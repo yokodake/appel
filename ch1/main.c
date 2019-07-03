@@ -1,7 +1,10 @@
-#include "slp.h"
 #include <stdio.h>
+#include <string.h>
 
-/// exo1
+#include "slp.h"
+
+/***************************/
+/* exo1 */
 int max(int a, int b) {
     return a > b ? a : b;
 }
@@ -33,9 +36,10 @@ int maxargs(A_stm p) {
     return m;
 }
 
-/// exo2
+/***************************/
+/* exo2 */
 typedef struct table_* table;
-struct table_ {string id; int value; table tail};
+struct table_ {string id; int value; table tail; };
 table Table(string id, int value, table tail) {
     table t = malloc(sizeof(*t));
     t->id = id;
@@ -43,15 +47,25 @@ table Table(string id, int value, table tail) {
     t->tail = tail;
     return t;
 }
-struct expRes_ {int i; table t;};
-typedef struct expRes_* expRes;
+int lookup(string id, table tail) {
+    table tl = tail;
+    while (tl != NULL) {
+        if (strcmp(id, tl->id) == 0)
+            return tl->value;
+    }
+    printf("%s : not found" , id);
+    exit(EXIT_FAILURE);
+}
+
+typedef struct expRes expRes;
+struct expRes {int i; table t;};
 expRes ExpRes(int i, table t) {
-    expRes r = malloc(sizeof(*r));
-    r->i = i;
-    r->t = t;
+    expRes r;
+    r.i = i;
+    r.t = t;
     return r;
 }
-void interpStm(A_stm, table);
+table interpStm(A_stm, table);
 expRes interpExp(A_exp, table);
 
 table interpStm(A_stm s, table t) {
@@ -60,26 +74,63 @@ table interpStm(A_stm s, table t) {
         return interpStm(s->u.compound.stm2, nt);
     } else if (s->kind == A_assignStm) {
         expRes er = interpExp(s->u.assign.exp, t);
-        return Table(s->u.assign.id, er->i, er->t);
+        return Table(s->u.assign.id, er.i, er.t);
     } else if (s->kind == A_printStm) {
-        expList exps = s->u.print.exps;
-        expRes er;
+        A_expList exps = s->u.print.exps;
+        expRes er; er.t = t;
         while (exps->kind != A_lastExpList) {
-            er = interpExp()
+            er = interpExp(exps->u.pair.head, er.t);
+            printf("%d", er.i);
         }
-        er = interpExp(exps->last, er->t);
-        printf("%d", )
-        return;
+        er = interpExp(exps->u.last, er.t);
+        printf("%d", er.i);
+        return er.t;
     }
 }
-expRes interpExp(A_exp exp, table t) {
-    switch(root->kind) {
-    case A_idExp:
-    case A_numExp:
-    case A_opExp:
-    case A_eseqExp:
+
+expRes eval(A_binop op, A_exp left, A_exp right, table t) {
+    expRes l = interpExp(left, t);
+    expRes r = interpExp(right, l.t);
+    int v;
+    switch(op) {
+    case A_plus:
+        v = l.i + r.i;
+        break;
+    case A_minus:
+        v = l.i - r.i;
+        break;
+    case A_times:
+        v = l.i * r.i;
+        break;
+    case A_div:
+        v = l.i / r.i;
+        break;
     }
-    return 0;
+    expRes o;
+    o.i = v; o.t = r.t;
+    return o;
+}
+
+expRes interpExp(A_exp exp, table t) {
+    expRes r;
+    switch(exp->kind) {
+    case A_idExp:
+        r.i = lookup(exp->u.id, t);
+        r.t = t;
+        return r;
+    case A_numExp:
+        r.i = exp->u.num;
+        r.t = t;
+        return r;
+    case A_opExp:
+        return eval(exp->u.op.oper,
+                    exp->u.op.left,
+                    exp->u.op.right,
+                    t);
+    case A_eseqExp:
+        return interpExp(exp->u.eseq.exp,
+                         interpStm(exp->u.eseq.stm, t));
+    }
 }
 
 
