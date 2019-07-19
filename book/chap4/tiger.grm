@@ -1,0 +1,151 @@
+%{
+#include <stdio.h>
+#include "util.h"
+#include "symbol.h"
+#include "errormsg.h"
+#include "absyn.h"
+
+int yylex(void); /* function prototype */
+
+A_exp absyn_root;
+
+void yyerror(char *s)
+{
+ EM_error(EM_tokPos, "%s", s);
+}
+%}
+
+
+%union {
+  int pos;
+  int ival;
+  string sval;
+//  A_var var;
+//  A_exp exp;
+  /* et cetera */
+}
+
+%token <sval> ID STRING
+%token <ival> INT
+
+%token
+  COMMA COLON SEMICOLON LPAREN RPAREN LBRACK RBRACK
+  LBRACE RBRACE DOT
+  PLUS MINUS TIMES DIVIDE EQ NEQ LT LE GT GE
+  AND OR ASSIGN
+  ARRAY IF THEN ELSE WHILE FOR TO DO LET IN END OF
+  BREAK NIL
+  FUNCTION VAR TYPE
+
+%right LOWPREC
+%nonassoc THEN OF DO TO
+%nonassoc ASSIGN
+%nonassoc ELSE LBRACK
+%left OR
+%left AND
+%nonassoc EQ NEQ LT LE GT GE
+%left PLUS MINUS
+%left TIMES DIVIDE
+%nonassoc UMINUS
+
+%start program
+
+%%
+program : exp
+
+/* declarations */
+decs : dec decs
+     |
+
+dec : tydec
+    | vardec
+    | fundec
+
+/* data types */
+tydec : TYPE ID EQ ty
+
+ty : ID
+   | LBRACE tyfields RBRACE
+   | ARRAY OF ID
+
+tyfields : tyfield tyfields_tl
+         |
+tyfield : ID COLON ID
+tyfields_tl : COMMA tyfield tyfields_tl
+         |
+
+/* variables */
+vardec : VAR ID ASSIGN exp
+       | VAR ID COLON ID ASSIGN exp
+
+
+/* functions */
+fundec : FUNCTION ID LPAREN tyfields RPAREN EQ exp
+       | FUNCTION ID LPAREN tyfields RPAREN COLON ID EQ exp
+
+/* variables and expression */
+lvalue : ID                       %prec LOWPREC
+       | lvalue DOT ID
+       | lvalue LBRACK exp RBRACK
+       | ID LBRACK exp RBRACK
+
+/* experessions */
+
+exp : lvalue
+    | NIL
+    | INT
+    | STRING
+    | LPAREN RPAREN
+    | LPAREN exp seq RPAREN
+    | funcall
+    /* arithmetic,boolean,etc. */
+    | binexp
+    /* record creation */
+    | reccrea
+    /* array creation */
+    | ID LBRACK exp RBRACK OF exp
+    /* assignment */
+    | lvalue ASSIGN exp
+    | ifexp
+    | WHILE exp DO exp
+    | FOR ID ASSIGN exp TO exp DO exp
+    | BREAK
+    | LET decs IN expseq END
+
+expseq : exp seq
+       |
+
+seq : SEMICOLON exp seq
+    |
+
+funcall : ID LPAREN exp funargs RPAREN
+        | ID LPAREN RPAREN
+
+funargs : COMMA exp funargs
+        |
+
+binexp : MINUS exp %prec UMINUS
+       | exp PLUS exp
+       | exp MINUS exp
+       | exp TIMES exp
+       | exp DIVIDE exp
+       | exp EQ exp
+       | exp NEQ exp
+       | exp GT exp
+       | exp LT exp
+       | exp LE exp
+       | exp GE exp
+       | exp AND exp
+       | exp OR exp
+
+
+reccrea : ID LBRACE recfield recfields RBRACE
+        | ID LBRACE RBRACE
+
+recfield : ID EQ exp
+
+recfields : COMMA recfield recfields
+          |
+
+ifexp : IF exp THEN exp
+      | IF exp THEN exp ELSE exp
