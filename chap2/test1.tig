@@ -1,0 +1,9 @@
+/* an array type and an array variable */
+saljfl;ksaj fao
+let
+	type  arrtype = array /* foo */ of int
+	var arr1:arrtype /* foo */:= arrtype [10] of 0
+	var foo = "hi"
+in
+	arr1
+end
