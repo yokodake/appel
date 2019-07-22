@@ -1,10 +1,14 @@
 #include <stdio.h>
+#include <stdlib.h>
 #include "util.h"
 #include "errormsg.h"
+#include "absyn.h"
+#include "prabsyn.h"
 
 extern int yyparse(void);
+extern A_exp absyn_root;
 
-void parse(string fname) 
+void parse(string fname)
 {EM_reset(fname);
  if (yyparse() == 0) /* parsing worked */
    fprintf(stderr,"Parsing successful!\n");

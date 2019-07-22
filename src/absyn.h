@@ -6,6 +6,7 @@
  */
 
 /* Type Definitions */
+#include "symbol.h"
 
 typedef int A_pos;
 
@@ -30,7 +31,7 @@ typedef enum { A_plusOp, A_minusOp, A_timesOp, A_divideOp
              } A_oper;
 
 struct A_var_ {
-    enum {A_simpleVar, A_fieldVar, A_subscriptVar} kind;
+    enum { A_simpleVar, A_fieldVar, A_subscriptVar} kind;
     A_pos pos;
     union {
         S_symbol simple;
@@ -46,9 +47,9 @@ struct A_var_ {
 };
 
 struct A_exp_ {
-    enum {A_varExp, A_nilExp, A_intExp, A_stringExp, A_callExp,
-          A_opExp, A_recordExp, A_seqExp, A_assignExp, A_ifExp,
-          A_whileExp, A_forExp, A_breakExp, A_letExp, A_arrayExp
+    enum { A_varExp, A_nilExp, A_intExp, A_stringExp, A_callExp
+         , A_opExp, A_recordExp, A_seqExp, A_assignExp, A_ifExp
+         , A_whileExp, A_forExp, A_breakExp, A_letExp, A_arrayExp
     } kind;
     A_pos pos;
     union {
@@ -113,6 +114,7 @@ struct A_efieldList_ {A_efield head; A_efieldList tail;};
 A_var A_SimpleVar(A_pos pos, S_symbol sym);
 A_var A_FieldVar(A_pos pos, A_var var, S_symbol sym);
 A_var A_SubscriptVar(A_pos pos, A_var var, A_exp exp);
+
 A_exp A_VarExp(A_pos pos, A_var var);
 A_exp A_NilExp(A_pos pos);
 A_exp A_IntExp(A_pos pos, int i);
@@ -128,20 +130,28 @@ A_exp A_ForExp(A_pos pos, S_symbol var, A_exp lo, A_exp hi, A_exp body);
 A_exp A_BreakExp(A_pos pos);
 A_exp A_LetExp(A_pos pos, A_decList decs, A_exp body);
 A_exp A_ArrayExp(A_pos pos, S_symbol typ, A_exp size, A_exp init);
+
 A_dec A_FunctionDec(A_pos pos, A_fundecList function);
 A_dec A_VarDec(A_pos pos, S_symbol var, S_symbol typ, A_exp init);
 A_dec A_TypeDec(A_pos pos, A_nametyList type);
+
 A_ty A_NameTy(A_pos pos, S_symbol name);
 A_ty A_RecordTy(A_pos pos, A_fieldList record);
 A_ty A_ArrayTy(A_pos pos, S_symbol array);
+
 A_field A_Field(A_pos pos, S_symbol name, S_symbol typ);
 A_fieldList A_FieldList(A_field head, A_fieldList tail);
+
 A_expList A_ExpList(A_exp head, A_expList tail);
+
 A_fundec A_Fundec(A_pos pos, S_symbol name, A_fieldList params, S_symbol result,
                   A_exp body);
 A_fundecList A_FundecList(A_fundec head, A_fundecList tail);
+
 A_decList A_DecList(A_dec head, A_decList tail);
+
 A_namety A_Namety(S_symbol name, A_ty ty);
 A_nametyList A_NametyList(A_namety head, A_nametyList tail);
+
 A_efield A_Efield(S_symbol name, A_exp exp);
 A_efieldList A_EfieldList(A_efield head, A_efieldList tail);

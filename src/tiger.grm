@@ -20,13 +20,13 @@ void yyerror(char *s)
   int pos;
   int ival;
   string sval;
-  A_var var;
-  A_exp exp;
-  A_ty ty;
   A_field field;
-  A_fieldList fieldList;
+  A_fieldList fieldlist;
   /* et cetera */
 }
+
+%type <field> tyfield
+%type <fieldList> tyfields tyfieldList
 
 %token <sval> ID STRING
 %token <ival> INT
@@ -56,46 +56,49 @@ void yyerror(char *s)
 %%
 program : exp
 
+/* QOL */
+id : ID   {$$=S_Symbol($1)}
+
 /* declarations */
 decs : dec decs
      |
 
-dec : tydec
-    | vardec
-    | fundec
+dec : tydec          {$$=A_TypeDec(EM_tokPos, A_NametyList($1, NULL))}
+    | vardec         {$$=$1}
+    | fundec         {$$=A_FunctionDec(EM_tokPos, A_FundecList($1, NULL))}
 
 /* data types */
-tydec : TYPE ID EQ ty
+tydec : TYPE id EQ ty                    {$$=A_Namety($2, $4)}
 
-ty : ID
-   | LBRACE tyfields RBRACE
-   | ARRAY OF ID
+ty : id                                  {$$=A_NameTy(EM_tokPos, $1)}
+   | LBRACE tyfields RBRACE              {$$=A_RecordTy(EM_tokPos, $2)}
+   | ARRAY OF id                         {$$=A_ArrayTy(EM_tokPos, $3)}
 
-tyfields : tyfield tyfields_tl
-         |
-tyfield : ID COLON ID
-tyfields_tl : COMMA tyfield tyfields_tl
-         |
+tyfields : tyfield tyfieldList           {$$=A_FieldList($1, $2)}
+         |                               {$$=NULL}
+tyfield : id COLON id                    {$$=A_Field(EM_tokPos, $1, $3)}
+tyfieldList : COMMA tyfield tyfieldList  {$$=A_FieldList($2, $3)}
+            |                            {$$=NULL}
 
 /* variables */
-vardec : VAR ID ASSIGN exp
-       | VAR ID COLON ID ASSIGN exp
+vardec : VAR id ASSIGN exp
+       | VAR id COLON id ASSIGN exp
 
 
 /* functions */
-fundec : FUNCTION ID LPAREN tyfields RPAREN EQ exp
-       | FUNCTION ID LPAREN tyfields RPAREN COLON ID EQ exp
+fundec : FUNCTION id LPAREN tyfields RPAREN EQ exp
+       | FUNCTION id LPAREN tyfields RPAREN COLON id EQ exp
 
 /* variables and expression */
-lvalue : ID                       %prec LOWPREC
-       | lvalue DOT ID
+lvalue : id              %prec LOWPREC
+       | lvalue DOT id
        | lvalue LBRACK exp RBRACK
-       | ID LBRACK exp RBRACK
+       | id LBRACK exp RBRACK
 
 /* experessions */
 
-exp : lvalue                            {$$=$1}
-    | NIL                               {$$=A_NilExp()}
+exp : lvalue                            // {$$=$1}
+    | NIL                               // {$$=A_NilExp(EM_tokPos)}
     | INT
     | STRING
     | LPAREN RPAREN
@@ -106,12 +109,12 @@ exp : lvalue                            {$$=$1}
     /* record creation */
     | reccrea
     /* array creation */
-    | ID LBRACK exp RBRACK OF exp
+    | id LBRACK exp RBRACK OF exp
     /* assignment */
     | lvalue ASSIGN exp
     | ifexp
     | WHILE exp DO exp
-    | FOR ID ASSIGN exp TO exp DO exp
+    | FOR id ASSIGN exp TO exp DO exp
     | BREAK
     | LET decs IN expseq END
 
@@ -121,8 +124,8 @@ expseq : exp seq
 seq : SEMICOLON exp seq
     |
 
-funcall : ID LPAREN exp funargs RPAREN
-        | ID LPAREN RPAREN
+funcall : id LPAREN exp funargs RPAREN
+        | id LPAREN RPAREN
 
 funargs : COMMA exp funargs
         |
@@ -142,10 +145,10 @@ binexp : MINUS exp %prec UMINUS
        | exp OR exp
 
 
-reccrea : ID LBRACE recfield recfields RBRACE
-        | ID LBRACE RBRACE
+reccrea : id LBRACE recfield recfields RBRACE
+        | id LBRACE RBRACE
 
-recfield : ID EQ exp
+recfield : id EQ exp
 
 recfields : COMMA recfield recfields
           |

@@ -17,12 +17,12 @@ Grammar
     9   | LBRACE tyfields RBRACE
    10   | ARRAY OF ID
 
-   11 tyfields: tyfield tyfields_tl
+   11 tyfields: tyfield tyfieldList
    12         | %empty
 
    13 tyfield: ID COLON ID
 
-   14 tyfields_tl: COMMA tyfield tyfields_tl
+   14 tyfieldList: COMMA tyfield tyfieldList
    15            | %empty
 
    16 vardec: VAR ID ASSIGN exp
@@ -156,11 +156,11 @@ tydec (52)
     on left: 7, on right: 4
 ty (53)
     on left: 8 9 10, on right: 7
-tyfields (54)
+tyfields <fieldList> (54)
     on left: 11 12, on right: 9 18 19
-tyfield (55)
+tyfield <field> (55)
     on left: 13, on right: 11 14
-tyfields_tl (56)
+tyfieldList <fieldList> (56)
     on left: 14 15, on right: 11 14
 vardec (57)
     on left: 16 17, on right: 5
@@ -2249,13 +2249,13 @@ State 111
 
 State 112
 
-   11 tyfields: tyfield . tyfields_tl
+   11 tyfields: tyfield . tyfieldList
 
     COMMA  shift, and go to state 128
 
-    $default  reduce using rule 15 (tyfields_tl)
+    $default  reduce using rule 15 (tyfieldList)
 
-    tyfields_tl  go to state 129
+    tyfieldList  go to state 129
 
 
 State 113
@@ -2471,7 +2471,7 @@ State 127
 
 State 128
 
-   14 tyfields_tl: COMMA . tyfield tyfields_tl
+   14 tyfieldList: COMMA . tyfield tyfieldList
 
     ID  shift, and go to state 110
 
@@ -2480,7 +2480,7 @@ State 128
 
 State 129
 
-   11 tyfields: tyfield tyfields_tl .
+   11 tyfields: tyfield tyfieldList .
 
     $default  reduce using rule 11 (tyfields)
 
@@ -2587,13 +2587,13 @@ State 136
 
 State 137
 
-   14 tyfields_tl: COMMA tyfield . tyfields_tl
+   14 tyfieldList: COMMA tyfield . tyfieldList
 
     COMMA  shift, and go to state 128
 
-    $default  reduce using rule 15 (tyfields_tl)
+    $default  reduce using rule 15 (tyfieldList)
 
-    tyfields_tl  go to state 144
+    tyfieldList  go to state 144
 
 
 State 138
@@ -2715,9 +2715,9 @@ State 143
 
 State 144
 
-   14 tyfields_tl: COMMA tyfield tyfields_tl .
+   14 tyfieldList: COMMA tyfield tyfieldList .
 
-    $default  reduce using rule 14 (tyfields_tl)
+    $default  reduce using rule 14 (tyfieldList)
 
 
 State 145
