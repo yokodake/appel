@@ -53,7 +53,7 @@ struct A_exp_ {
     } kind;
     A_pos pos;
     union {
-        A_var var;
+        A_var var; // lvalue
         /* nil; - needs only the pos */
         int intt;
         string stringg;

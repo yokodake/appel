@@ -21,12 +21,26 @@ void yyerror(char *s)
   int ival;
   string sval;
   A_field field;
-  A_fieldList fieldlist;
+  A_fieldList fieldList;
+  A_dec dec;
+  A_decList decList;
+  A_fundecList fundecList;
+  A_fundec fundec;
+  A_ty ty;
+  A_namety namety;
+  A_nametyList nametyList;
+  S_symbol symbol;
   /* et cetera */
 }
 
 %type <field> tyfield
 %type <fieldList> tyfields tyfieldList
+%type <symbol> id
+%type <dec> dec vardec
+%type <decList> decs
+%type <fundec> fundec
+%type <ty> ty
+%type <namety> tydec
 
 %token <sval> ID STRING
 %token <ival> INT
@@ -57,28 +71,28 @@ void yyerror(char *s)
 program : exp
 
 /* QOL */
-id : ID   {$$=S_Symbol($1)}
+id : ID   {$$=S_Symbol($1);}
 
 /* declarations */
 decs : dec decs
      |
 
-dec : tydec          {$$=A_TypeDec(EM_tokPos, A_NametyList($1, NULL))}
-    | vardec         {$$=$1}
-    | fundec         {$$=A_FunctionDec(EM_tokPos, A_FundecList($1, NULL))}
+dec : tydec          {$$=A_TypeDec(EM_tokPos, A_NametyList($1, NULL));}
+    | vardec         {$$=$1;}
+    | fundec         {$$=A_FunctionDec(EM_tokPos, A_FundecList($1, NULL));}
 
 /* data types */
-tydec : TYPE id EQ ty                    {$$=A_Namety($2, $4)}
+tydec : TYPE id EQ ty                    {$$=A_Namety($2, $4);}
 
-ty : id                                  {$$=A_NameTy(EM_tokPos, $1)}
-   | LBRACE tyfields RBRACE              {$$=A_RecordTy(EM_tokPos, $2)}
-   | ARRAY OF id                         {$$=A_ArrayTy(EM_tokPos, $3)}
+ty : id                                  {$$=A_NameTy(EM_tokPos, $1);}
+   | LBRACE tyfields RBRACE              {$$=A_RecordTy(EM_tokPos, $2);}
+   | ARRAY OF id                         {$$=A_ArrayTy(EM_tokPos, $3);}
 
-tyfields : tyfield tyfieldList           {$$=A_FieldList($1, $2)}
-         |                               {$$=NULL}
-tyfield : id COLON id                    {$$=A_Field(EM_tokPos, $1, $3)}
-tyfieldList : COMMA tyfield tyfieldList  {$$=A_FieldList($2, $3)}
-            |                            {$$=NULL}
+tyfields : tyfield tyfieldList           {$$=A_FieldList($1, $2);}
+         |                               {$$=NULL;}
+tyfield : id COLON id                    {$$=A_Field(EM_tokPos, $1, $3);}
+tyfieldList : COMMA tyfield tyfieldList  {$$=A_FieldList($2, $3);}
+            |                            {$$=NULL;}
 
 /* variables */
 vardec : VAR id ASSIGN exp
@@ -97,8 +111,8 @@ lvalue : id              %prec LOWPREC
 
 /* experessions */
 
-exp : lvalue                            // {$$=$1}
-    | NIL                               // {$$=A_NilExp(EM_tokPos)}
+exp : lvalue                            // {$$=$1;}
+    | NIL                               // {$$=A_NilExp(EM_tokPos);}
     | INT
     | STRING
     | LPAREN RPAREN

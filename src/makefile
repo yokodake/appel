@@ -1,31 +1,45 @@
-# a.out: parsetest.o y.tab.o lex.yy.o errormsg.o util.o
-# 	cc -g parsetest.o y.tab.o lex.yy.o errormsg.o util.o
-#
-# parsetest.o: parsetest.c errormsg.h util.h
-# 	cc -g -c parsetest.c
-#
-# y.tab.o: y.tab.c
-# 	cc -g -c y.tab.c
-#
-# errormsg.o: errormsg.c errormsg.h util.h
-# 	cc -g -c errormsg.c
-#
-# lex.yy.o: lex.yy.c y.tab.h errormsg.h util.h
-# 	cc -g -c lex.yy.c
-#
-#
-# util.o: util.c util.h
-# 	cc -g -c util.c
+a.out: parsetest.o y.tab.o lex.yy.o errormsg.o util.o absyn.o prabsyn.o symbol.o table.o
+	cc -g $^
 
-all: lex.yy.c y.tab.c y.tab.h
+parsetest.o: parsetest.c errormsg.h util.h
+	cc -g -c parsetest.c
 
-lex.yy.c: tiger.lex y.tab.h
-	lex tiger.lex
+y.tab.o: y.tab.c absyn.h
+	cc -g -c y.tab.c
 
-y.tab.c: tiger.grm
+errormsg.o: errormsg.c errormsg.h util.h
+	cc -g -c errormsg.c
+
+lex.yy.o: lex.yy.c y.tab.h errormsg.h util.h
+	cc -g -c lex.yy.c
+
+parse.o: parse.c parse.h errormsg.h absyn.h
+	cc -g -c parse.c
+
+util.o: util.c util.h
+	cc -g -c util.c
+
+absyn.o: absyn.c absyn.h util.h symbol.h
+	cc -g -c absyn.c
+
+prabsyn.o: prabsyn.c prabsyn.h absyn.h
+	cc -g -c prabsyn.c
+
+symbol.o: symbol.c symbol.h table.h
+	cc -g -c symbol.c
+
+table.o: table.c table.h util.h
+	cc -g -c table.c
+
+parser: lex.yy.c y.tab.c y.tab.h
+
+lex.yy.c: tiger.lex y.tab.h absyn.h
+	flex tiger.lex
+
+y.tab.c: tiger.grm absyn.h
 	yacc -dv tiger.grm
 
 y.tab.h: y.tab.c
 
 clean:
-	rm -f y.output a.out util.o parsetest.o lex.yy.o errormsg.o y.tab.c y.tab.h y.tab.o lex.yy.c
+	rm -v y.output a.out y.tab.c y.tab.h lex.yy.c *.o
