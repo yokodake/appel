@@ -154,10 +154,22 @@ union YYSTYPE
   int ival;
   string sval;
   A_field field;
-  A_fieldList fieldlist;
-  /* et cetera */
+  A_fieldList fieldList;
+  A_dec dec;
+  A_decList decList;
+  A_fundecList fundecList;
+  A_fundec fundec;
+  A_ty ty;
+  A_namety namety;
+  A_nametyList nametyList;
+  A_exp exp;
+  A_var var;
+  A_efield efield;
+  A_efieldList efieldList;
+  A_expList expList;
+  S_symbol symbol;
 
-#line 161 "y.tab.h" /* yacc.c:1921  */
+#line 173 "y.tab.h" /* yacc.c:1921  */
 };
 
 typedef union YYSTYPE YYSTYPE;

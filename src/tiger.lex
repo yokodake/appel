@@ -1,4 +1,6 @@
 %{
+#define YY_NO_UNISTD_H
+
 #include <string.h>
 #include "util.h"
 #include "errormsg.h"
@@ -11,7 +13,6 @@ int yywrap(void) {
  charPos=1;
  return 1;
 }
-
 
 void adjust(void) {
  EM_tokPos=charPos;
