@@ -28,7 +28,7 @@ Grammar
    16            | %empty
 
    17 vardec: VAR id ASSIGN exp
-   18       | VAR id COLON id ASSIGN exp
+   18       | VAR id COLON id EQ exp
 
    19 fundec: FUNCTION id LPAREN tyfields RPAREN EQ exp
    20       | FUNCTION id LPAREN tyfields RPAREN COLON id EQ exp
@@ -116,7 +116,7 @@ PLUS (271) 51
 MINUS (272) 50 52
 TIMES (273) 53
 DIVIDE (274) 54
-EQ (275) 8 19 20 55 65
+EQ (275) 8 18 19 20 55 65
 NEQ (276) 56
 LT (277) 58
 LE (278) 59
@@ -124,7 +124,7 @@ GT (279) 57
 GE (280) 60
 AND (281) 61
 OR (282) 62
-ASSIGN (283) 17 18 35 38
+ASSIGN (283) 17 35 38
 ARRAY (284) 11
 IF (285) 68 69
 THEN (286) 68 69
@@ -645,7 +645,7 @@ State 27
 State 28
 
    17 vardec: VAR . id ASSIGN exp
-   18       | VAR . id COLON id ASSIGN exp
+   18       | VAR . id COLON id EQ exp
 
     ID  shift, and go to state 1
 
@@ -1276,7 +1276,7 @@ State 59
 State 60
 
    17 vardec: VAR id . ASSIGN exp
-   18       | VAR id . COLON id ASSIGN exp
+   18       | VAR id . COLON id EQ exp
 
     COLON   shift, and go to state 91
     ASSIGN  shift, and go to state 92
@@ -1978,7 +1978,7 @@ State 90
 
 State 91
 
-   18 vardec: VAR id COLON . id ASSIGN exp
+   18 vardec: VAR id COLON . id EQ exp
 
     ID  shift, and go to state 1
 
@@ -2245,9 +2245,9 @@ State 108
 
 State 109
 
-   18 vardec: VAR id COLON id . ASSIGN exp
+   18 vardec: VAR id COLON id . EQ exp
 
-    ASSIGN  shift, and go to state 129
+    EQ  shift, and go to state 129
 
 
 State 110
@@ -2548,7 +2548,7 @@ State 128
 
 State 129
 
-   18 vardec: VAR id COLON id ASSIGN . exp
+   18 vardec: VAR id COLON id EQ . exp
 
     ID      shift, and go to state 1
     STRING  shift, and go to state 2
@@ -2715,7 +2715,7 @@ State 139
 
 State 140
 
-   18 vardec: VAR id COLON id ASSIGN exp .
+   18 vardec: VAR id COLON id EQ exp .
    51 binexp: exp . PLUS exp
    52       | exp . MINUS exp
    53       | exp . TIMES exp

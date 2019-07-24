@@ -1,4 +1,4 @@
-a.out: parsetest.o y.tab.o lex.yy.o errormsg.o util.o absyn.o prabsyn.o symbol.o table.o
+a.out: parsetest.o y.tab.o lex.yy.o errormsg.o util.o absyn.o s-prabsyn.o symbol.o table.o
 	cc -g $^
 
 parsetest.o: parsetest.c errormsg.h util.h
@@ -22,8 +22,8 @@ util.o: util.c util.h
 absyn.o: absyn.c absyn.h util.h symbol.h
 	cc -g -c absyn.c
 
-prabsyn.o: prabsyn.c prabsyn.h absyn.h
-	cc -g -c prabsyn.c
+s-prabsyn.o: s-prabsyn.c prabsyn.h absyn.h
+	cc -g -c s-prabsyn.c
 
 symbol.o: symbol.c symbol.h table.h
 	cc -g -c symbol.c

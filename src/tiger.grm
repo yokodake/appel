@@ -106,7 +106,7 @@ tyfieldList : COMMA tyfield tyfieldList  {$$=A_FieldList($2, $3);}
 /* variables */
 vardec : VAR id ASSIGN exp               {$$=A_VarDec(EM_tokPos, $2, NULL, $4);}
                                          // FIXME
-       | VAR id COLON id ASSIGN exp      {$$=A_VarDec(EM_tokPos, $2, $4, $6);}
+       | VAR id COLON id EQ exp      {$$=A_VarDec(EM_tokPos, $2, $4, $6);}
 
 
 /* functions */
