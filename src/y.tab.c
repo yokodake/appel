@@ -78,10 +78,10 @@ int yylex(void); /* function prototype */
 
 A_exp absyn_root;
 
-void yyerror(char *s)
-{
- EM_error(EM_tokPos, "<%s>", s);
+void yyerror(const char *s) {
+ EM_error(EM_tokPos, "%s", s);
 }
+
 
 #line 87 "y.tab.c" /* yacc.c:337  */
 # ifndef YY_NULLPTR
@@ -101,7 +101,7 @@ void yyerror(char *s)
 # undef YYERROR_VERBOSE
 # define YYERROR_VERBOSE 1
 #else
-# define YYERROR_VERBOSE 0
+# define YYERROR_VERBOSE 1
 #endif
 
 /* In a future release of Bison, this section will be replaced
@@ -168,63 +168,18 @@ extern int yydebug;
     UMINUS = 302
   };
 #endif
-/* Tokens.  */
-#define ID 258
-#define STRING 259
-#define INT 260
-#define COMMA 261
-#define COLON 262
-#define SEMICOLON 263
-#define LPAREN 264
-#define RPAREN 265
-#define LBRACK 266
-#define RBRACK 267
-#define LBRACE 268
-#define RBRACE 269
-#define DOT 270
-#define PLUS 271
-#define MINUS 272
-#define TIMES 273
-#define DIVIDE 274
-#define EQ 275
-#define NEQ 276
-#define LT 277
-#define LE 278
-#define GT 279
-#define GE 280
-#define AND 281
-#define OR 282
-#define ASSIGN 283
-#define ARRAY 284
-#define IF 285
-#define THEN 286
-#define ELSE 287
-#define WHILE 288
-#define FOR 289
-#define TO 290
-#define DO 291
-#define LET 292
-#define IN 293
-#define END 294
-#define OF 295
-#define BREAK 296
-#define NIL 297
-#define FUNCTION 298
-#define VAR 299
-#define TYPE 300
-#define LOWPREC 301
-#define UMINUS 302
 
 /* Value type.  */
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 
 union YYSTYPE
 {
-#line 19 "tiger.grm" /* yacc.c:352  */
+#line 20 "tiger.grm" /* yacc.c:352  */
 
   int pos;
   int ival;
   string sval;
+  struct {string sval; int ssiz; } str;
   A_field field;
   A_fieldList fieldList;
   A_dec dec;
@@ -241,7 +196,7 @@ union YYSTYPE
   A_expList expList;
   S_symbol symbol;
 
-#line 245 "y.tab.c" /* yacc.c:352  */
+#line 200 "y.tab.c" /* yacc.c:352  */
 };
 
 typedef union YYSTYPE YYSTYPE;
@@ -549,31 +504,33 @@ static const yytype_uint8 yytranslate[] =
   /* YYRLINE[YYN] -- Source line where rule number YYN was defined.  */
 static const yytype_uint8 yyrline[] =
 {
-       0,    80,    80,    83,    86,    87,    89,    90,    91,    94,
-      96,    97,    98,   100,   101,   102,   103,   104,   107,   109,
-     113,   115,   119,   120,   121,   122,   126,   127,   128,   129,
-     130,   131,   132,   133,   134,   135,   136,   137,   138,   139,
-     140,   141,   142,   144,   145,   147,   148,   150,   151,   153,
-     154,   156,   157,   158,   159,   160,   161,   162,   163,   164,
-     165,   166,   168,   169,   172,   173,   175,   177,   178,   180,
-     181
+       0,    83,    83,    86,    89,    90,    92,    93,    94,    97,
+      99,   100,   101,   103,   104,   105,   106,   107,   110,   112,
+     116,   118,   122,   123,   124,   125,   129,   130,   131,   132,
+     133,   134,   135,   136,   137,   138,   139,   140,   141,   142,
+     143,   144,   145,   147,   148,   150,   151,   153,   154,   156,
+     157,   159,   160,   161,   162,   163,   164,   165,   166,   167,
+     168,   169,   171,   172,   175,   176,   178,   180,   181,   183,
+     184
 };
 #endif
 
-#if YYDEBUG || YYERROR_VERBOSE || 0
+#if YYDEBUG || YYERROR_VERBOSE || 1
 /* YYTNAME[SYMBOL-NUM] -- String name of the symbol SYMBOL-NUM.
    First, the terminals, then, starting at YYNTOKENS, nonterminals.  */
 static const char *const yytname[] =
 {
-  "$end", "error", "$undefined", "ID", "STRING", "INT", "COMMA", "COLON",
-  "SEMICOLON", "LPAREN", "RPAREN", "LBRACK", "RBRACK", "LBRACE", "RBRACE",
-  "DOT", "PLUS", "MINUS", "TIMES", "DIVIDE", "EQ", "NEQ", "LT", "LE", "GT",
-  "GE", "AND", "OR", "ASSIGN", "ARRAY", "IF", "THEN", "ELSE", "WHILE",
-  "FOR", "TO", "DO", "LET", "IN", "END", "OF", "BREAK", "NIL", "FUNCTION",
-  "VAR", "TYPE", "LOWPREC", "UMINUS", "$accept", "program", "id", "decs",
-  "dec", "tydec", "ty", "tyfields", "tyfield", "tyfieldList", "vardec",
-  "fundec", "lvalue", "exp", "expseq", "seq", "funcall", "funargs",
-  "binexp", "boolexp", "reccrea", "recfield", "recfields", "ifexp", YY_NULLPTR
+  "$end", "error", "$undefined", "ID", "STRING", "INT", "\",\"", "\":\"",
+  "\";\"", "\"(\"", "\")\"", "\"[\"", "\"]\"", "\"{\"", "\"}\"", "\".\"",
+  "\"+\"", "\"-\"", "\"*\"", "\"/\"", "\"=\"", "\"!=\"", "\"<\"", "\"<=\"",
+  "\">\"", "\">=\"", "\"&\"", "\"|\"", "\":=\"", "\"array\"", "\"if\"",
+  "\"then\"", "\"else\"", "\"while\"", "\"for\"", "\"to\"", "\"do\"",
+  "\"let\"", "\"in\"", "\"end\"", "\"of\"", "\"break\"", "\"nil\"",
+  "\"function\"", "\"var\"", "\"type\"", "LOWPREC", "UMINUS", "$accept",
+  "program", "id", "decs", "dec", "tydec", "ty", "tyfields", "tyfield",
+  "tyfieldList", "vardec", "fundec", "lvalue", "exp", "expseq", "seq",
+  "funcall", "funargs", "binexp", "boolexp", "reccrea", "recfield",
+  "recfields", "ifexp", YY_NULLPTR
 };
 #endif
 
@@ -1474,421 +1431,421 @@ yyreduce:
   switch (yyn)
     {
         case 2:
-#line 80 "tiger.grm" /* yacc.c:1652  */
+#line 83 "tiger.grm" /* yacc.c:1652  */
     {(yyval.exp)=absyn_root = (yyvsp[0].exp);}
-#line 1480 "y.tab.c" /* yacc.c:1652  */
+#line 1437 "y.tab.c" /* yacc.c:1652  */
     break;
 
   case 3:
-#line 83 "tiger.grm" /* yacc.c:1652  */
+#line 86 "tiger.grm" /* yacc.c:1652  */
     {(yyval.symbol)= S_Symbol(String((yyvsp[0].sval)));}
-#line 1486 "y.tab.c" /* yacc.c:1652  */
+#line 1443 "y.tab.c" /* yacc.c:1652  */
     break;
 
   case 4:
-#line 86 "tiger.grm" /* yacc.c:1652  */
+#line 89 "tiger.grm" /* yacc.c:1652  */
     {(yyval.decList)=A_DecList((yyvsp[-1].dec), (yyvsp[0].decList));}
-#line 1492 "y.tab.c" /* yacc.c:1652  */
+#line 1449 "y.tab.c" /* yacc.c:1652  */
     break;
 
   case 5:
-#line 87 "tiger.grm" /* yacc.c:1652  */
+#line 90 "tiger.grm" /* yacc.c:1652  */
     {(yyval.decList)=NULL;}
-#line 1498 "y.tab.c" /* yacc.c:1652  */
+#line 1455 "y.tab.c" /* yacc.c:1652  */
     break;
 
   case 6:
-#line 89 "tiger.grm" /* yacc.c:1652  */
+#line 92 "tiger.grm" /* yacc.c:1652  */
     {(yyval.dec)=A_TypeDec(EM_tokPos, A_NametyList((yyvsp[0].namety), NULL));}
-#line 1504 "y.tab.c" /* yacc.c:1652  */
+#line 1461 "y.tab.c" /* yacc.c:1652  */
     break;
 
   case 7:
-#line 90 "tiger.grm" /* yacc.c:1652  */
+#line 93 "tiger.grm" /* yacc.c:1652  */
     {(yyval.dec)=(yyvsp[0].dec);}
-#line 1510 "y.tab.c" /* yacc.c:1652  */
+#line 1467 "y.tab.c" /* yacc.c:1652  */
     break;
 
   case 8:
-#line 91 "tiger.grm" /* yacc.c:1652  */
+#line 94 "tiger.grm" /* yacc.c:1652  */
     {(yyval.dec)=A_FunctionDec(EM_tokPos, A_FundecList((yyvsp[0].fundec), NULL));}
-#line 1516 "y.tab.c" /* yacc.c:1652  */
+#line 1473 "y.tab.c" /* yacc.c:1652  */
     break;
 
   case 9:
-#line 94 "tiger.grm" /* yacc.c:1652  */
+#line 97 "tiger.grm" /* yacc.c:1652  */
     {(yyval.namety)=A_Namety((yyvsp[-2].symbol), (yyvsp[0].ty));}
-#line 1522 "y.tab.c" /* yacc.c:1652  */
+#line 1479 "y.tab.c" /* yacc.c:1652  */
     break;
 
   case 10:
-#line 96 "tiger.grm" /* yacc.c:1652  */
+#line 99 "tiger.grm" /* yacc.c:1652  */
     {(yyval.ty)=A_NameTy(EM_tokPos, (yyvsp[0].symbol));}
-#line 1528 "y.tab.c" /* yacc.c:1652  */
+#line 1485 "y.tab.c" /* yacc.c:1652  */
     break;
 
   case 11:
-#line 97 "tiger.grm" /* yacc.c:1652  */
+#line 100 "tiger.grm" /* yacc.c:1652  */
     {(yyval.ty)=A_RecordTy(EM_tokPos, (yyvsp[-1].fieldList));}
-#line 1534 "y.tab.c" /* yacc.c:1652  */
+#line 1491 "y.tab.c" /* yacc.c:1652  */
     break;
 
   case 12:
-#line 98 "tiger.grm" /* yacc.c:1652  */
+#line 101 "tiger.grm" /* yacc.c:1652  */
     {(yyval.ty)=A_ArrayTy(EM_tokPos, (yyvsp[0].symbol));}
-#line 1540 "y.tab.c" /* yacc.c:1652  */
+#line 1497 "y.tab.c" /* yacc.c:1652  */
     break;
 
   case 13:
-#line 100 "tiger.grm" /* yacc.c:1652  */
+#line 103 "tiger.grm" /* yacc.c:1652  */
     {(yyval.fieldList)=A_FieldList((yyvsp[-1].field), (yyvsp[0].fieldList));}
-#line 1546 "y.tab.c" /* yacc.c:1652  */
+#line 1503 "y.tab.c" /* yacc.c:1652  */
     break;
 
   case 14:
-#line 101 "tiger.grm" /* yacc.c:1652  */
+#line 104 "tiger.grm" /* yacc.c:1652  */
     {(yyval.fieldList)=NULL;}
-#line 1552 "y.tab.c" /* yacc.c:1652  */
+#line 1509 "y.tab.c" /* yacc.c:1652  */
     break;
 
   case 15:
-#line 102 "tiger.grm" /* yacc.c:1652  */
+#line 105 "tiger.grm" /* yacc.c:1652  */
     {(yyval.field)=A_Field(EM_tokPos, (yyvsp[-2].symbol), (yyvsp[0].symbol));}
-#line 1558 "y.tab.c" /* yacc.c:1652  */
+#line 1515 "y.tab.c" /* yacc.c:1652  */
     break;
 
   case 16:
-#line 103 "tiger.grm" /* yacc.c:1652  */
+#line 106 "tiger.grm" /* yacc.c:1652  */
     {(yyval.fieldList)=A_FieldList((yyvsp[-1].field), (yyvsp[0].fieldList));}
-#line 1564 "y.tab.c" /* yacc.c:1652  */
+#line 1521 "y.tab.c" /* yacc.c:1652  */
     break;
 
   case 17:
-#line 104 "tiger.grm" /* yacc.c:1652  */
+#line 107 "tiger.grm" /* yacc.c:1652  */
     {(yyval.fieldList)=NULL;}
-#line 1570 "y.tab.c" /* yacc.c:1652  */
+#line 1527 "y.tab.c" /* yacc.c:1652  */
     break;
 
   case 18:
-#line 107 "tiger.grm" /* yacc.c:1652  */
+#line 110 "tiger.grm" /* yacc.c:1652  */
     {(yyval.dec)=A_VarDec(EM_tokPos, (yyvsp[-2].symbol), NULL, (yyvsp[0].exp));}
-#line 1576 "y.tab.c" /* yacc.c:1652  */
+#line 1533 "y.tab.c" /* yacc.c:1652  */
     break;
 
   case 19:
-#line 109 "tiger.grm" /* yacc.c:1652  */
+#line 112 "tiger.grm" /* yacc.c:1652  */
     {(yyval.dec)=A_VarDec(EM_tokPos, (yyvsp[-4].symbol), (yyvsp[-2].symbol), (yyvsp[0].exp));}
-#line 1582 "y.tab.c" /* yacc.c:1652  */
+#line 1539 "y.tab.c" /* yacc.c:1652  */
     break;
 
   case 20:
-#line 114 "tiger.grm" /* yacc.c:1652  */
+#line 117 "tiger.grm" /* yacc.c:1652  */
     {(yyval.fundec)=A_Fundec(EM_tokPos, (yyvsp[-5].symbol), (yyvsp[-3].fieldList), NULL, (yyvsp[0].exp));}
-#line 1588 "y.tab.c" /* yacc.c:1652  */
+#line 1545 "y.tab.c" /* yacc.c:1652  */
     break;
 
   case 21:
-#line 116 "tiger.grm" /* yacc.c:1652  */
+#line 119 "tiger.grm" /* yacc.c:1652  */
     {(yyval.fundec)=A_Fundec(EM_tokPos, (yyvsp[-7].symbol), (yyvsp[-5].fieldList), (yyvsp[-2].symbol), (yyvsp[0].exp));}
-#line 1594 "y.tab.c" /* yacc.c:1652  */
+#line 1551 "y.tab.c" /* yacc.c:1652  */
     break;
 
   case 22:
-#line 119 "tiger.grm" /* yacc.c:1652  */
+#line 122 "tiger.grm" /* yacc.c:1652  */
     {(yyval.var)=A_SimpleVar(EM_tokPos, (yyvsp[0].symbol));}
-#line 1600 "y.tab.c" /* yacc.c:1652  */
+#line 1557 "y.tab.c" /* yacc.c:1652  */
     break;
 
   case 23:
-#line 120 "tiger.grm" /* yacc.c:1652  */
+#line 123 "tiger.grm" /* yacc.c:1652  */
     {(yyval.var)=A_FieldVar(EM_tokPos, (yyvsp[-2].var), (yyvsp[0].symbol));}
-#line 1606 "y.tab.c" /* yacc.c:1652  */
+#line 1563 "y.tab.c" /* yacc.c:1652  */
     break;
 
   case 24:
-#line 121 "tiger.grm" /* yacc.c:1652  */
+#line 124 "tiger.grm" /* yacc.c:1652  */
     {(yyval.var)=A_SubscriptVar(EM_tokPos, (yyvsp[-3].var), (yyvsp[-1].exp));}
-#line 1612 "y.tab.c" /* yacc.c:1652  */
+#line 1569 "y.tab.c" /* yacc.c:1652  */
     break;
 
   case 25:
-#line 122 "tiger.grm" /* yacc.c:1652  */
+#line 125 "tiger.grm" /* yacc.c:1652  */
     {(yyval.var)=A_SubscriptVar(EM_tokPos, A_SimpleVar(EM_tokPos, (yyvsp[-3].symbol)), (yyvsp[-1].exp));}
-#line 1618 "y.tab.c" /* yacc.c:1652  */
+#line 1575 "y.tab.c" /* yacc.c:1652  */
     break;
 
   case 26:
-#line 126 "tiger.grm" /* yacc.c:1652  */
+#line 129 "tiger.grm" /* yacc.c:1652  */
     {(yyval.exp)=A_VarExp(EM_tokPos, (yyvsp[0].var));}
-#line 1624 "y.tab.c" /* yacc.c:1652  */
+#line 1581 "y.tab.c" /* yacc.c:1652  */
     break;
 
   case 27:
-#line 127 "tiger.grm" /* yacc.c:1652  */
+#line 130 "tiger.grm" /* yacc.c:1652  */
     {(yyval.exp)=A_NilExp(EM_tokPos);}
-#line 1630 "y.tab.c" /* yacc.c:1652  */
+#line 1587 "y.tab.c" /* yacc.c:1652  */
     break;
 
   case 28:
-#line 128 "tiger.grm" /* yacc.c:1652  */
+#line 131 "tiger.grm" /* yacc.c:1652  */
     {(yyval.exp)=A_IntExp(EM_tokPos, (yyvsp[0].ival));}
-#line 1636 "y.tab.c" /* yacc.c:1652  */
+#line 1593 "y.tab.c" /* yacc.c:1652  */
     break;
 
   case 29:
-#line 129 "tiger.grm" /* yacc.c:1652  */
-    {(yyval.exp)=A_StringExp(EM_tokPos, String((yyvsp[0].sval)));}
-#line 1642 "y.tab.c" /* yacc.c:1652  */
+#line 132 "tiger.grm" /* yacc.c:1652  */
+    {(yyval.exp)=A_StringExp(EM_tokPos, String_strip((yyvsp[0].str).sval, (yyvsp[0].str).ssiz));}
+#line 1599 "y.tab.c" /* yacc.c:1652  */
     break;
 
   case 30:
-#line 130 "tiger.grm" /* yacc.c:1652  */
+#line 133 "tiger.grm" /* yacc.c:1652  */
     {(yyval.exp)=NULL;}
-#line 1648 "y.tab.c" /* yacc.c:1652  */
+#line 1605 "y.tab.c" /* yacc.c:1652  */
     break;
 
   case 31:
-#line 131 "tiger.grm" /* yacc.c:1652  */
+#line 134 "tiger.grm" /* yacc.c:1652  */
     {(yyval.exp)=(yyvsp[0].exp);}
-#line 1654 "y.tab.c" /* yacc.c:1652  */
+#line 1611 "y.tab.c" /* yacc.c:1652  */
     break;
 
   case 32:
-#line 132 "tiger.grm" /* yacc.c:1652  */
+#line 135 "tiger.grm" /* yacc.c:1652  */
     {(yyval.exp)=(yyvsp[0].exp);}
-#line 1660 "y.tab.c" /* yacc.c:1652  */
+#line 1617 "y.tab.c" /* yacc.c:1652  */
     break;
 
   case 33:
-#line 133 "tiger.grm" /* yacc.c:1652  */
+#line 136 "tiger.grm" /* yacc.c:1652  */
     {(yyval.exp)=(yyvsp[0].exp);}
-#line 1666 "y.tab.c" /* yacc.c:1652  */
+#line 1623 "y.tab.c" /* yacc.c:1652  */
     break;
 
   case 34:
-#line 134 "tiger.grm" /* yacc.c:1652  */
+#line 137 "tiger.grm" /* yacc.c:1652  */
     {(yyval.exp)=(yyvsp[0].exp);}
-#line 1672 "y.tab.c" /* yacc.c:1652  */
+#line 1629 "y.tab.c" /* yacc.c:1652  */
     break;
 
   case 35:
-#line 135 "tiger.grm" /* yacc.c:1652  */
+#line 138 "tiger.grm" /* yacc.c:1652  */
     {(yyval.exp)=A_SeqExp(EM_tokPos, A_ExpList((yyvsp[-2].exp), (yyvsp[-1].expList)));}
-#line 1678 "y.tab.c" /* yacc.c:1652  */
+#line 1635 "y.tab.c" /* yacc.c:1652  */
     break;
 
   case 36:
-#line 136 "tiger.grm" /* yacc.c:1652  */
+#line 139 "tiger.grm" /* yacc.c:1652  */
     {(yyval.exp)=A_AssignExp(EM_tokPos, (yyvsp[-2].var), (yyvsp[0].exp));}
-#line 1684 "y.tab.c" /* yacc.c:1652  */
+#line 1641 "y.tab.c" /* yacc.c:1652  */
     break;
 
   case 37:
-#line 137 "tiger.grm" /* yacc.c:1652  */
+#line 140 "tiger.grm" /* yacc.c:1652  */
     {(yyval.exp)=(yyvsp[0].exp);}
-#line 1690 "y.tab.c" /* yacc.c:1652  */
+#line 1647 "y.tab.c" /* yacc.c:1652  */
     break;
 
   case 38:
-#line 138 "tiger.grm" /* yacc.c:1652  */
+#line 141 "tiger.grm" /* yacc.c:1652  */
     {(yyval.exp)=A_WhileExp(EM_tokPos, (yyvsp[-2].exp), (yyvsp[0].exp));}
-#line 1696 "y.tab.c" /* yacc.c:1652  */
+#line 1653 "y.tab.c" /* yacc.c:1652  */
     break;
 
   case 39:
-#line 139 "tiger.grm" /* yacc.c:1652  */
+#line 142 "tiger.grm" /* yacc.c:1652  */
     {(yyval.exp)=A_ForExp(EM_tokPos, (yyvsp[-6].symbol), (yyvsp[-4].exp), (yyvsp[-2].exp), (yyvsp[0].exp));}
-#line 1702 "y.tab.c" /* yacc.c:1652  */
+#line 1659 "y.tab.c" /* yacc.c:1652  */
     break;
 
   case 40:
-#line 140 "tiger.grm" /* yacc.c:1652  */
+#line 143 "tiger.grm" /* yacc.c:1652  */
     {(yyval.exp)=A_BreakExp(EM_tokPos);}
-#line 1708 "y.tab.c" /* yacc.c:1652  */
+#line 1665 "y.tab.c" /* yacc.c:1652  */
     break;
 
   case 41:
-#line 141 "tiger.grm" /* yacc.c:1652  */
+#line 144 "tiger.grm" /* yacc.c:1652  */
     {(yyval.exp)=A_LetExp(EM_tokPos, (yyvsp[-3].decList), (yyvsp[-1].exp));}
-#line 1714 "y.tab.c" /* yacc.c:1652  */
+#line 1671 "y.tab.c" /* yacc.c:1652  */
     break;
 
   case 42:
-#line 142 "tiger.grm" /* yacc.c:1652  */
+#line 145 "tiger.grm" /* yacc.c:1652  */
     {(yyval.exp)=A_ArrayExp(EM_tokPos, (yyvsp[-5].symbol), (yyvsp[-3].exp), (yyvsp[0].exp));}
-#line 1720 "y.tab.c" /* yacc.c:1652  */
+#line 1677 "y.tab.c" /* yacc.c:1652  */
     break;
 
   case 43:
-#line 144 "tiger.grm" /* yacc.c:1652  */
+#line 147 "tiger.grm" /* yacc.c:1652  */
     {(yyval.exp)=A_SeqExp(EM_tokPos, A_ExpList((yyvsp[-1].exp), (yyvsp[0].expList)));}
-#line 1726 "y.tab.c" /* yacc.c:1652  */
+#line 1683 "y.tab.c" /* yacc.c:1652  */
     break;
 
   case 44:
-#line 145 "tiger.grm" /* yacc.c:1652  */
+#line 148 "tiger.grm" /* yacc.c:1652  */
     {(yyval.exp)=NULL;}
-#line 1732 "y.tab.c" /* yacc.c:1652  */
+#line 1689 "y.tab.c" /* yacc.c:1652  */
     break;
 
   case 45:
-#line 147 "tiger.grm" /* yacc.c:1652  */
+#line 150 "tiger.grm" /* yacc.c:1652  */
     {(yyval.expList)=A_ExpList((yyvsp[-1].exp), (yyvsp[0].expList));}
-#line 1738 "y.tab.c" /* yacc.c:1652  */
+#line 1695 "y.tab.c" /* yacc.c:1652  */
     break;
 
   case 46:
-#line 148 "tiger.grm" /* yacc.c:1652  */
+#line 151 "tiger.grm" /* yacc.c:1652  */
     {(yyval.expList)=NULL;}
-#line 1744 "y.tab.c" /* yacc.c:1652  */
+#line 1701 "y.tab.c" /* yacc.c:1652  */
     break;
 
   case 47:
-#line 150 "tiger.grm" /* yacc.c:1652  */
+#line 153 "tiger.grm" /* yacc.c:1652  */
     {(yyval.exp)=A_CallExp(EM_tokPos, (yyvsp[-4].symbol), A_ExpList((yyvsp[-2].exp), (yyvsp[-1].expList)));}
-#line 1750 "y.tab.c" /* yacc.c:1652  */
+#line 1707 "y.tab.c" /* yacc.c:1652  */
     break;
 
   case 48:
-#line 151 "tiger.grm" /* yacc.c:1652  */
+#line 154 "tiger.grm" /* yacc.c:1652  */
     {(yyval.exp)=A_CallExp(EM_tokPos, (yyvsp[-2].symbol), NULL);}
-#line 1756 "y.tab.c" /* yacc.c:1652  */
+#line 1713 "y.tab.c" /* yacc.c:1652  */
     break;
 
   case 49:
-#line 153 "tiger.grm" /* yacc.c:1652  */
+#line 156 "tiger.grm" /* yacc.c:1652  */
     {(yyval.expList)=A_ExpList((yyvsp[-1].exp), (yyvsp[0].expList));}
-#line 1762 "y.tab.c" /* yacc.c:1652  */
+#line 1719 "y.tab.c" /* yacc.c:1652  */
     break;
 
   case 50:
-#line 154 "tiger.grm" /* yacc.c:1652  */
+#line 157 "tiger.grm" /* yacc.c:1652  */
     {(yyval.expList)=NULL;}
-#line 1768 "y.tab.c" /* yacc.c:1652  */
+#line 1725 "y.tab.c" /* yacc.c:1652  */
     break;
 
   case 51:
-#line 156 "tiger.grm" /* yacc.c:1652  */
+#line 159 "tiger.grm" /* yacc.c:1652  */
     {(yyval.exp)=A_OpExp(EM_tokPos, A_minusOp,A_IntExp(EM_tokPos, 0), (yyvsp[0].exp));}
-#line 1774 "y.tab.c" /* yacc.c:1652  */
+#line 1731 "y.tab.c" /* yacc.c:1652  */
     break;
 
   case 52:
-#line 157 "tiger.grm" /* yacc.c:1652  */
+#line 160 "tiger.grm" /* yacc.c:1652  */
     {(yyval.exp)=A_OpExp(EM_tokPos, A_plusOp,(yyvsp[-2].exp), (yyvsp[0].exp));}
-#line 1780 "y.tab.c" /* yacc.c:1652  */
+#line 1737 "y.tab.c" /* yacc.c:1652  */
     break;
 
   case 53:
-#line 158 "tiger.grm" /* yacc.c:1652  */
+#line 161 "tiger.grm" /* yacc.c:1652  */
     {(yyval.exp)=A_OpExp(EM_tokPos, A_minusOp,(yyvsp[-2].exp), (yyvsp[0].exp));}
-#line 1786 "y.tab.c" /* yacc.c:1652  */
+#line 1743 "y.tab.c" /* yacc.c:1652  */
     break;
 
   case 54:
-#line 159 "tiger.grm" /* yacc.c:1652  */
+#line 162 "tiger.grm" /* yacc.c:1652  */
     {(yyval.exp)=A_OpExp(EM_tokPos, A_timesOp,(yyvsp[-2].exp), (yyvsp[0].exp));}
-#line 1792 "y.tab.c" /* yacc.c:1652  */
+#line 1749 "y.tab.c" /* yacc.c:1652  */
     break;
 
   case 55:
-#line 160 "tiger.grm" /* yacc.c:1652  */
+#line 163 "tiger.grm" /* yacc.c:1652  */
     {(yyval.exp)=A_OpExp(EM_tokPos, A_divideOp,(yyvsp[-2].exp), (yyvsp[0].exp));}
-#line 1798 "y.tab.c" /* yacc.c:1652  */
+#line 1755 "y.tab.c" /* yacc.c:1652  */
     break;
 
   case 56:
-#line 161 "tiger.grm" /* yacc.c:1652  */
+#line 164 "tiger.grm" /* yacc.c:1652  */
     {(yyval.exp)=A_OpExp(EM_tokPos, A_eqOp,(yyvsp[-2].exp), (yyvsp[0].exp));}
-#line 1804 "y.tab.c" /* yacc.c:1652  */
+#line 1761 "y.tab.c" /* yacc.c:1652  */
     break;
 
   case 57:
-#line 162 "tiger.grm" /* yacc.c:1652  */
+#line 165 "tiger.grm" /* yacc.c:1652  */
     {(yyval.exp)=A_OpExp(EM_tokPos, A_neqOp,(yyvsp[-2].exp), (yyvsp[0].exp));}
-#line 1810 "y.tab.c" /* yacc.c:1652  */
+#line 1767 "y.tab.c" /* yacc.c:1652  */
     break;
 
   case 58:
-#line 163 "tiger.grm" /* yacc.c:1652  */
+#line 166 "tiger.grm" /* yacc.c:1652  */
     {(yyval.exp)=A_OpExp(EM_tokPos, A_gtOp,(yyvsp[-2].exp), (yyvsp[0].exp));}
-#line 1816 "y.tab.c" /* yacc.c:1652  */
+#line 1773 "y.tab.c" /* yacc.c:1652  */
     break;
 
   case 59:
-#line 164 "tiger.grm" /* yacc.c:1652  */
+#line 167 "tiger.grm" /* yacc.c:1652  */
     {(yyval.exp)=A_OpExp(EM_tokPos, A_ltOp,(yyvsp[-2].exp), (yyvsp[0].exp));}
-#line 1822 "y.tab.c" /* yacc.c:1652  */
+#line 1779 "y.tab.c" /* yacc.c:1652  */
     break;
 
   case 60:
-#line 165 "tiger.grm" /* yacc.c:1652  */
+#line 168 "tiger.grm" /* yacc.c:1652  */
     {(yyval.exp)=A_OpExp(EM_tokPos, A_leOp,(yyvsp[-2].exp), (yyvsp[0].exp));}
-#line 1828 "y.tab.c" /* yacc.c:1652  */
+#line 1785 "y.tab.c" /* yacc.c:1652  */
     break;
 
   case 61:
-#line 166 "tiger.grm" /* yacc.c:1652  */
+#line 169 "tiger.grm" /* yacc.c:1652  */
     {(yyval.exp)=A_OpExp(EM_tokPos, A_geOp,(yyvsp[-2].exp), (yyvsp[0].exp));}
-#line 1834 "y.tab.c" /* yacc.c:1652  */
+#line 1791 "y.tab.c" /* yacc.c:1652  */
     break;
 
   case 62:
-#line 168 "tiger.grm" /* yacc.c:1652  */
+#line 171 "tiger.grm" /* yacc.c:1652  */
     {(yyval.exp)=A_IfExp(EM_tokPos, (yyvsp[-2].exp), (yyvsp[0].exp), A_IntExp(EM_tokPos, 0));}
-#line 1840 "y.tab.c" /* yacc.c:1652  */
+#line 1797 "y.tab.c" /* yacc.c:1652  */
     break;
 
   case 63:
-#line 169 "tiger.grm" /* yacc.c:1652  */
+#line 172 "tiger.grm" /* yacc.c:1652  */
     {(yyval.exp)=A_IfExp(EM_tokPos, (yyvsp[-2].exp), A_IntExp(EM_tokPos, 1), (yyvsp[0].exp));}
-#line 1846 "y.tab.c" /* yacc.c:1652  */
+#line 1803 "y.tab.c" /* yacc.c:1652  */
     break;
 
   case 64:
-#line 172 "tiger.grm" /* yacc.c:1652  */
+#line 175 "tiger.grm" /* yacc.c:1652  */
     {(yyval.exp)=A_RecordExp(EM_tokPos, (yyvsp[-4].symbol), A_EfieldList((yyvsp[-2].efield), (yyvsp[-1].efieldList)));}
-#line 1852 "y.tab.c" /* yacc.c:1652  */
+#line 1809 "y.tab.c" /* yacc.c:1652  */
     break;
 
   case 65:
-#line 173 "tiger.grm" /* yacc.c:1652  */
+#line 176 "tiger.grm" /* yacc.c:1652  */
     {(yyval.exp)=A_RecordExp(EM_tokPos, (yyvsp[-2].symbol), NULL);}
-#line 1858 "y.tab.c" /* yacc.c:1652  */
+#line 1815 "y.tab.c" /* yacc.c:1652  */
     break;
 
   case 66:
-#line 175 "tiger.grm" /* yacc.c:1652  */
+#line 178 "tiger.grm" /* yacc.c:1652  */
     {(yyval.efield)=A_Efield((yyvsp[-2].symbol), (yyvsp[0].exp));}
-#line 1864 "y.tab.c" /* yacc.c:1652  */
+#line 1821 "y.tab.c" /* yacc.c:1652  */
     break;
 
   case 67:
-#line 177 "tiger.grm" /* yacc.c:1652  */
+#line 180 "tiger.grm" /* yacc.c:1652  */
     {(yyval.efieldList)=A_EfieldList((yyvsp[-1].efield), (yyvsp[0].efieldList));}
-#line 1870 "y.tab.c" /* yacc.c:1652  */
+#line 1827 "y.tab.c" /* yacc.c:1652  */
     break;
 
   case 68:
-#line 178 "tiger.grm" /* yacc.c:1652  */
+#line 181 "tiger.grm" /* yacc.c:1652  */
     {(yyval.efieldList)=NULL;}
-#line 1876 "y.tab.c" /* yacc.c:1652  */
+#line 1833 "y.tab.c" /* yacc.c:1652  */
     break;
 
   case 69:
-#line 180 "tiger.grm" /* yacc.c:1652  */
+#line 183 "tiger.grm" /* yacc.c:1652  */
     {(yyval.exp)=A_IfExp(EM_tokPos, (yyvsp[-2].exp), (yyvsp[0].exp), NULL);}
-#line 1882 "y.tab.c" /* yacc.c:1652  */
+#line 1839 "y.tab.c" /* yacc.c:1652  */
     break;
 
   case 70:
-#line 181 "tiger.grm" /* yacc.c:1652  */
+#line 184 "tiger.grm" /* yacc.c:1652  */
     {(yyval.exp)=A_IfExp(EM_tokPos, (yyvsp[-4].exp), (yyvsp[-2].exp), (yyvsp[0].exp));}
-#line 1888 "y.tab.c" /* yacc.c:1652  */
+#line 1845 "y.tab.c" /* yacc.c:1652  */
     break;
 
 
-#line 1892 "y.tab.c" /* yacc.c:1652  */
+#line 1849 "y.tab.c" /* yacc.c:1652  */
       default: break;
     }
   /* User semantic actions sometimes alter yychar, and that requires

@@ -9,17 +9,19 @@ int yylex(void); /* function prototype */
 
 A_exp absyn_root;
 
-void yyerror(char *s)
-{
- EM_error(EM_tokPos, "<%s>", s);
+void yyerror(const char *s) {
+ EM_error(EM_tokPos, "%s", s);
 }
+
 %}
 
+%define parse.error verbose
 
 %union {
   int pos;
   int ival;
   string sval;
+  struct {string sval; int ssiz; } str;
   A_field field;
   A_fieldList fieldList;
   A_dec dec;
@@ -51,17 +53,18 @@ void yyerror(char *s)
 %type <efieldList> recfields
 %type <expList> seq funargs
 
-%token <sval> ID STRING
+%token <sval> ID
+%token <str> STRING
 %token <ival> INT
 
 %token
-  COMMA COLON SEMICOLON LPAREN RPAREN LBRACK RBRACK
-  LBRACE RBRACE DOT
-  PLUS MINUS TIMES DIVIDE EQ NEQ LT LE GT GE
-  AND OR ASSIGN
-  ARRAY IF THEN ELSE WHILE FOR TO DO LET IN END OF
-  BREAK NIL
-  FUNCTION VAR TYPE
+  COMMA "," COLON ":" SEMICOLON ";" LPAREN "(" RPAREN ")" LBRACK "[" RBRACK "]"
+  LBRACE "{" RBRACE "}" DOT "."
+  PLUS "+" MINUS "-" TIMES "*" DIVIDE "/" EQ "=" NEQ "!=" LT "<" LE "<=" GT ">" GE ">="
+  AND "&" OR "|" ASSIGN ":="
+  ARRAY "array" IF "if" THEN "then" ELSE "else" WHILE "while" FOR "for" TO "to" DO "do" LET "let" IN "in" END "end" OF "of"
+  BREAK "break" NIL "nil"
+  FUNCTION "function" VAR "var" TYPE "type"
 
 %right LOWPREC
 %nonassoc THEN OF DO TO
@@ -126,7 +129,7 @@ lvalue : id         %prec LOWPREC       {$$=A_SimpleVar(EM_tokPos, $1);}
 exp : lvalue                            {$$=A_VarExp(EM_tokPos, $1);}
     | NIL                               {$$=A_NilExp(EM_tokPos);}
     | INT                               {$$=A_IntExp(EM_tokPos, $1);}
-    | STRING                            {$$=A_StringExp(EM_tokPos, String($1));}
+    | STRING                            {$$=A_StringExp(EM_tokPos, String_strip($1.sval, $1.ssiz));}
     | LPAREN RPAREN                     {$$=NULL;}
     | funcall                           {$$=$1;}
     | binexp                            {$$=$1;}

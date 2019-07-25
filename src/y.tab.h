@@ -96,63 +96,18 @@ extern int yydebug;
     UMINUS = 302
   };
 #endif
-/* Tokens.  */
-#define ID 258
-#define STRING 259
-#define INT 260
-#define COMMA 261
-#define COLON 262
-#define SEMICOLON 263
-#define LPAREN 264
-#define RPAREN 265
-#define LBRACK 266
-#define RBRACK 267
-#define LBRACE 268
-#define RBRACE 269
-#define DOT 270
-#define PLUS 271
-#define MINUS 272
-#define TIMES 273
-#define DIVIDE 274
-#define EQ 275
-#define NEQ 276
-#define LT 277
-#define LE 278
-#define GT 279
-#define GE 280
-#define AND 281
-#define OR 282
-#define ASSIGN 283
-#define ARRAY 284
-#define IF 285
-#define THEN 286
-#define ELSE 287
-#define WHILE 288
-#define FOR 289
-#define TO 290
-#define DO 291
-#define LET 292
-#define IN 293
-#define END 294
-#define OF 295
-#define BREAK 296
-#define NIL 297
-#define FUNCTION 298
-#define VAR 299
-#define TYPE 300
-#define LOWPREC 301
-#define UMINUS 302
 
 /* Value type.  */
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 
 union YYSTYPE
 {
-#line 19 "tiger.grm" /* yacc.c:1921  */
+#line 20 "tiger.grm" /* yacc.c:1921  */
 
   int pos;
   int ival;
   string sval;
+  struct {string sval; int ssiz; } str;
   A_field field;
   A_fieldList fieldList;
   A_dec dec;
@@ -169,7 +124,7 @@ union YYSTYPE
   A_expList expList;
   S_symbol symbol;
 
-#line 173 "y.tab.h" /* yacc.c:1921  */
+#line 128 "y.tab.h" /* yacc.c:1921  */
 };
 
 typedef union YYSTYPE YYSTYPE;

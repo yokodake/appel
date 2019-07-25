@@ -78,6 +78,6 @@ var      {adjust(); return VAR;}
 type     {adjust(); return TYPE;}
 
 {id}               {adjust(); yylval.sval=yytext; return ID;}
-\"(\\.|[^\\\"])*\" {adjust(); yylval.sval=yytext; return STRING;}
+\"(\\.|[^\\\"])*\" {adjust(); yylval.str.sval=yytext; yylval.str.ssiz=yyleng; return STRING;}
 [0-9]+             {adjust(); yylval.ival=atoi(yytext); return INT;}
 .                  {adjust(); EM_error(EM_tokPos,"illegal token");}

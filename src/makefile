@@ -37,7 +37,7 @@ lex.yy.c: tiger.lex y.tab.h absyn.h
 	flex tiger.lex
 
 y.tab.c: tiger.grm absyn.h
-	yacc -dv tiger.grm
+	bison -dv tiger.grm -o y.tab.c
 
 y.tab.h: y.tab.c
 

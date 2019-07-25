@@ -13,86 +13,86 @@ Grammar
     6    | vardec
     7    | fundec
 
-    8 tydec: TYPE id EQ ty
+    8 tydec: "type" id "=" ty
 
     9 ty: id
-   10   | LBRACE tyfields RBRACE
-   11   | ARRAY OF id
+   10   | "{" tyfields "}"
+   11   | "array" "of" id
 
    12 tyfields: tyfield tyfieldList
    13         | %empty
 
-   14 tyfield: id COLON id
+   14 tyfield: id ":" id
 
-   15 tyfieldList: COMMA tyfield tyfieldList
+   15 tyfieldList: "," tyfield tyfieldList
    16            | %empty
 
-   17 vardec: VAR id ASSIGN exp
-   18       | VAR id COLON id EQ exp
+   17 vardec: "var" id ":=" exp
+   18       | "var" id ":" id "=" exp
 
-   19 fundec: FUNCTION id LPAREN tyfields RPAREN EQ exp
-   20       | FUNCTION id LPAREN tyfields RPAREN COLON id EQ exp
+   19 fundec: "function" id "(" tyfields ")" "=" exp
+   20       | "function" id "(" tyfields ")" ":" id "=" exp
 
    21 lvalue: id
-   22       | lvalue DOT id
-   23       | lvalue LBRACK exp RBRACK
-   24       | id LBRACK exp RBRACK
+   22       | lvalue "." id
+   23       | lvalue "[" exp "]"
+   24       | id "[" exp "]"
 
    25 exp: lvalue
-   26    | NIL
+   26    | "nil"
    27    | INT
    28    | STRING
-   29    | LPAREN RPAREN
+   29    | "(" ")"
    30    | funcall
    31    | binexp
    32    | boolexp
    33    | reccrea
-   34    | LPAREN exp seq RPAREN
-   35    | lvalue ASSIGN exp
+   34    | "(" exp seq ")"
+   35    | lvalue ":=" exp
    36    | ifexp
-   37    | WHILE exp DO exp
-   38    | FOR id ASSIGN exp TO exp DO exp
-   39    | BREAK
-   40    | LET decs IN expseq END
-   41    | id LBRACK exp RBRACK OF exp
+   37    | "while" exp "do" exp
+   38    | "for" id ":=" exp "to" exp "do" exp
+   39    | "break"
+   40    | "let" decs "in" expseq "end"
+   41    | id "[" exp "]" "of" exp
 
    42 expseq: exp seq
    43       | %empty
 
-   44 seq: SEMICOLON exp seq
+   44 seq: ";" exp seq
    45    | %empty
 
-   46 funcall: id LPAREN exp funargs RPAREN
-   47        | id LPAREN RPAREN
+   46 funcall: id "(" exp funargs ")"
+   47        | id "(" ")"
 
-   48 funargs: COMMA exp funargs
+   48 funargs: "," exp funargs
    49        | %empty
 
-   50 binexp: MINUS exp
-   51       | exp PLUS exp
-   52       | exp MINUS exp
-   53       | exp TIMES exp
-   54       | exp DIVIDE exp
-   55       | exp EQ exp
-   56       | exp NEQ exp
-   57       | exp GT exp
-   58       | exp LT exp
-   59       | exp LE exp
-   60       | exp GE exp
+   50 binexp: "-" exp
+   51       | exp "+" exp
+   52       | exp "-" exp
+   53       | exp "*" exp
+   54       | exp "/" exp
+   55       | exp "=" exp
+   56       | exp "!=" exp
+   57       | exp ">" exp
+   58       | exp "<" exp
+   59       | exp "<=" exp
+   60       | exp ">=" exp
 
-   61 boolexp: exp AND exp
-   62        | exp OR exp
+   61 boolexp: exp "&" exp
+   62        | exp "|" exp
 
-   63 reccrea: id LBRACE recfield recfields RBRACE
-   64        | id LBRACE RBRACE
+   63 reccrea: id "{" recfield recfields "}"
+   64        | id "{" "}"
 
-   65 recfield: id EQ exp
+   65 recfield: id "=" exp
 
-   66 recfields: COMMA recfield recfields
+   66 recfields: "," recfield recfields
    67          | %empty
 
-   68 ifexp: IF exp THEN exp
-   69      | IF exp THEN exp ELSE exp
+   68 ifexp: "if" exp "then" exp
+   69      | "if" exp "then" exp "else" exp
 
 
 Terminals, with rules where they appear
@@ -100,48 +100,48 @@ Terminals, with rules where they appear
 $end (0) 0
 error (256)
 ID <sval> (258) 2
-STRING <sval> (259) 28
+STRING <str> (259) 28
 INT <ival> (260) 27
-COMMA (261) 15 48 66
-COLON (262) 14 18 20
-SEMICOLON (263) 44
-LPAREN (264) 19 20 29 34 46 47
-RPAREN (265) 19 20 29 34 46 47
-LBRACK (266) 23 24 41
-RBRACK (267) 23 24 41
-LBRACE (268) 10 63 64
-RBRACE (269) 10 63 64
-DOT (270) 22
-PLUS (271) 51
-MINUS (272) 50 52
-TIMES (273) 53
-DIVIDE (274) 54
-EQ (275) 8 18 19 20 55 65
-NEQ (276) 56
-LT (277) 58
-LE (278) 59
-GT (279) 57
-GE (280) 60
-AND (281) 61
-OR (282) 62
-ASSIGN (283) 17 35 38
-ARRAY (284) 11
-IF (285) 68 69
-THEN (286) 68 69
-ELSE (287) 69
-WHILE (288) 37
-FOR (289) 38
-TO (290) 38
-DO (291) 37 38
-LET (292) 40
-IN (293) 40
-END (294) 40
-OF (295) 11 41
-BREAK (296) 39
-NIL (297) 26
-FUNCTION (298) 19 20
-VAR (299) 17 18
-TYPE (300) 8
+"," (261) 15 48 66
+":" (262) 14 18 20
+";" (263) 44
+"(" (264) 19 20 29 34 46 47
+")" (265) 19 20 29 34 46 47
+"[" (266) 23 24 41
+"]" (267) 23 24 41
+"{" (268) 10 63 64
+"}" (269) 10 63 64
+"." (270) 22
+"+" (271) 51
+"-" (272) 50 52
+"*" (273) 53
+"/" (274) 54
+"=" (275) 8 18 19 20 55 65
+"!=" (276) 56
+"<" (277) 58
+"<=" (278) 59
+">" (279) 57
+">=" (280) 60
+"&" (281) 61
+"|" (282) 62
+":=" (283) 17 35 38
+"array" (284) 11
+"if" (285) 68 69
+"then" (286) 68 69
+"else" (287) 69
+"while" (288) 37
+"for" (289) 38
+"to" (290) 38
+"do" (291) 37 38
+"let" (292) 40
+"in" (293) 40
+"end" (294) 40
+"of" (295) 11 41
+"break" (296) 39
+"nil" (297) 26
+"function" (298) 19 20
+"var" (299) 17 18
+"type" (300) 8
 LOWPREC (301)
 UMINUS (302)
 
@@ -205,17 +205,17 @@ State 0
 
     0 $accept: . program $end
 
-    ID      shift, and go to state 1
-    STRING  shift, and go to state 2
-    INT     shift, and go to state 3
-    LPAREN  shift, and go to state 4
-    MINUS   shift, and go to state 5
-    IF      shift, and go to state 6
-    WHILE   shift, and go to state 7
-    FOR     shift, and go to state 8
-    LET     shift, and go to state 9
-    BREAK   shift, and go to state 10
-    NIL     shift, and go to state 11
+    ID       shift, and go to state 1
+    STRING   shift, and go to state 2
+    INT      shift, and go to state 3
+    "("      shift, and go to state 4
+    "-"      shift, and go to state 5
+    "if"     shift, and go to state 6
+    "while"  shift, and go to state 7
+    "for"    shift, and go to state 8
+    "let"    shift, and go to state 9
+    "break"  shift, and go to state 10
+    "nil"    shift, and go to state 11
 
     program  go to state 12
     id       go to state 13
@@ -251,21 +251,21 @@ State 3
 
 State 4
 
-   29 exp: LPAREN . RPAREN
-   34    | LPAREN . exp seq RPAREN
+   29 exp: "(" . ")"
+   34    | "(" . exp seq ")"
 
-    ID      shift, and go to state 1
-    STRING  shift, and go to state 2
-    INT     shift, and go to state 3
-    LPAREN  shift, and go to state 4
-    RPAREN  shift, and go to state 21
-    MINUS   shift, and go to state 5
-    IF      shift, and go to state 6
-    WHILE   shift, and go to state 7
-    FOR     shift, and go to state 8
-    LET     shift, and go to state 9
-    BREAK   shift, and go to state 10
-    NIL     shift, and go to state 11
+    ID       shift, and go to state 1
+    STRING   shift, and go to state 2
+    INT      shift, and go to state 3
+    "("      shift, and go to state 4
+    ")"      shift, and go to state 21
+    "-"      shift, and go to state 5
+    "if"     shift, and go to state 6
+    "while"  shift, and go to state 7
+    "for"    shift, and go to state 8
+    "let"    shift, and go to state 9
+    "break"  shift, and go to state 10
+    "nil"    shift, and go to state 11
 
     id       go to state 13
     lvalue   go to state 14
@@ -279,19 +279,19 @@ State 4
 
 State 5
 
-   50 binexp: MINUS . exp
+   50 binexp: "-" . exp
 
-    ID      shift, and go to state 1
-    STRING  shift, and go to state 2
-    INT     shift, and go to state 3
-    LPAREN  shift, and go to state 4
-    MINUS   shift, and go to state 5
-    IF      shift, and go to state 6
-    WHILE   shift, and go to state 7
-    FOR     shift, and go to state 8
-    LET     shift, and go to state 9
-    BREAK   shift, and go to state 10
-    NIL     shift, and go to state 11
+    ID       shift, and go to state 1
+    STRING   shift, and go to state 2
+    INT      shift, and go to state 3
+    "("      shift, and go to state 4
+    "-"      shift, and go to state 5
+    "if"     shift, and go to state 6
+    "while"  shift, and go to state 7
+    "for"    shift, and go to state 8
+    "let"    shift, and go to state 9
+    "break"  shift, and go to state 10
+    "nil"    shift, and go to state 11
 
     id       go to state 13
     lvalue   go to state 14
@@ -305,20 +305,20 @@ State 5
 
 State 6
 
-   68 ifexp: IF . exp THEN exp
-   69      | IF . exp THEN exp ELSE exp
+   68 ifexp: "if" . exp "then" exp
+   69      | "if" . exp "then" exp "else" exp
 
-    ID      shift, and go to state 1
-    STRING  shift, and go to state 2
-    INT     shift, and go to state 3
-    LPAREN  shift, and go to state 4
-    MINUS   shift, and go to state 5
-    IF      shift, and go to state 6
-    WHILE   shift, and go to state 7
-    FOR     shift, and go to state 8
-    LET     shift, and go to state 9
-    BREAK   shift, and go to state 10
-    NIL     shift, and go to state 11
+    ID       shift, and go to state 1
+    STRING   shift, and go to state 2
+    INT      shift, and go to state 3
+    "("      shift, and go to state 4
+    "-"      shift, and go to state 5
+    "if"     shift, and go to state 6
+    "while"  shift, and go to state 7
+    "for"    shift, and go to state 8
+    "let"    shift, and go to state 9
+    "break"  shift, and go to state 10
+    "nil"    shift, and go to state 11
 
     id       go to state 13
     lvalue   go to state 14
@@ -332,19 +332,19 @@ State 6
 
 State 7
 
-   37 exp: WHILE . exp DO exp
+   37 exp: "while" . exp "do" exp
 
-    ID      shift, and go to state 1
-    STRING  shift, and go to state 2
-    INT     shift, and go to state 3
-    LPAREN  shift, and go to state 4
-    MINUS   shift, and go to state 5
-    IF      shift, and go to state 6
-    WHILE   shift, and go to state 7
-    FOR     shift, and go to state 8
-    LET     shift, and go to state 9
-    BREAK   shift, and go to state 10
-    NIL     shift, and go to state 11
+    ID       shift, and go to state 1
+    STRING   shift, and go to state 2
+    INT      shift, and go to state 3
+    "("      shift, and go to state 4
+    "-"      shift, and go to state 5
+    "if"     shift, and go to state 6
+    "while"  shift, and go to state 7
+    "for"    shift, and go to state 8
+    "let"    shift, and go to state 9
+    "break"  shift, and go to state 10
+    "nil"    shift, and go to state 11
 
     id       go to state 13
     lvalue   go to state 14
@@ -358,7 +358,7 @@ State 7
 
 State 8
 
-   38 exp: FOR . id ASSIGN exp TO exp DO exp
+   38 exp: "for" . id ":=" exp "to" exp "do" exp
 
     ID  shift, and go to state 1
 
@@ -367,11 +367,11 @@ State 8
 
 State 9
 
-   40 exp: LET . decs IN expseq END
+   40 exp: "let" . decs "in" expseq "end"
 
-    FUNCTION  shift, and go to state 27
-    VAR       shift, and go to state 28
-    TYPE      shift, and go to state 29
+    "function"  shift, and go to state 27
+    "var"       shift, and go to state 28
+    "type"      shift, and go to state 29
 
     $default  reduce using rule 4 (decs)
 
@@ -384,14 +384,14 @@ State 9
 
 State 10
 
-   39 exp: BREAK .
+   39 exp: "break" .
 
     $default  reduce using rule 39 (exp)
 
 
 State 11
 
-   26 exp: NIL .
+   26 exp: "nil" .
 
     $default  reduce using rule 26 (exp)
 
@@ -406,30 +406,30 @@ State 12
 State 13
 
    21 lvalue: id .
-   24       | id . LBRACK exp RBRACK
-   41 exp: id . LBRACK exp RBRACK OF exp
-   46 funcall: id . LPAREN exp funargs RPAREN
-   47        | id . LPAREN RPAREN
-   63 reccrea: id . LBRACE recfield recfields RBRACE
-   64        | id . LBRACE RBRACE
+   24       | id . "[" exp "]"
+   41 exp: id . "[" exp "]" "of" exp
+   46 funcall: id . "(" exp funargs ")"
+   47        | id . "(" ")"
+   63 reccrea: id . "{" recfield recfields "}"
+   64        | id . "{" "}"
 
-    LPAREN  shift, and go to state 36
-    LBRACK  shift, and go to state 37
-    LBRACE  shift, and go to state 38
+    "("  shift, and go to state 36
+    "["  shift, and go to state 37
+    "{"  shift, and go to state 38
 
     $default  reduce using rule 21 (lvalue)
 
 
 State 14
 
-   22 lvalue: lvalue . DOT id
-   23       | lvalue . LBRACK exp RBRACK
+   22 lvalue: lvalue . "." id
+   23       | lvalue . "[" exp "]"
    25 exp: lvalue .
-   35    | lvalue . ASSIGN exp
+   35    | lvalue . ":=" exp
 
-    LBRACK  shift, and go to state 39
-    DOT     shift, and go to state 40
-    ASSIGN  shift, and go to state 41
+    "["   shift, and go to state 39
+    "."   shift, and go to state 40
+    ":="  shift, and go to state 41
 
     $default  reduce using rule 25 (exp)
 
@@ -437,31 +437,31 @@ State 14
 State 15
 
     1 program: exp .
-   51 binexp: exp . PLUS exp
-   52       | exp . MINUS exp
-   53       | exp . TIMES exp
-   54       | exp . DIVIDE exp
-   55       | exp . EQ exp
-   56       | exp . NEQ exp
-   57       | exp . GT exp
-   58       | exp . LT exp
-   59       | exp . LE exp
-   60       | exp . GE exp
-   61 boolexp: exp . AND exp
-   62        | exp . OR exp
+   51 binexp: exp . "+" exp
+   52       | exp . "-" exp
+   53       | exp . "*" exp
+   54       | exp . "/" exp
+   55       | exp . "=" exp
+   56       | exp . "!=" exp
+   57       | exp . ">" exp
+   58       | exp . "<" exp
+   59       | exp . "<=" exp
+   60       | exp . ">=" exp
+   61 boolexp: exp . "&" exp
+   62        | exp . "|" exp
 
-    PLUS    shift, and go to state 42
-    MINUS   shift, and go to state 43
-    TIMES   shift, and go to state 44
-    DIVIDE  shift, and go to state 45
-    EQ      shift, and go to state 46
-    NEQ     shift, and go to state 47
-    LT      shift, and go to state 48
-    LE      shift, and go to state 49
-    GT      shift, and go to state 50
-    GE      shift, and go to state 51
-    AND     shift, and go to state 52
-    OR      shift, and go to state 53
+    "+"   shift, and go to state 42
+    "-"   shift, and go to state 43
+    "*"   shift, and go to state 44
+    "/"   shift, and go to state 45
+    "="   shift, and go to state 46
+    "!="  shift, and go to state 47
+    "<"   shift, and go to state 48
+    "<="  shift, and go to state 49
+    ">"   shift, and go to state 50
+    ">="  shift, and go to state 51
+    "&"   shift, and go to state 52
+    "|"   shift, and go to state 53
 
     $default  reduce using rule 1 (program)
 
@@ -503,40 +503,40 @@ State 20
 
 State 21
 
-   29 exp: LPAREN RPAREN .
+   29 exp: "(" ")" .
 
     $default  reduce using rule 29 (exp)
 
 
 State 22
 
-   34 exp: LPAREN exp . seq RPAREN
-   51 binexp: exp . PLUS exp
-   52       | exp . MINUS exp
-   53       | exp . TIMES exp
-   54       | exp . DIVIDE exp
-   55       | exp . EQ exp
-   56       | exp . NEQ exp
-   57       | exp . GT exp
-   58       | exp . LT exp
-   59       | exp . LE exp
-   60       | exp . GE exp
-   61 boolexp: exp . AND exp
-   62        | exp . OR exp
+   34 exp: "(" exp . seq ")"
+   51 binexp: exp . "+" exp
+   52       | exp . "-" exp
+   53       | exp . "*" exp
+   54       | exp . "/" exp
+   55       | exp . "=" exp
+   56       | exp . "!=" exp
+   57       | exp . ">" exp
+   58       | exp . "<" exp
+   59       | exp . "<=" exp
+   60       | exp . ">=" exp
+   61 boolexp: exp . "&" exp
+   62        | exp . "|" exp
 
-    SEMICOLON  shift, and go to state 54
-    PLUS       shift, and go to state 42
-    MINUS      shift, and go to state 43
-    TIMES      shift, and go to state 44
-    DIVIDE     shift, and go to state 45
-    EQ         shift, and go to state 46
-    NEQ        shift, and go to state 47
-    LT         shift, and go to state 48
-    LE         shift, and go to state 49
-    GT         shift, and go to state 50
-    GE         shift, and go to state 51
-    AND        shift, and go to state 52
-    OR         shift, and go to state 53
+    ";"   shift, and go to state 54
+    "+"   shift, and go to state 42
+    "-"   shift, and go to state 43
+    "*"   shift, and go to state 44
+    "/"   shift, and go to state 45
+    "="   shift, and go to state 46
+    "!="  shift, and go to state 47
+    "<"   shift, and go to state 48
+    "<="  shift, and go to state 49
+    ">"   shift, and go to state 50
+    ">="  shift, and go to state 51
+    "&"   shift, and go to state 52
+    "|"   shift, and go to state 53
 
     $default  reduce using rule 45 (seq)
 
@@ -545,97 +545,97 @@ State 22
 
 State 23
 
-   50 binexp: MINUS exp .
-   51       | exp . PLUS exp
-   52       | exp . MINUS exp
-   53       | exp . TIMES exp
-   54       | exp . DIVIDE exp
-   55       | exp . EQ exp
-   56       | exp . NEQ exp
-   57       | exp . GT exp
-   58       | exp . LT exp
-   59       | exp . LE exp
-   60       | exp . GE exp
-   61 boolexp: exp . AND exp
-   62        | exp . OR exp
+   50 binexp: "-" exp .
+   51       | exp . "+" exp
+   52       | exp . "-" exp
+   53       | exp . "*" exp
+   54       | exp . "/" exp
+   55       | exp . "=" exp
+   56       | exp . "!=" exp
+   57       | exp . ">" exp
+   58       | exp . "<" exp
+   59       | exp . "<=" exp
+   60       | exp . ">=" exp
+   61 boolexp: exp . "&" exp
+   62        | exp . "|" exp
 
     $default  reduce using rule 50 (binexp)
 
 
 State 24
 
-   51 binexp: exp . PLUS exp
-   52       | exp . MINUS exp
-   53       | exp . TIMES exp
-   54       | exp . DIVIDE exp
-   55       | exp . EQ exp
-   56       | exp . NEQ exp
-   57       | exp . GT exp
-   58       | exp . LT exp
-   59       | exp . LE exp
-   60       | exp . GE exp
-   61 boolexp: exp . AND exp
-   62        | exp . OR exp
-   68 ifexp: IF exp . THEN exp
-   69      | IF exp . THEN exp ELSE exp
+   51 binexp: exp . "+" exp
+   52       | exp . "-" exp
+   53       | exp . "*" exp
+   54       | exp . "/" exp
+   55       | exp . "=" exp
+   56       | exp . "!=" exp
+   57       | exp . ">" exp
+   58       | exp . "<" exp
+   59       | exp . "<=" exp
+   60       | exp . ">=" exp
+   61 boolexp: exp . "&" exp
+   62        | exp . "|" exp
+   68 ifexp: "if" exp . "then" exp
+   69      | "if" exp . "then" exp "else" exp
 
-    PLUS    shift, and go to state 42
-    MINUS   shift, and go to state 43
-    TIMES   shift, and go to state 44
-    DIVIDE  shift, and go to state 45
-    EQ      shift, and go to state 46
-    NEQ     shift, and go to state 47
-    LT      shift, and go to state 48
-    LE      shift, and go to state 49
-    GT      shift, and go to state 50
-    GE      shift, and go to state 51
-    AND     shift, and go to state 52
-    OR      shift, and go to state 53
-    THEN    shift, and go to state 56
+    "+"     shift, and go to state 42
+    "-"     shift, and go to state 43
+    "*"     shift, and go to state 44
+    "/"     shift, and go to state 45
+    "="     shift, and go to state 46
+    "!="    shift, and go to state 47
+    "<"     shift, and go to state 48
+    "<="    shift, and go to state 49
+    ">"     shift, and go to state 50
+    ">="    shift, and go to state 51
+    "&"     shift, and go to state 52
+    "|"     shift, and go to state 53
+    "then"  shift, and go to state 56
 
 
 State 25
 
-   37 exp: WHILE exp . DO exp
-   51 binexp: exp . PLUS exp
-   52       | exp . MINUS exp
-   53       | exp . TIMES exp
-   54       | exp . DIVIDE exp
-   55       | exp . EQ exp
-   56       | exp . NEQ exp
-   57       | exp . GT exp
-   58       | exp . LT exp
-   59       | exp . LE exp
-   60       | exp . GE exp
-   61 boolexp: exp . AND exp
-   62        | exp . OR exp
+   37 exp: "while" exp . "do" exp
+   51 binexp: exp . "+" exp
+   52       | exp . "-" exp
+   53       | exp . "*" exp
+   54       | exp . "/" exp
+   55       | exp . "=" exp
+   56       | exp . "!=" exp
+   57       | exp . ">" exp
+   58       | exp . "<" exp
+   59       | exp . "<=" exp
+   60       | exp . ">=" exp
+   61 boolexp: exp . "&" exp
+   62        | exp . "|" exp
 
-    PLUS    shift, and go to state 42
-    MINUS   shift, and go to state 43
-    TIMES   shift, and go to state 44
-    DIVIDE  shift, and go to state 45
-    EQ      shift, and go to state 46
-    NEQ     shift, and go to state 47
-    LT      shift, and go to state 48
-    LE      shift, and go to state 49
-    GT      shift, and go to state 50
-    GE      shift, and go to state 51
-    AND     shift, and go to state 52
-    OR      shift, and go to state 53
-    DO      shift, and go to state 57
+    "+"   shift, and go to state 42
+    "-"   shift, and go to state 43
+    "*"   shift, and go to state 44
+    "/"   shift, and go to state 45
+    "="   shift, and go to state 46
+    "!="  shift, and go to state 47
+    "<"   shift, and go to state 48
+    "<="  shift, and go to state 49
+    ">"   shift, and go to state 50
+    ">="  shift, and go to state 51
+    "&"   shift, and go to state 52
+    "|"   shift, and go to state 53
+    "do"  shift, and go to state 57
 
 
 State 26
 
-   38 exp: FOR id . ASSIGN exp TO exp DO exp
+   38 exp: "for" id . ":=" exp "to" exp "do" exp
 
-    ASSIGN  shift, and go to state 58
+    ":="  shift, and go to state 58
 
 
 State 27
 
-   19 fundec: FUNCTION . id LPAREN tyfields RPAREN EQ exp
-   20       | FUNCTION . id LPAREN tyfields RPAREN COLON id EQ exp
+   19 fundec: "function" . id "(" tyfields ")" "=" exp
+   20       | "function" . id "(" tyfields ")" ":" id "=" exp
 
     ID  shift, and go to state 1
 
@@ -644,8 +644,8 @@ State 27
 
 State 28
 
-   17 vardec: VAR . id ASSIGN exp
-   18       | VAR . id COLON id EQ exp
+   17 vardec: "var" . id ":=" exp
+   18       | "var" . id ":" id "=" exp
 
     ID  shift, and go to state 1
 
@@ -654,7 +654,7 @@ State 28
 
 State 29
 
-    8 tydec: TYPE . id EQ ty
+    8 tydec: "type" . id "=" ty
 
     ID  shift, and go to state 1
 
@@ -663,18 +663,18 @@ State 29
 
 State 30
 
-   40 exp: LET decs . IN expseq END
+   40 exp: "let" decs . "in" expseq "end"
 
-    IN  shift, and go to state 62
+    "in"  shift, and go to state 62
 
 
 State 31
 
     3 decs: dec . decs
 
-    FUNCTION  shift, and go to state 27
-    VAR       shift, and go to state 28
-    TYPE      shift, and go to state 29
+    "function"  shift, and go to state 27
+    "var"       shift, and go to state 28
+    "type"      shift, and go to state 29
 
     $default  reduce using rule 4 (decs)
 
@@ -715,21 +715,21 @@ State 35
 
 State 36
 
-   46 funcall: id LPAREN . exp funargs RPAREN
-   47        | id LPAREN . RPAREN
+   46 funcall: id "(" . exp funargs ")"
+   47        | id "(" . ")"
 
-    ID      shift, and go to state 1
-    STRING  shift, and go to state 2
-    INT     shift, and go to state 3
-    LPAREN  shift, and go to state 4
-    RPAREN  shift, and go to state 64
-    MINUS   shift, and go to state 5
-    IF      shift, and go to state 6
-    WHILE   shift, and go to state 7
-    FOR     shift, and go to state 8
-    LET     shift, and go to state 9
-    BREAK   shift, and go to state 10
-    NIL     shift, and go to state 11
+    ID       shift, and go to state 1
+    STRING   shift, and go to state 2
+    INT      shift, and go to state 3
+    "("      shift, and go to state 4
+    ")"      shift, and go to state 64
+    "-"      shift, and go to state 5
+    "if"     shift, and go to state 6
+    "while"  shift, and go to state 7
+    "for"    shift, and go to state 8
+    "let"    shift, and go to state 9
+    "break"  shift, and go to state 10
+    "nil"    shift, and go to state 11
 
     id       go to state 13
     lvalue   go to state 14
@@ -743,20 +743,20 @@ State 36
 
 State 37
 
-   24 lvalue: id LBRACK . exp RBRACK
-   41 exp: id LBRACK . exp RBRACK OF exp
+   24 lvalue: id "[" . exp "]"
+   41 exp: id "[" . exp "]" "of" exp
 
-    ID      shift, and go to state 1
-    STRING  shift, and go to state 2
-    INT     shift, and go to state 3
-    LPAREN  shift, and go to state 4
-    MINUS   shift, and go to state 5
-    IF      shift, and go to state 6
-    WHILE   shift, and go to state 7
-    FOR     shift, and go to state 8
-    LET     shift, and go to state 9
-    BREAK   shift, and go to state 10
-    NIL     shift, and go to state 11
+    ID       shift, and go to state 1
+    STRING   shift, and go to state 2
+    INT      shift, and go to state 3
+    "("      shift, and go to state 4
+    "-"      shift, and go to state 5
+    "if"     shift, and go to state 6
+    "while"  shift, and go to state 7
+    "for"    shift, and go to state 8
+    "let"    shift, and go to state 9
+    "break"  shift, and go to state 10
+    "nil"    shift, and go to state 11
 
     id       go to state 13
     lvalue   go to state 14
@@ -770,11 +770,11 @@ State 37
 
 State 38
 
-   63 reccrea: id LBRACE . recfield recfields RBRACE
-   64        | id LBRACE . RBRACE
+   63 reccrea: id "{" . recfield recfields "}"
+   64        | id "{" . "}"
 
-    ID      shift, and go to state 1
-    RBRACE  shift, and go to state 67
+    ID   shift, and go to state 1
+    "}"  shift, and go to state 67
 
     id        go to state 68
     recfield  go to state 69
@@ -782,19 +782,19 @@ State 38
 
 State 39
 
-   23 lvalue: lvalue LBRACK . exp RBRACK
+   23 lvalue: lvalue "[" . exp "]"
 
-    ID      shift, and go to state 1
-    STRING  shift, and go to state 2
-    INT     shift, and go to state 3
-    LPAREN  shift, and go to state 4
-    MINUS   shift, and go to state 5
-    IF      shift, and go to state 6
-    WHILE   shift, and go to state 7
-    FOR     shift, and go to state 8
-    LET     shift, and go to state 9
-    BREAK   shift, and go to state 10
-    NIL     shift, and go to state 11
+    ID       shift, and go to state 1
+    STRING   shift, and go to state 2
+    INT      shift, and go to state 3
+    "("      shift, and go to state 4
+    "-"      shift, and go to state 5
+    "if"     shift, and go to state 6
+    "while"  shift, and go to state 7
+    "for"    shift, and go to state 8
+    "let"    shift, and go to state 9
+    "break"  shift, and go to state 10
+    "nil"    shift, and go to state 11
 
     id       go to state 13
     lvalue   go to state 14
@@ -808,7 +808,7 @@ State 39
 
 State 40
 
-   22 lvalue: lvalue DOT . id
+   22 lvalue: lvalue "." . id
 
     ID  shift, and go to state 1
 
@@ -817,19 +817,19 @@ State 40
 
 State 41
 
-   35 exp: lvalue ASSIGN . exp
+   35 exp: lvalue ":=" . exp
 
-    ID      shift, and go to state 1
-    STRING  shift, and go to state 2
-    INT     shift, and go to state 3
-    LPAREN  shift, and go to state 4
-    MINUS   shift, and go to state 5
-    IF      shift, and go to state 6
-    WHILE   shift, and go to state 7
-    FOR     shift, and go to state 8
-    LET     shift, and go to state 9
-    BREAK   shift, and go to state 10
-    NIL     shift, and go to state 11
+    ID       shift, and go to state 1
+    STRING   shift, and go to state 2
+    INT      shift, and go to state 3
+    "("      shift, and go to state 4
+    "-"      shift, and go to state 5
+    "if"     shift, and go to state 6
+    "while"  shift, and go to state 7
+    "for"    shift, and go to state 8
+    "let"    shift, and go to state 9
+    "break"  shift, and go to state 10
+    "nil"    shift, and go to state 11
 
     id       go to state 13
     lvalue   go to state 14
@@ -843,19 +843,19 @@ State 41
 
 State 42
 
-   51 binexp: exp PLUS . exp
+   51 binexp: exp "+" . exp
 
-    ID      shift, and go to state 1
-    STRING  shift, and go to state 2
-    INT     shift, and go to state 3
-    LPAREN  shift, and go to state 4
-    MINUS   shift, and go to state 5
-    IF      shift, and go to state 6
-    WHILE   shift, and go to state 7
-    FOR     shift, and go to state 8
-    LET     shift, and go to state 9
-    BREAK   shift, and go to state 10
-    NIL     shift, and go to state 11
+    ID       shift, and go to state 1
+    STRING   shift, and go to state 2
+    INT      shift, and go to state 3
+    "("      shift, and go to state 4
+    "-"      shift, and go to state 5
+    "if"     shift, and go to state 6
+    "while"  shift, and go to state 7
+    "for"    shift, and go to state 8
+    "let"    shift, and go to state 9
+    "break"  shift, and go to state 10
+    "nil"    shift, and go to state 11
 
     id       go to state 13
     lvalue   go to state 14
@@ -869,19 +869,19 @@ State 42
 
 State 43
 
-   52 binexp: exp MINUS . exp
+   52 binexp: exp "-" . exp
 
-    ID      shift, and go to state 1
-    STRING  shift, and go to state 2
-    INT     shift, and go to state 3
-    LPAREN  shift, and go to state 4
-    MINUS   shift, and go to state 5
-    IF      shift, and go to state 6
-    WHILE   shift, and go to state 7
-    FOR     shift, and go to state 8
-    LET     shift, and go to state 9
-    BREAK   shift, and go to state 10
-    NIL     shift, and go to state 11
+    ID       shift, and go to state 1
+    STRING   shift, and go to state 2
+    INT      shift, and go to state 3
+    "("      shift, and go to state 4
+    "-"      shift, and go to state 5
+    "if"     shift, and go to state 6
+    "while"  shift, and go to state 7
+    "for"    shift, and go to state 8
+    "let"    shift, and go to state 9
+    "break"  shift, and go to state 10
+    "nil"    shift, and go to state 11
 
     id       go to state 13
     lvalue   go to state 14
@@ -895,19 +895,19 @@ State 43
 
 State 44
 
-   53 binexp: exp TIMES . exp
+   53 binexp: exp "*" . exp
 
-    ID      shift, and go to state 1
-    STRING  shift, and go to state 2
-    INT     shift, and go to state 3
-    LPAREN  shift, and go to state 4
-    MINUS   shift, and go to state 5
-    IF      shift, and go to state 6
-    WHILE   shift, and go to state 7
-    FOR     shift, and go to state 8
-    LET     shift, and go to state 9
-    BREAK   shift, and go to state 10
-    NIL     shift, and go to state 11
+    ID       shift, and go to state 1
+    STRING   shift, and go to state 2
+    INT      shift, and go to state 3
+    "("      shift, and go to state 4
+    "-"      shift, and go to state 5
+    "if"     shift, and go to state 6
+    "while"  shift, and go to state 7
+    "for"    shift, and go to state 8
+    "let"    shift, and go to state 9
+    "break"  shift, and go to state 10
+    "nil"    shift, and go to state 11
 
     id       go to state 13
     lvalue   go to state 14
@@ -921,19 +921,19 @@ State 44
 
 State 45
 
-   54 binexp: exp DIVIDE . exp
+   54 binexp: exp "/" . exp
 
-    ID      shift, and go to state 1
-    STRING  shift, and go to state 2
-    INT     shift, and go to state 3
-    LPAREN  shift, and go to state 4
-    MINUS   shift, and go to state 5
-    IF      shift, and go to state 6
-    WHILE   shift, and go to state 7
-    FOR     shift, and go to state 8
-    LET     shift, and go to state 9
-    BREAK   shift, and go to state 10
-    NIL     shift, and go to state 11
+    ID       shift, and go to state 1
+    STRING   shift, and go to state 2
+    INT      shift, and go to state 3
+    "("      shift, and go to state 4
+    "-"      shift, and go to state 5
+    "if"     shift, and go to state 6
+    "while"  shift, and go to state 7
+    "for"    shift, and go to state 8
+    "let"    shift, and go to state 9
+    "break"  shift, and go to state 10
+    "nil"    shift, and go to state 11
 
     id       go to state 13
     lvalue   go to state 14
@@ -947,19 +947,19 @@ State 45
 
 State 46
 
-   55 binexp: exp EQ . exp
+   55 binexp: exp "=" . exp
 
-    ID      shift, and go to state 1
-    STRING  shift, and go to state 2
-    INT     shift, and go to state 3
-    LPAREN  shift, and go to state 4
-    MINUS   shift, and go to state 5
-    IF      shift, and go to state 6
-    WHILE   shift, and go to state 7
-    FOR     shift, and go to state 8
-    LET     shift, and go to state 9
-    BREAK   shift, and go to state 10
-    NIL     shift, and go to state 11
+    ID       shift, and go to state 1
+    STRING   shift, and go to state 2
+    INT      shift, and go to state 3
+    "("      shift, and go to state 4
+    "-"      shift, and go to state 5
+    "if"     shift, and go to state 6
+    "while"  shift, and go to state 7
+    "for"    shift, and go to state 8
+    "let"    shift, and go to state 9
+    "break"  shift, and go to state 10
+    "nil"    shift, and go to state 11
 
     id       go to state 13
     lvalue   go to state 14
@@ -973,19 +973,19 @@ State 46
 
 State 47
 
-   56 binexp: exp NEQ . exp
+   56 binexp: exp "!=" . exp
 
-    ID      shift, and go to state 1
-    STRING  shift, and go to state 2
-    INT     shift, and go to state 3
-    LPAREN  shift, and go to state 4
-    MINUS   shift, and go to state 5
-    IF      shift, and go to state 6
-    WHILE   shift, and go to state 7
-    FOR     shift, and go to state 8
-    LET     shift, and go to state 9
-    BREAK   shift, and go to state 10
-    NIL     shift, and go to state 11
+    ID       shift, and go to state 1
+    STRING   shift, and go to state 2
+    INT      shift, and go to state 3
+    "("      shift, and go to state 4
+    "-"      shift, and go to state 5
+    "if"     shift, and go to state 6
+    "while"  shift, and go to state 7
+    "for"    shift, and go to state 8
+    "let"    shift, and go to state 9
+    "break"  shift, and go to state 10
+    "nil"    shift, and go to state 11
 
     id       go to state 13
     lvalue   go to state 14
@@ -999,19 +999,19 @@ State 47
 
 State 48
 
-   58 binexp: exp LT . exp
+   58 binexp: exp "<" . exp
 
-    ID      shift, and go to state 1
-    STRING  shift, and go to state 2
-    INT     shift, and go to state 3
-    LPAREN  shift, and go to state 4
-    MINUS   shift, and go to state 5
-    IF      shift, and go to state 6
-    WHILE   shift, and go to state 7
-    FOR     shift, and go to state 8
-    LET     shift, and go to state 9
-    BREAK   shift, and go to state 10
-    NIL     shift, and go to state 11
+    ID       shift, and go to state 1
+    STRING   shift, and go to state 2
+    INT      shift, and go to state 3
+    "("      shift, and go to state 4
+    "-"      shift, and go to state 5
+    "if"     shift, and go to state 6
+    "while"  shift, and go to state 7
+    "for"    shift, and go to state 8
+    "let"    shift, and go to state 9
+    "break"  shift, and go to state 10
+    "nil"    shift, and go to state 11
 
     id       go to state 13
     lvalue   go to state 14
@@ -1025,19 +1025,19 @@ State 48
 
 State 49
 
-   59 binexp: exp LE . exp
+   59 binexp: exp "<=" . exp
 
-    ID      shift, and go to state 1
-    STRING  shift, and go to state 2
-    INT     shift, and go to state 3
-    LPAREN  shift, and go to state 4
-    MINUS   shift, and go to state 5
-    IF      shift, and go to state 6
-    WHILE   shift, and go to state 7
-    FOR     shift, and go to state 8
-    LET     shift, and go to state 9
-    BREAK   shift, and go to state 10
-    NIL     shift, and go to state 11
+    ID       shift, and go to state 1
+    STRING   shift, and go to state 2
+    INT      shift, and go to state 3
+    "("      shift, and go to state 4
+    "-"      shift, and go to state 5
+    "if"     shift, and go to state 6
+    "while"  shift, and go to state 7
+    "for"    shift, and go to state 8
+    "let"    shift, and go to state 9
+    "break"  shift, and go to state 10
+    "nil"    shift, and go to state 11
 
     id       go to state 13
     lvalue   go to state 14
@@ -1051,19 +1051,19 @@ State 49
 
 State 50
 
-   57 binexp: exp GT . exp
+   57 binexp: exp ">" . exp
 
-    ID      shift, and go to state 1
-    STRING  shift, and go to state 2
-    INT     shift, and go to state 3
-    LPAREN  shift, and go to state 4
-    MINUS   shift, and go to state 5
-    IF      shift, and go to state 6
-    WHILE   shift, and go to state 7
-    FOR     shift, and go to state 8
-    LET     shift, and go to state 9
-    BREAK   shift, and go to state 10
-    NIL     shift, and go to state 11
+    ID       shift, and go to state 1
+    STRING   shift, and go to state 2
+    INT      shift, and go to state 3
+    "("      shift, and go to state 4
+    "-"      shift, and go to state 5
+    "if"     shift, and go to state 6
+    "while"  shift, and go to state 7
+    "for"    shift, and go to state 8
+    "let"    shift, and go to state 9
+    "break"  shift, and go to state 10
+    "nil"    shift, and go to state 11
 
     id       go to state 13
     lvalue   go to state 14
@@ -1077,19 +1077,19 @@ State 50
 
 State 51
 
-   60 binexp: exp GE . exp
+   60 binexp: exp ">=" . exp
 
-    ID      shift, and go to state 1
-    STRING  shift, and go to state 2
-    INT     shift, and go to state 3
-    LPAREN  shift, and go to state 4
-    MINUS   shift, and go to state 5
-    IF      shift, and go to state 6
-    WHILE   shift, and go to state 7
-    FOR     shift, and go to state 8
-    LET     shift, and go to state 9
-    BREAK   shift, and go to state 10
-    NIL     shift, and go to state 11
+    ID       shift, and go to state 1
+    STRING   shift, and go to state 2
+    INT      shift, and go to state 3
+    "("      shift, and go to state 4
+    "-"      shift, and go to state 5
+    "if"     shift, and go to state 6
+    "while"  shift, and go to state 7
+    "for"    shift, and go to state 8
+    "let"    shift, and go to state 9
+    "break"  shift, and go to state 10
+    "nil"    shift, and go to state 11
 
     id       go to state 13
     lvalue   go to state 14
@@ -1103,19 +1103,19 @@ State 51
 
 State 52
 
-   61 boolexp: exp AND . exp
+   61 boolexp: exp "&" . exp
 
-    ID      shift, and go to state 1
-    STRING  shift, and go to state 2
-    INT     shift, and go to state 3
-    LPAREN  shift, and go to state 4
-    MINUS   shift, and go to state 5
-    IF      shift, and go to state 6
-    WHILE   shift, and go to state 7
-    FOR     shift, and go to state 8
-    LET     shift, and go to state 9
-    BREAK   shift, and go to state 10
-    NIL     shift, and go to state 11
+    ID       shift, and go to state 1
+    STRING   shift, and go to state 2
+    INT      shift, and go to state 3
+    "("      shift, and go to state 4
+    "-"      shift, and go to state 5
+    "if"     shift, and go to state 6
+    "while"  shift, and go to state 7
+    "for"    shift, and go to state 8
+    "let"    shift, and go to state 9
+    "break"  shift, and go to state 10
+    "nil"    shift, and go to state 11
 
     id       go to state 13
     lvalue   go to state 14
@@ -1129,19 +1129,19 @@ State 52
 
 State 53
 
-   62 boolexp: exp OR . exp
+   62 boolexp: exp "|" . exp
 
-    ID      shift, and go to state 1
-    STRING  shift, and go to state 2
-    INT     shift, and go to state 3
-    LPAREN  shift, and go to state 4
-    MINUS   shift, and go to state 5
-    IF      shift, and go to state 6
-    WHILE   shift, and go to state 7
-    FOR     shift, and go to state 8
-    LET     shift, and go to state 9
-    BREAK   shift, and go to state 10
-    NIL     shift, and go to state 11
+    ID       shift, and go to state 1
+    STRING   shift, and go to state 2
+    INT      shift, and go to state 3
+    "("      shift, and go to state 4
+    "-"      shift, and go to state 5
+    "if"     shift, and go to state 6
+    "while"  shift, and go to state 7
+    "for"    shift, and go to state 8
+    "let"    shift, and go to state 9
+    "break"  shift, and go to state 10
+    "nil"    shift, and go to state 11
 
     id       go to state 13
     lvalue   go to state 14
@@ -1155,19 +1155,19 @@ State 53
 
 State 54
 
-   44 seq: SEMICOLON . exp seq
+   44 seq: ";" . exp seq
 
-    ID      shift, and go to state 1
-    STRING  shift, and go to state 2
-    INT     shift, and go to state 3
-    LPAREN  shift, and go to state 4
-    MINUS   shift, and go to state 5
-    IF      shift, and go to state 6
-    WHILE   shift, and go to state 7
-    FOR     shift, and go to state 8
-    LET     shift, and go to state 9
-    BREAK   shift, and go to state 10
-    NIL     shift, and go to state 11
+    ID       shift, and go to state 1
+    STRING   shift, and go to state 2
+    INT      shift, and go to state 3
+    "("      shift, and go to state 4
+    "-"      shift, and go to state 5
+    "if"     shift, and go to state 6
+    "while"  shift, and go to state 7
+    "for"    shift, and go to state 8
+    "let"    shift, and go to state 9
+    "break"  shift, and go to state 10
+    "nil"    shift, and go to state 11
 
     id       go to state 13
     lvalue   go to state 14
@@ -1181,27 +1181,27 @@ State 54
 
 State 55
 
-   34 exp: LPAREN exp seq . RPAREN
+   34 exp: "(" exp seq . ")"
 
-    RPAREN  shift, and go to state 86
+    ")"  shift, and go to state 86
 
 
 State 56
 
-   68 ifexp: IF exp THEN . exp
-   69      | IF exp THEN . exp ELSE exp
+   68 ifexp: "if" exp "then" . exp
+   69      | "if" exp "then" . exp "else" exp
 
-    ID      shift, and go to state 1
-    STRING  shift, and go to state 2
-    INT     shift, and go to state 3
-    LPAREN  shift, and go to state 4
-    MINUS   shift, and go to state 5
-    IF      shift, and go to state 6
-    WHILE   shift, and go to state 7
-    FOR     shift, and go to state 8
-    LET     shift, and go to state 9
-    BREAK   shift, and go to state 10
-    NIL     shift, and go to state 11
+    ID       shift, and go to state 1
+    STRING   shift, and go to state 2
+    INT      shift, and go to state 3
+    "("      shift, and go to state 4
+    "-"      shift, and go to state 5
+    "if"     shift, and go to state 6
+    "while"  shift, and go to state 7
+    "for"    shift, and go to state 8
+    "let"    shift, and go to state 9
+    "break"  shift, and go to state 10
+    "nil"    shift, and go to state 11
 
     id       go to state 13
     lvalue   go to state 14
@@ -1215,19 +1215,19 @@ State 56
 
 State 57
 
-   37 exp: WHILE exp DO . exp
+   37 exp: "while" exp "do" . exp
 
-    ID      shift, and go to state 1
-    STRING  shift, and go to state 2
-    INT     shift, and go to state 3
-    LPAREN  shift, and go to state 4
-    MINUS   shift, and go to state 5
-    IF      shift, and go to state 6
-    WHILE   shift, and go to state 7
-    FOR     shift, and go to state 8
-    LET     shift, and go to state 9
-    BREAK   shift, and go to state 10
-    NIL     shift, and go to state 11
+    ID       shift, and go to state 1
+    STRING   shift, and go to state 2
+    INT      shift, and go to state 3
+    "("      shift, and go to state 4
+    "-"      shift, and go to state 5
+    "if"     shift, and go to state 6
+    "while"  shift, and go to state 7
+    "for"    shift, and go to state 8
+    "let"    shift, and go to state 9
+    "break"  shift, and go to state 10
+    "nil"    shift, and go to state 11
 
     id       go to state 13
     lvalue   go to state 14
@@ -1241,19 +1241,19 @@ State 57
 
 State 58
 
-   38 exp: FOR id ASSIGN . exp TO exp DO exp
+   38 exp: "for" id ":=" . exp "to" exp "do" exp
 
-    ID      shift, and go to state 1
-    STRING  shift, and go to state 2
-    INT     shift, and go to state 3
-    LPAREN  shift, and go to state 4
-    MINUS   shift, and go to state 5
-    IF      shift, and go to state 6
-    WHILE   shift, and go to state 7
-    FOR     shift, and go to state 8
-    LET     shift, and go to state 9
-    BREAK   shift, and go to state 10
-    NIL     shift, and go to state 11
+    ID       shift, and go to state 1
+    STRING   shift, and go to state 2
+    INT      shift, and go to state 3
+    "("      shift, and go to state 4
+    "-"      shift, and go to state 5
+    "if"     shift, and go to state 6
+    "while"  shift, and go to state 7
+    "for"    shift, and go to state 8
+    "let"    shift, and go to state 9
+    "break"  shift, and go to state 10
+    "nil"    shift, and go to state 11
 
     id       go to state 13
     lvalue   go to state 14
@@ -1267,43 +1267,43 @@ State 58
 
 State 59
 
-   19 fundec: FUNCTION id . LPAREN tyfields RPAREN EQ exp
-   20       | FUNCTION id . LPAREN tyfields RPAREN COLON id EQ exp
+   19 fundec: "function" id . "(" tyfields ")" "=" exp
+   20       | "function" id . "(" tyfields ")" ":" id "=" exp
 
-    LPAREN  shift, and go to state 90
+    "("  shift, and go to state 90
 
 
 State 60
 
-   17 vardec: VAR id . ASSIGN exp
-   18       | VAR id . COLON id EQ exp
+   17 vardec: "var" id . ":=" exp
+   18       | "var" id . ":" id "=" exp
 
-    COLON   shift, and go to state 91
-    ASSIGN  shift, and go to state 92
+    ":"   shift, and go to state 91
+    ":="  shift, and go to state 92
 
 
 State 61
 
-    8 tydec: TYPE id . EQ ty
+    8 tydec: "type" id . "=" ty
 
-    EQ  shift, and go to state 93
+    "="  shift, and go to state 93
 
 
 State 62
 
-   40 exp: LET decs IN . expseq END
+   40 exp: "let" decs "in" . expseq "end"
 
-    ID      shift, and go to state 1
-    STRING  shift, and go to state 2
-    INT     shift, and go to state 3
-    LPAREN  shift, and go to state 4
-    MINUS   shift, and go to state 5
-    IF      shift, and go to state 6
-    WHILE   shift, and go to state 7
-    FOR     shift, and go to state 8
-    LET     shift, and go to state 9
-    BREAK   shift, and go to state 10
-    NIL     shift, and go to state 11
+    ID       shift, and go to state 1
+    STRING   shift, and go to state 2
+    INT      shift, and go to state 3
+    "("      shift, and go to state 4
+    "-"      shift, and go to state 5
+    "if"     shift, and go to state 6
+    "while"  shift, and go to state 7
+    "for"    shift, and go to state 8
+    "let"    shift, and go to state 9
+    "break"  shift, and go to state 10
+    "nil"    shift, and go to state 11
 
     $default  reduce using rule 43 (expseq)
 
@@ -1327,40 +1327,40 @@ State 63
 
 State 64
 
-   47 funcall: id LPAREN RPAREN .
+   47 funcall: id "(" ")" .
 
     $default  reduce using rule 47 (funcall)
 
 
 State 65
 
-   46 funcall: id LPAREN exp . funargs RPAREN
-   51 binexp: exp . PLUS exp
-   52       | exp . MINUS exp
-   53       | exp . TIMES exp
-   54       | exp . DIVIDE exp
-   55       | exp . EQ exp
-   56       | exp . NEQ exp
-   57       | exp . GT exp
-   58       | exp . LT exp
-   59       | exp . LE exp
-   60       | exp . GE exp
-   61 boolexp: exp . AND exp
-   62        | exp . OR exp
+   46 funcall: id "(" exp . funargs ")"
+   51 binexp: exp . "+" exp
+   52       | exp . "-" exp
+   53       | exp . "*" exp
+   54       | exp . "/" exp
+   55       | exp . "=" exp
+   56       | exp . "!=" exp
+   57       | exp . ">" exp
+   58       | exp . "<" exp
+   59       | exp . "<=" exp
+   60       | exp . ">=" exp
+   61 boolexp: exp . "&" exp
+   62        | exp . "|" exp
 
-    COMMA   shift, and go to state 96
-    PLUS    shift, and go to state 42
-    MINUS   shift, and go to state 43
-    TIMES   shift, and go to state 44
-    DIVIDE  shift, and go to state 45
-    EQ      shift, and go to state 46
-    NEQ     shift, and go to state 47
-    LT      shift, and go to state 48
-    LE      shift, and go to state 49
-    GT      shift, and go to state 50
-    GE      shift, and go to state 51
-    AND     shift, and go to state 52
-    OR      shift, and go to state 53
+    ","   shift, and go to state 96
+    "+"   shift, and go to state 42
+    "-"   shift, and go to state 43
+    "*"   shift, and go to state 44
+    "/"   shift, and go to state 45
+    "="   shift, and go to state 46
+    "!="  shift, and go to state 47
+    "<"   shift, and go to state 48
+    "<="  shift, and go to state 49
+    ">"   shift, and go to state 50
+    ">="  shift, and go to state 51
+    "&"   shift, and go to state 52
+    "|"   shift, and go to state 53
 
     $default  reduce using rule 49 (funargs)
 
@@ -1369,55 +1369,55 @@ State 65
 
 State 66
 
-   24 lvalue: id LBRACK exp . RBRACK
-   41 exp: id LBRACK exp . RBRACK OF exp
-   51 binexp: exp . PLUS exp
-   52       | exp . MINUS exp
-   53       | exp . TIMES exp
-   54       | exp . DIVIDE exp
-   55       | exp . EQ exp
-   56       | exp . NEQ exp
-   57       | exp . GT exp
-   58       | exp . LT exp
-   59       | exp . LE exp
-   60       | exp . GE exp
-   61 boolexp: exp . AND exp
-   62        | exp . OR exp
+   24 lvalue: id "[" exp . "]"
+   41 exp: id "[" exp . "]" "of" exp
+   51 binexp: exp . "+" exp
+   52       | exp . "-" exp
+   53       | exp . "*" exp
+   54       | exp . "/" exp
+   55       | exp . "=" exp
+   56       | exp . "!=" exp
+   57       | exp . ">" exp
+   58       | exp . "<" exp
+   59       | exp . "<=" exp
+   60       | exp . ">=" exp
+   61 boolexp: exp . "&" exp
+   62        | exp . "|" exp
 
-    RBRACK  shift, and go to state 98
-    PLUS    shift, and go to state 42
-    MINUS   shift, and go to state 43
-    TIMES   shift, and go to state 44
-    DIVIDE  shift, and go to state 45
-    EQ      shift, and go to state 46
-    NEQ     shift, and go to state 47
-    LT      shift, and go to state 48
-    LE      shift, and go to state 49
-    GT      shift, and go to state 50
-    GE      shift, and go to state 51
-    AND     shift, and go to state 52
-    OR      shift, and go to state 53
+    "]"   shift, and go to state 98
+    "+"   shift, and go to state 42
+    "-"   shift, and go to state 43
+    "*"   shift, and go to state 44
+    "/"   shift, and go to state 45
+    "="   shift, and go to state 46
+    "!="  shift, and go to state 47
+    "<"   shift, and go to state 48
+    "<="  shift, and go to state 49
+    ">"   shift, and go to state 50
+    ">="  shift, and go to state 51
+    "&"   shift, and go to state 52
+    "|"   shift, and go to state 53
 
 
 State 67
 
-   64 reccrea: id LBRACE RBRACE .
+   64 reccrea: id "{" "}" .
 
     $default  reduce using rule 64 (reccrea)
 
 
 State 68
 
-   65 recfield: id . EQ exp
+   65 recfield: id . "=" exp
 
-    EQ  shift, and go to state 99
+    "="  shift, and go to state 99
 
 
 State 69
 
-   63 reccrea: id LBRACE recfield . recfields RBRACE
+   63 reccrea: id "{" recfield . recfields "}"
 
-    COMMA  shift, and go to state 100
+    ","  shift, and go to state 100
 
     $default  reduce using rule 67 (recfields)
 
@@ -1426,432 +1426,432 @@ State 69
 
 State 70
 
-   23 lvalue: lvalue LBRACK exp . RBRACK
-   51 binexp: exp . PLUS exp
-   52       | exp . MINUS exp
-   53       | exp . TIMES exp
-   54       | exp . DIVIDE exp
-   55       | exp . EQ exp
-   56       | exp . NEQ exp
-   57       | exp . GT exp
-   58       | exp . LT exp
-   59       | exp . LE exp
-   60       | exp . GE exp
-   61 boolexp: exp . AND exp
-   62        | exp . OR exp
+   23 lvalue: lvalue "[" exp . "]"
+   51 binexp: exp . "+" exp
+   52       | exp . "-" exp
+   53       | exp . "*" exp
+   54       | exp . "/" exp
+   55       | exp . "=" exp
+   56       | exp . "!=" exp
+   57       | exp . ">" exp
+   58       | exp . "<" exp
+   59       | exp . "<=" exp
+   60       | exp . ">=" exp
+   61 boolexp: exp . "&" exp
+   62        | exp . "|" exp
 
-    RBRACK  shift, and go to state 102
-    PLUS    shift, and go to state 42
-    MINUS   shift, and go to state 43
-    TIMES   shift, and go to state 44
-    DIVIDE  shift, and go to state 45
-    EQ      shift, and go to state 46
-    NEQ     shift, and go to state 47
-    LT      shift, and go to state 48
-    LE      shift, and go to state 49
-    GT      shift, and go to state 50
-    GE      shift, and go to state 51
-    AND     shift, and go to state 52
-    OR      shift, and go to state 53
+    "]"   shift, and go to state 102
+    "+"   shift, and go to state 42
+    "-"   shift, and go to state 43
+    "*"   shift, and go to state 44
+    "/"   shift, and go to state 45
+    "="   shift, and go to state 46
+    "!="  shift, and go to state 47
+    "<"   shift, and go to state 48
+    "<="  shift, and go to state 49
+    ">"   shift, and go to state 50
+    ">="  shift, and go to state 51
+    "&"   shift, and go to state 52
+    "|"   shift, and go to state 53
 
 
 State 71
 
-   22 lvalue: lvalue DOT id .
+   22 lvalue: lvalue "." id .
 
     $default  reduce using rule 22 (lvalue)
 
 
 State 72
 
-   35 exp: lvalue ASSIGN exp .
-   51 binexp: exp . PLUS exp
-   52       | exp . MINUS exp
-   53       | exp . TIMES exp
-   54       | exp . DIVIDE exp
-   55       | exp . EQ exp
-   56       | exp . NEQ exp
-   57       | exp . GT exp
-   58       | exp . LT exp
-   59       | exp . LE exp
-   60       | exp . GE exp
-   61 boolexp: exp . AND exp
-   62        | exp . OR exp
+   35 exp: lvalue ":=" exp .
+   51 binexp: exp . "+" exp
+   52       | exp . "-" exp
+   53       | exp . "*" exp
+   54       | exp . "/" exp
+   55       | exp . "=" exp
+   56       | exp . "!=" exp
+   57       | exp . ">" exp
+   58       | exp . "<" exp
+   59       | exp . "<=" exp
+   60       | exp . ">=" exp
+   61 boolexp: exp . "&" exp
+   62        | exp . "|" exp
 
-    PLUS    shift, and go to state 42
-    MINUS   shift, and go to state 43
-    TIMES   shift, and go to state 44
-    DIVIDE  shift, and go to state 45
-    EQ      shift, and go to state 46
-    NEQ     shift, and go to state 47
-    LT      shift, and go to state 48
-    LE      shift, and go to state 49
-    GT      shift, and go to state 50
-    GE      shift, and go to state 51
-    AND     shift, and go to state 52
-    OR      shift, and go to state 53
+    "+"   shift, and go to state 42
+    "-"   shift, and go to state 43
+    "*"   shift, and go to state 44
+    "/"   shift, and go to state 45
+    "="   shift, and go to state 46
+    "!="  shift, and go to state 47
+    "<"   shift, and go to state 48
+    "<="  shift, and go to state 49
+    ">"   shift, and go to state 50
+    ">="  shift, and go to state 51
+    "&"   shift, and go to state 52
+    "|"   shift, and go to state 53
 
     $default  reduce using rule 35 (exp)
 
 
 State 73
 
-   51 binexp: exp . PLUS exp
-   51       | exp PLUS exp .
-   52       | exp . MINUS exp
-   53       | exp . TIMES exp
-   54       | exp . DIVIDE exp
-   55       | exp . EQ exp
-   56       | exp . NEQ exp
-   57       | exp . GT exp
-   58       | exp . LT exp
-   59       | exp . LE exp
-   60       | exp . GE exp
-   61 boolexp: exp . AND exp
-   62        | exp . OR exp
+   51 binexp: exp . "+" exp
+   51       | exp "+" exp .
+   52       | exp . "-" exp
+   53       | exp . "*" exp
+   54       | exp . "/" exp
+   55       | exp . "=" exp
+   56       | exp . "!=" exp
+   57       | exp . ">" exp
+   58       | exp . "<" exp
+   59       | exp . "<=" exp
+   60       | exp . ">=" exp
+   61 boolexp: exp . "&" exp
+   62        | exp . "|" exp
 
-    TIMES   shift, and go to state 44
-    DIVIDE  shift, and go to state 45
+    "*"  shift, and go to state 44
+    "/"  shift, and go to state 45
 
     $default  reduce using rule 51 (binexp)
 
 
 State 74
 
-   51 binexp: exp . PLUS exp
-   52       | exp . MINUS exp
-   52       | exp MINUS exp .
-   53       | exp . TIMES exp
-   54       | exp . DIVIDE exp
-   55       | exp . EQ exp
-   56       | exp . NEQ exp
-   57       | exp . GT exp
-   58       | exp . LT exp
-   59       | exp . LE exp
-   60       | exp . GE exp
-   61 boolexp: exp . AND exp
-   62        | exp . OR exp
+   51 binexp: exp . "+" exp
+   52       | exp . "-" exp
+   52       | exp "-" exp .
+   53       | exp . "*" exp
+   54       | exp . "/" exp
+   55       | exp . "=" exp
+   56       | exp . "!=" exp
+   57       | exp . ">" exp
+   58       | exp . "<" exp
+   59       | exp . "<=" exp
+   60       | exp . ">=" exp
+   61 boolexp: exp . "&" exp
+   62        | exp . "|" exp
 
-    TIMES   shift, and go to state 44
-    DIVIDE  shift, and go to state 45
+    "*"  shift, and go to state 44
+    "/"  shift, and go to state 45
 
     $default  reduce using rule 52 (binexp)
 
 
 State 75
 
-   51 binexp: exp . PLUS exp
-   52       | exp . MINUS exp
-   53       | exp . TIMES exp
-   53       | exp TIMES exp .
-   54       | exp . DIVIDE exp
-   55       | exp . EQ exp
-   56       | exp . NEQ exp
-   57       | exp . GT exp
-   58       | exp . LT exp
-   59       | exp . LE exp
-   60       | exp . GE exp
-   61 boolexp: exp . AND exp
-   62        | exp . OR exp
+   51 binexp: exp . "+" exp
+   52       | exp . "-" exp
+   53       | exp . "*" exp
+   53       | exp "*" exp .
+   54       | exp . "/" exp
+   55       | exp . "=" exp
+   56       | exp . "!=" exp
+   57       | exp . ">" exp
+   58       | exp . "<" exp
+   59       | exp . "<=" exp
+   60       | exp . ">=" exp
+   61 boolexp: exp . "&" exp
+   62        | exp . "|" exp
 
     $default  reduce using rule 53 (binexp)
 
 
 State 76
 
-   51 binexp: exp . PLUS exp
-   52       | exp . MINUS exp
-   53       | exp . TIMES exp
-   54       | exp . DIVIDE exp
-   54       | exp DIVIDE exp .
-   55       | exp . EQ exp
-   56       | exp . NEQ exp
-   57       | exp . GT exp
-   58       | exp . LT exp
-   59       | exp . LE exp
-   60       | exp . GE exp
-   61 boolexp: exp . AND exp
-   62        | exp . OR exp
+   51 binexp: exp . "+" exp
+   52       | exp . "-" exp
+   53       | exp . "*" exp
+   54       | exp . "/" exp
+   54       | exp "/" exp .
+   55       | exp . "=" exp
+   56       | exp . "!=" exp
+   57       | exp . ">" exp
+   58       | exp . "<" exp
+   59       | exp . "<=" exp
+   60       | exp . ">=" exp
+   61 boolexp: exp . "&" exp
+   62        | exp . "|" exp
 
     $default  reduce using rule 54 (binexp)
 
 
 State 77
 
-   51 binexp: exp . PLUS exp
-   52       | exp . MINUS exp
-   53       | exp . TIMES exp
-   54       | exp . DIVIDE exp
-   55       | exp . EQ exp
-   55       | exp EQ exp .
-   56       | exp . NEQ exp
-   57       | exp . GT exp
-   58       | exp . LT exp
-   59       | exp . LE exp
-   60       | exp . GE exp
-   61 boolexp: exp . AND exp
-   62        | exp . OR exp
+   51 binexp: exp . "+" exp
+   52       | exp . "-" exp
+   53       | exp . "*" exp
+   54       | exp . "/" exp
+   55       | exp . "=" exp
+   55       | exp "=" exp .
+   56       | exp . "!=" exp
+   57       | exp . ">" exp
+   58       | exp . "<" exp
+   59       | exp . "<=" exp
+   60       | exp . ">=" exp
+   61 boolexp: exp . "&" exp
+   62        | exp . "|" exp
 
-    PLUS    shift, and go to state 42
-    MINUS   shift, and go to state 43
-    TIMES   shift, and go to state 44
-    DIVIDE  shift, and go to state 45
+    "+"  shift, and go to state 42
+    "-"  shift, and go to state 43
+    "*"  shift, and go to state 44
+    "/"  shift, and go to state 45
 
-    EQ   error (nonassociative)
-    NEQ  error (nonassociative)
-    LT   error (nonassociative)
-    LE   error (nonassociative)
-    GT   error (nonassociative)
-    GE   error (nonassociative)
+    "="   error (nonassociative)
+    "!="  error (nonassociative)
+    "<"   error (nonassociative)
+    "<="  error (nonassociative)
+    ">"   error (nonassociative)
+    ">="  error (nonassociative)
 
     $default  reduce using rule 55 (binexp)
 
 
 State 78
 
-   51 binexp: exp . PLUS exp
-   52       | exp . MINUS exp
-   53       | exp . TIMES exp
-   54       | exp . DIVIDE exp
-   55       | exp . EQ exp
-   56       | exp . NEQ exp
-   56       | exp NEQ exp .
-   57       | exp . GT exp
-   58       | exp . LT exp
-   59       | exp . LE exp
-   60       | exp . GE exp
-   61 boolexp: exp . AND exp
-   62        | exp . OR exp
+   51 binexp: exp . "+" exp
+   52       | exp . "-" exp
+   53       | exp . "*" exp
+   54       | exp . "/" exp
+   55       | exp . "=" exp
+   56       | exp . "!=" exp
+   56       | exp "!=" exp .
+   57       | exp . ">" exp
+   58       | exp . "<" exp
+   59       | exp . "<=" exp
+   60       | exp . ">=" exp
+   61 boolexp: exp . "&" exp
+   62        | exp . "|" exp
 
-    PLUS    shift, and go to state 42
-    MINUS   shift, and go to state 43
-    TIMES   shift, and go to state 44
-    DIVIDE  shift, and go to state 45
+    "+"  shift, and go to state 42
+    "-"  shift, and go to state 43
+    "*"  shift, and go to state 44
+    "/"  shift, and go to state 45
 
-    EQ   error (nonassociative)
-    NEQ  error (nonassociative)
-    LT   error (nonassociative)
-    LE   error (nonassociative)
-    GT   error (nonassociative)
-    GE   error (nonassociative)
+    "="   error (nonassociative)
+    "!="  error (nonassociative)
+    "<"   error (nonassociative)
+    "<="  error (nonassociative)
+    ">"   error (nonassociative)
+    ">="  error (nonassociative)
 
     $default  reduce using rule 56 (binexp)
 
 
 State 79
 
-   51 binexp: exp . PLUS exp
-   52       | exp . MINUS exp
-   53       | exp . TIMES exp
-   54       | exp . DIVIDE exp
-   55       | exp . EQ exp
-   56       | exp . NEQ exp
-   57       | exp . GT exp
-   58       | exp . LT exp
-   58       | exp LT exp .
-   59       | exp . LE exp
-   60       | exp . GE exp
-   61 boolexp: exp . AND exp
-   62        | exp . OR exp
+   51 binexp: exp . "+" exp
+   52       | exp . "-" exp
+   53       | exp . "*" exp
+   54       | exp . "/" exp
+   55       | exp . "=" exp
+   56       | exp . "!=" exp
+   57       | exp . ">" exp
+   58       | exp . "<" exp
+   58       | exp "<" exp .
+   59       | exp . "<=" exp
+   60       | exp . ">=" exp
+   61 boolexp: exp . "&" exp
+   62        | exp . "|" exp
 
-    PLUS    shift, and go to state 42
-    MINUS   shift, and go to state 43
-    TIMES   shift, and go to state 44
-    DIVIDE  shift, and go to state 45
+    "+"  shift, and go to state 42
+    "-"  shift, and go to state 43
+    "*"  shift, and go to state 44
+    "/"  shift, and go to state 45
 
-    EQ   error (nonassociative)
-    NEQ  error (nonassociative)
-    LT   error (nonassociative)
-    LE   error (nonassociative)
-    GT   error (nonassociative)
-    GE   error (nonassociative)
+    "="   error (nonassociative)
+    "!="  error (nonassociative)
+    "<"   error (nonassociative)
+    "<="  error (nonassociative)
+    ">"   error (nonassociative)
+    ">="  error (nonassociative)
 
     $default  reduce using rule 58 (binexp)
 
 
 State 80
 
-   51 binexp: exp . PLUS exp
-   52       | exp . MINUS exp
-   53       | exp . TIMES exp
-   54       | exp . DIVIDE exp
-   55       | exp . EQ exp
-   56       | exp . NEQ exp
-   57       | exp . GT exp
-   58       | exp . LT exp
-   59       | exp . LE exp
-   59       | exp LE exp .
-   60       | exp . GE exp
-   61 boolexp: exp . AND exp
-   62        | exp . OR exp
+   51 binexp: exp . "+" exp
+   52       | exp . "-" exp
+   53       | exp . "*" exp
+   54       | exp . "/" exp
+   55       | exp . "=" exp
+   56       | exp . "!=" exp
+   57       | exp . ">" exp
+   58       | exp . "<" exp
+   59       | exp . "<=" exp
+   59       | exp "<=" exp .
+   60       | exp . ">=" exp
+   61 boolexp: exp . "&" exp
+   62        | exp . "|" exp
 
-    PLUS    shift, and go to state 42
-    MINUS   shift, and go to state 43
-    TIMES   shift, and go to state 44
-    DIVIDE  shift, and go to state 45
+    "+"  shift, and go to state 42
+    "-"  shift, and go to state 43
+    "*"  shift, and go to state 44
+    "/"  shift, and go to state 45
 
-    EQ   error (nonassociative)
-    NEQ  error (nonassociative)
-    LT   error (nonassociative)
-    LE   error (nonassociative)
-    GT   error (nonassociative)
-    GE   error (nonassociative)
+    "="   error (nonassociative)
+    "!="  error (nonassociative)
+    "<"   error (nonassociative)
+    "<="  error (nonassociative)
+    ">"   error (nonassociative)
+    ">="  error (nonassociative)
 
     $default  reduce using rule 59 (binexp)
 
 
 State 81
 
-   51 binexp: exp . PLUS exp
-   52       | exp . MINUS exp
-   53       | exp . TIMES exp
-   54       | exp . DIVIDE exp
-   55       | exp . EQ exp
-   56       | exp . NEQ exp
-   57       | exp . GT exp
-   57       | exp GT exp .
-   58       | exp . LT exp
-   59       | exp . LE exp
-   60       | exp . GE exp
-   61 boolexp: exp . AND exp
-   62        | exp . OR exp
+   51 binexp: exp . "+" exp
+   52       | exp . "-" exp
+   53       | exp . "*" exp
+   54       | exp . "/" exp
+   55       | exp . "=" exp
+   56       | exp . "!=" exp
+   57       | exp . ">" exp
+   57       | exp ">" exp .
+   58       | exp . "<" exp
+   59       | exp . "<=" exp
+   60       | exp . ">=" exp
+   61 boolexp: exp . "&" exp
+   62        | exp . "|" exp
 
-    PLUS    shift, and go to state 42
-    MINUS   shift, and go to state 43
-    TIMES   shift, and go to state 44
-    DIVIDE  shift, and go to state 45
+    "+"  shift, and go to state 42
+    "-"  shift, and go to state 43
+    "*"  shift, and go to state 44
+    "/"  shift, and go to state 45
 
-    EQ   error (nonassociative)
-    NEQ  error (nonassociative)
-    LT   error (nonassociative)
-    LE   error (nonassociative)
-    GT   error (nonassociative)
-    GE   error (nonassociative)
+    "="   error (nonassociative)
+    "!="  error (nonassociative)
+    "<"   error (nonassociative)
+    "<="  error (nonassociative)
+    ">"   error (nonassociative)
+    ">="  error (nonassociative)
 
     $default  reduce using rule 57 (binexp)
 
 
 State 82
 
-   51 binexp: exp . PLUS exp
-   52       | exp . MINUS exp
-   53       | exp . TIMES exp
-   54       | exp . DIVIDE exp
-   55       | exp . EQ exp
-   56       | exp . NEQ exp
-   57       | exp . GT exp
-   58       | exp . LT exp
-   59       | exp . LE exp
-   60       | exp . GE exp
-   60       | exp GE exp .
-   61 boolexp: exp . AND exp
-   62        | exp . OR exp
+   51 binexp: exp . "+" exp
+   52       | exp . "-" exp
+   53       | exp . "*" exp
+   54       | exp . "/" exp
+   55       | exp . "=" exp
+   56       | exp . "!=" exp
+   57       | exp . ">" exp
+   58       | exp . "<" exp
+   59       | exp . "<=" exp
+   60       | exp . ">=" exp
+   60       | exp ">=" exp .
+   61 boolexp: exp . "&" exp
+   62        | exp . "|" exp
 
-    PLUS    shift, and go to state 42
-    MINUS   shift, and go to state 43
-    TIMES   shift, and go to state 44
-    DIVIDE  shift, and go to state 45
+    "+"  shift, and go to state 42
+    "-"  shift, and go to state 43
+    "*"  shift, and go to state 44
+    "/"  shift, and go to state 45
 
-    EQ   error (nonassociative)
-    NEQ  error (nonassociative)
-    LT   error (nonassociative)
-    LE   error (nonassociative)
-    GT   error (nonassociative)
-    GE   error (nonassociative)
+    "="   error (nonassociative)
+    "!="  error (nonassociative)
+    "<"   error (nonassociative)
+    "<="  error (nonassociative)
+    ">"   error (nonassociative)
+    ">="  error (nonassociative)
 
     $default  reduce using rule 60 (binexp)
 
 
 State 83
 
-   51 binexp: exp . PLUS exp
-   52       | exp . MINUS exp
-   53       | exp . TIMES exp
-   54       | exp . DIVIDE exp
-   55       | exp . EQ exp
-   56       | exp . NEQ exp
-   57       | exp . GT exp
-   58       | exp . LT exp
-   59       | exp . LE exp
-   60       | exp . GE exp
-   61 boolexp: exp . AND exp
-   61        | exp AND exp .
-   62        | exp . OR exp
+   51 binexp: exp . "+" exp
+   52       | exp . "-" exp
+   53       | exp . "*" exp
+   54       | exp . "/" exp
+   55       | exp . "=" exp
+   56       | exp . "!=" exp
+   57       | exp . ">" exp
+   58       | exp . "<" exp
+   59       | exp . "<=" exp
+   60       | exp . ">=" exp
+   61 boolexp: exp . "&" exp
+   61        | exp "&" exp .
+   62        | exp . "|" exp
 
-    PLUS    shift, and go to state 42
-    MINUS   shift, and go to state 43
-    TIMES   shift, and go to state 44
-    DIVIDE  shift, and go to state 45
-    EQ      shift, and go to state 46
-    NEQ     shift, and go to state 47
-    LT      shift, and go to state 48
-    LE      shift, and go to state 49
-    GT      shift, and go to state 50
-    GE      shift, and go to state 51
+    "+"   shift, and go to state 42
+    "-"   shift, and go to state 43
+    "*"   shift, and go to state 44
+    "/"   shift, and go to state 45
+    "="   shift, and go to state 46
+    "!="  shift, and go to state 47
+    "<"   shift, and go to state 48
+    "<="  shift, and go to state 49
+    ">"   shift, and go to state 50
+    ">="  shift, and go to state 51
 
     $default  reduce using rule 61 (boolexp)
 
 
 State 84
 
-   51 binexp: exp . PLUS exp
-   52       | exp . MINUS exp
-   53       | exp . TIMES exp
-   54       | exp . DIVIDE exp
-   55       | exp . EQ exp
-   56       | exp . NEQ exp
-   57       | exp . GT exp
-   58       | exp . LT exp
-   59       | exp . LE exp
-   60       | exp . GE exp
-   61 boolexp: exp . AND exp
-   62        | exp . OR exp
-   62        | exp OR exp .
+   51 binexp: exp . "+" exp
+   52       | exp . "-" exp
+   53       | exp . "*" exp
+   54       | exp . "/" exp
+   55       | exp . "=" exp
+   56       | exp . "!=" exp
+   57       | exp . ">" exp
+   58       | exp . "<" exp
+   59       | exp . "<=" exp
+   60       | exp . ">=" exp
+   61 boolexp: exp . "&" exp
+   62        | exp . "|" exp
+   62        | exp "|" exp .
 
-    PLUS    shift, and go to state 42
-    MINUS   shift, and go to state 43
-    TIMES   shift, and go to state 44
-    DIVIDE  shift, and go to state 45
-    EQ      shift, and go to state 46
-    NEQ     shift, and go to state 47
-    LT      shift, and go to state 48
-    LE      shift, and go to state 49
-    GT      shift, and go to state 50
-    GE      shift, and go to state 51
-    AND     shift, and go to state 52
+    "+"   shift, and go to state 42
+    "-"   shift, and go to state 43
+    "*"   shift, and go to state 44
+    "/"   shift, and go to state 45
+    "="   shift, and go to state 46
+    "!="  shift, and go to state 47
+    "<"   shift, and go to state 48
+    "<="  shift, and go to state 49
+    ">"   shift, and go to state 50
+    ">="  shift, and go to state 51
+    "&"   shift, and go to state 52
 
     $default  reduce using rule 62 (boolexp)
 
 
 State 85
 
-   44 seq: SEMICOLON exp . seq
-   51 binexp: exp . PLUS exp
-   52       | exp . MINUS exp
-   53       | exp . TIMES exp
-   54       | exp . DIVIDE exp
-   55       | exp . EQ exp
-   56       | exp . NEQ exp
-   57       | exp . GT exp
-   58       | exp . LT exp
-   59       | exp . LE exp
-   60       | exp . GE exp
-   61 boolexp: exp . AND exp
-   62        | exp . OR exp
+   44 seq: ";" exp . seq
+   51 binexp: exp . "+" exp
+   52       | exp . "-" exp
+   53       | exp . "*" exp
+   54       | exp . "/" exp
+   55       | exp . "=" exp
+   56       | exp . "!=" exp
+   57       | exp . ">" exp
+   58       | exp . "<" exp
+   59       | exp . "<=" exp
+   60       | exp . ">=" exp
+   61 boolexp: exp . "&" exp
+   62        | exp . "|" exp
 
-    SEMICOLON  shift, and go to state 54
-    PLUS       shift, and go to state 42
-    MINUS      shift, and go to state 43
-    TIMES      shift, and go to state 44
-    DIVIDE     shift, and go to state 45
-    EQ         shift, and go to state 46
-    NEQ        shift, and go to state 47
-    LT         shift, and go to state 48
-    LE         shift, and go to state 49
-    GT         shift, and go to state 50
-    GE         shift, and go to state 51
-    AND        shift, and go to state 52
-    OR         shift, and go to state 53
+    ";"   shift, and go to state 54
+    "+"   shift, and go to state 42
+    "-"   shift, and go to state 43
+    "*"   shift, and go to state 44
+    "/"   shift, and go to state 45
+    "="   shift, and go to state 46
+    "!="  shift, and go to state 47
+    "<"   shift, and go to state 48
+    "<="  shift, and go to state 49
+    ">"   shift, and go to state 50
+    ">="  shift, and go to state 51
+    "&"   shift, and go to state 52
+    "|"   shift, and go to state 53
 
     $default  reduce using rule 45 (seq)
 
@@ -1860,112 +1860,112 @@ State 85
 
 State 86
 
-   34 exp: LPAREN exp seq RPAREN .
+   34 exp: "(" exp seq ")" .
 
     $default  reduce using rule 34 (exp)
 
 
 State 87
 
-   51 binexp: exp . PLUS exp
-   52       | exp . MINUS exp
-   53       | exp . TIMES exp
-   54       | exp . DIVIDE exp
-   55       | exp . EQ exp
-   56       | exp . NEQ exp
-   57       | exp . GT exp
-   58       | exp . LT exp
-   59       | exp . LE exp
-   60       | exp . GE exp
-   61 boolexp: exp . AND exp
-   62        | exp . OR exp
-   68 ifexp: IF exp THEN exp .
-   69      | IF exp THEN exp . ELSE exp
+   51 binexp: exp . "+" exp
+   52       | exp . "-" exp
+   53       | exp . "*" exp
+   54       | exp . "/" exp
+   55       | exp . "=" exp
+   56       | exp . "!=" exp
+   57       | exp . ">" exp
+   58       | exp . "<" exp
+   59       | exp . "<=" exp
+   60       | exp . ">=" exp
+   61 boolexp: exp . "&" exp
+   62        | exp . "|" exp
+   68 ifexp: "if" exp "then" exp .
+   69      | "if" exp "then" exp . "else" exp
 
-    PLUS    shift, and go to state 42
-    MINUS   shift, and go to state 43
-    TIMES   shift, and go to state 44
-    DIVIDE  shift, and go to state 45
-    EQ      shift, and go to state 46
-    NEQ     shift, and go to state 47
-    LT      shift, and go to state 48
-    LE      shift, and go to state 49
-    GT      shift, and go to state 50
-    GE      shift, and go to state 51
-    AND     shift, and go to state 52
-    OR      shift, and go to state 53
-    ELSE    shift, and go to state 104
+    "+"     shift, and go to state 42
+    "-"     shift, and go to state 43
+    "*"     shift, and go to state 44
+    "/"     shift, and go to state 45
+    "="     shift, and go to state 46
+    "!="    shift, and go to state 47
+    "<"     shift, and go to state 48
+    "<="    shift, and go to state 49
+    ">"     shift, and go to state 50
+    ">="    shift, and go to state 51
+    "&"     shift, and go to state 52
+    "|"     shift, and go to state 53
+    "else"  shift, and go to state 104
 
     $default  reduce using rule 68 (ifexp)
 
 
 State 88
 
-   37 exp: WHILE exp DO exp .
-   51 binexp: exp . PLUS exp
-   52       | exp . MINUS exp
-   53       | exp . TIMES exp
-   54       | exp . DIVIDE exp
-   55       | exp . EQ exp
-   56       | exp . NEQ exp
-   57       | exp . GT exp
-   58       | exp . LT exp
-   59       | exp . LE exp
-   60       | exp . GE exp
-   61 boolexp: exp . AND exp
-   62        | exp . OR exp
+   37 exp: "while" exp "do" exp .
+   51 binexp: exp . "+" exp
+   52       | exp . "-" exp
+   53       | exp . "*" exp
+   54       | exp . "/" exp
+   55       | exp . "=" exp
+   56       | exp . "!=" exp
+   57       | exp . ">" exp
+   58       | exp . "<" exp
+   59       | exp . "<=" exp
+   60       | exp . ">=" exp
+   61 boolexp: exp . "&" exp
+   62        | exp . "|" exp
 
-    PLUS    shift, and go to state 42
-    MINUS   shift, and go to state 43
-    TIMES   shift, and go to state 44
-    DIVIDE  shift, and go to state 45
-    EQ      shift, and go to state 46
-    NEQ     shift, and go to state 47
-    LT      shift, and go to state 48
-    LE      shift, and go to state 49
-    GT      shift, and go to state 50
-    GE      shift, and go to state 51
-    AND     shift, and go to state 52
-    OR      shift, and go to state 53
+    "+"   shift, and go to state 42
+    "-"   shift, and go to state 43
+    "*"   shift, and go to state 44
+    "/"   shift, and go to state 45
+    "="   shift, and go to state 46
+    "!="  shift, and go to state 47
+    "<"   shift, and go to state 48
+    "<="  shift, and go to state 49
+    ">"   shift, and go to state 50
+    ">="  shift, and go to state 51
+    "&"   shift, and go to state 52
+    "|"   shift, and go to state 53
 
     $default  reduce using rule 37 (exp)
 
 
 State 89
 
-   38 exp: FOR id ASSIGN exp . TO exp DO exp
-   51 binexp: exp . PLUS exp
-   52       | exp . MINUS exp
-   53       | exp . TIMES exp
-   54       | exp . DIVIDE exp
-   55       | exp . EQ exp
-   56       | exp . NEQ exp
-   57       | exp . GT exp
-   58       | exp . LT exp
-   59       | exp . LE exp
-   60       | exp . GE exp
-   61 boolexp: exp . AND exp
-   62        | exp . OR exp
+   38 exp: "for" id ":=" exp . "to" exp "do" exp
+   51 binexp: exp . "+" exp
+   52       | exp . "-" exp
+   53       | exp . "*" exp
+   54       | exp . "/" exp
+   55       | exp . "=" exp
+   56       | exp . "!=" exp
+   57       | exp . ">" exp
+   58       | exp . "<" exp
+   59       | exp . "<=" exp
+   60       | exp . ">=" exp
+   61 boolexp: exp . "&" exp
+   62        | exp . "|" exp
 
-    PLUS    shift, and go to state 42
-    MINUS   shift, and go to state 43
-    TIMES   shift, and go to state 44
-    DIVIDE  shift, and go to state 45
-    EQ      shift, and go to state 46
-    NEQ     shift, and go to state 47
-    LT      shift, and go to state 48
-    LE      shift, and go to state 49
-    GT      shift, and go to state 50
-    GE      shift, and go to state 51
-    AND     shift, and go to state 52
-    OR      shift, and go to state 53
-    TO      shift, and go to state 105
+    "+"   shift, and go to state 42
+    "-"   shift, and go to state 43
+    "*"   shift, and go to state 44
+    "/"   shift, and go to state 45
+    "="   shift, and go to state 46
+    "!="  shift, and go to state 47
+    "<"   shift, and go to state 48
+    "<="  shift, and go to state 49
+    ">"   shift, and go to state 50
+    ">="  shift, and go to state 51
+    "&"   shift, and go to state 52
+    "|"   shift, and go to state 53
+    "to"  shift, and go to state 105
 
 
 State 90
 
-   19 fundec: FUNCTION id LPAREN . tyfields RPAREN EQ exp
-   20       | FUNCTION id LPAREN . tyfields RPAREN COLON id EQ exp
+   19 fundec: "function" id "(" . tyfields ")" "=" exp
+   20       | "function" id "(" . tyfields ")" ":" id "=" exp
 
     ID  shift, and go to state 1
 
@@ -1978,7 +1978,7 @@ State 90
 
 State 91
 
-   18 vardec: VAR id COLON . id EQ exp
+   18 vardec: "var" id ":" . id "=" exp
 
     ID  shift, and go to state 1
 
@@ -1987,19 +1987,19 @@ State 91
 
 State 92
 
-   17 vardec: VAR id ASSIGN . exp
+   17 vardec: "var" id ":=" . exp
 
-    ID      shift, and go to state 1
-    STRING  shift, and go to state 2
-    INT     shift, and go to state 3
-    LPAREN  shift, and go to state 4
-    MINUS   shift, and go to state 5
-    IF      shift, and go to state 6
-    WHILE   shift, and go to state 7
-    FOR     shift, and go to state 8
-    LET     shift, and go to state 9
-    BREAK   shift, and go to state 10
-    NIL     shift, and go to state 11
+    ID       shift, and go to state 1
+    STRING   shift, and go to state 2
+    INT      shift, and go to state 3
+    "("      shift, and go to state 4
+    "-"      shift, and go to state 5
+    "if"     shift, and go to state 6
+    "while"  shift, and go to state 7
+    "for"    shift, and go to state 8
+    "let"    shift, and go to state 9
+    "break"  shift, and go to state 10
+    "nil"    shift, and go to state 11
 
     id       go to state 13
     lvalue   go to state 14
@@ -2013,11 +2013,11 @@ State 92
 
 State 93
 
-    8 tydec: TYPE id EQ . ty
+    8 tydec: "type" id "=" . ty
 
-    ID      shift, and go to state 1
-    LBRACE  shift, and go to state 111
-    ARRAY   shift, and go to state 112
+    ID       shift, and go to state 1
+    "{"      shift, and go to state 111
+    "array"  shift, and go to state 112
 
     id  go to state 113
     ty  go to state 114
@@ -2026,32 +2026,32 @@ State 93
 State 94
 
    42 expseq: exp . seq
-   51 binexp: exp . PLUS exp
-   52       | exp . MINUS exp
-   53       | exp . TIMES exp
-   54       | exp . DIVIDE exp
-   55       | exp . EQ exp
-   56       | exp . NEQ exp
-   57       | exp . GT exp
-   58       | exp . LT exp
-   59       | exp . LE exp
-   60       | exp . GE exp
-   61 boolexp: exp . AND exp
-   62        | exp . OR exp
+   51 binexp: exp . "+" exp
+   52       | exp . "-" exp
+   53       | exp . "*" exp
+   54       | exp . "/" exp
+   55       | exp . "=" exp
+   56       | exp . "!=" exp
+   57       | exp . ">" exp
+   58       | exp . "<" exp
+   59       | exp . "<=" exp
+   60       | exp . ">=" exp
+   61 boolexp: exp . "&" exp
+   62        | exp . "|" exp
 
-    SEMICOLON  shift, and go to state 54
-    PLUS       shift, and go to state 42
-    MINUS      shift, and go to state 43
-    TIMES      shift, and go to state 44
-    DIVIDE     shift, and go to state 45
-    EQ         shift, and go to state 46
-    NEQ        shift, and go to state 47
-    LT         shift, and go to state 48
-    LE         shift, and go to state 49
-    GT         shift, and go to state 50
-    GE         shift, and go to state 51
-    AND        shift, and go to state 52
-    OR         shift, and go to state 53
+    ";"   shift, and go to state 54
+    "+"   shift, and go to state 42
+    "-"   shift, and go to state 43
+    "*"   shift, and go to state 44
+    "/"   shift, and go to state 45
+    "="   shift, and go to state 46
+    "!="  shift, and go to state 47
+    "<"   shift, and go to state 48
+    "<="  shift, and go to state 49
+    ">"   shift, and go to state 50
+    ">="  shift, and go to state 51
+    "&"   shift, and go to state 52
+    "|"   shift, and go to state 53
 
     $default  reduce using rule 45 (seq)
 
@@ -2060,26 +2060,26 @@ State 94
 
 State 95
 
-   40 exp: LET decs IN expseq . END
+   40 exp: "let" decs "in" expseq . "end"
 
-    END  shift, and go to state 116
+    "end"  shift, and go to state 116
 
 
 State 96
 
-   48 funargs: COMMA . exp funargs
+   48 funargs: "," . exp funargs
 
-    ID      shift, and go to state 1
-    STRING  shift, and go to state 2
-    INT     shift, and go to state 3
-    LPAREN  shift, and go to state 4
-    MINUS   shift, and go to state 5
-    IF      shift, and go to state 6
-    WHILE   shift, and go to state 7
-    FOR     shift, and go to state 8
-    LET     shift, and go to state 9
-    BREAK   shift, and go to state 10
-    NIL     shift, and go to state 11
+    ID       shift, and go to state 1
+    STRING   shift, and go to state 2
+    INT      shift, and go to state 3
+    "("      shift, and go to state 4
+    "-"      shift, and go to state 5
+    "if"     shift, and go to state 6
+    "while"  shift, and go to state 7
+    "for"    shift, and go to state 8
+    "let"    shift, and go to state 9
+    "break"  shift, and go to state 10
+    "nil"    shift, and go to state 11
 
     id       go to state 13
     lvalue   go to state 14
@@ -2093,36 +2093,36 @@ State 96
 
 State 97
 
-   46 funcall: id LPAREN exp funargs . RPAREN
+   46 funcall: id "(" exp funargs . ")"
 
-    RPAREN  shift, and go to state 118
+    ")"  shift, and go to state 118
 
 
 State 98
 
-   24 lvalue: id LBRACK exp RBRACK .
-   41 exp: id LBRACK exp RBRACK . OF exp
+   24 lvalue: id "[" exp "]" .
+   41 exp: id "[" exp "]" . "of" exp
 
-    OF  shift, and go to state 119
+    "of"  shift, and go to state 119
 
     $default  reduce using rule 24 (lvalue)
 
 
 State 99
 
-   65 recfield: id EQ . exp
+   65 recfield: id "=" . exp
 
-    ID      shift, and go to state 1
-    STRING  shift, and go to state 2
-    INT     shift, and go to state 3
-    LPAREN  shift, and go to state 4
-    MINUS   shift, and go to state 5
-    IF      shift, and go to state 6
-    WHILE   shift, and go to state 7
-    FOR     shift, and go to state 8
-    LET     shift, and go to state 9
-    BREAK   shift, and go to state 10
-    NIL     shift, and go to state 11
+    ID       shift, and go to state 1
+    STRING   shift, and go to state 2
+    INT      shift, and go to state 3
+    "("      shift, and go to state 4
+    "-"      shift, and go to state 5
+    "if"     shift, and go to state 6
+    "while"  shift, and go to state 7
+    "for"    shift, and go to state 8
+    "let"    shift, and go to state 9
+    "break"  shift, and go to state 10
+    "nil"    shift, and go to state 11
 
     id       go to state 13
     lvalue   go to state 14
@@ -2136,7 +2136,7 @@ State 99
 
 State 100
 
-   66 recfields: COMMA . recfield recfields
+   66 recfields: "," . recfield recfields
 
     ID  shift, and go to state 1
 
@@ -2146,40 +2146,40 @@ State 100
 
 State 101
 
-   63 reccrea: id LBRACE recfield recfields . RBRACE
+   63 reccrea: id "{" recfield recfields . "}"
 
-    RBRACE  shift, and go to state 122
+    "}"  shift, and go to state 122
 
 
 State 102
 
-   23 lvalue: lvalue LBRACK exp RBRACK .
+   23 lvalue: lvalue "[" exp "]" .
 
     $default  reduce using rule 23 (lvalue)
 
 
 State 103
 
-   44 seq: SEMICOLON exp seq .
+   44 seq: ";" exp seq .
 
     $default  reduce using rule 44 (seq)
 
 
 State 104
 
-   69 ifexp: IF exp THEN exp ELSE . exp
+   69 ifexp: "if" exp "then" exp "else" . exp
 
-    ID      shift, and go to state 1
-    STRING  shift, and go to state 2
-    INT     shift, and go to state 3
-    LPAREN  shift, and go to state 4
-    MINUS   shift, and go to state 5
-    IF      shift, and go to state 6
-    WHILE   shift, and go to state 7
-    FOR     shift, and go to state 8
-    LET     shift, and go to state 9
-    BREAK   shift, and go to state 10
-    NIL     shift, and go to state 11
+    ID       shift, and go to state 1
+    STRING   shift, and go to state 2
+    INT      shift, and go to state 3
+    "("      shift, and go to state 4
+    "-"      shift, and go to state 5
+    "if"     shift, and go to state 6
+    "while"  shift, and go to state 7
+    "for"    shift, and go to state 8
+    "let"    shift, and go to state 9
+    "break"  shift, and go to state 10
+    "nil"    shift, and go to state 11
 
     id       go to state 13
     lvalue   go to state 14
@@ -2193,19 +2193,19 @@ State 104
 
 State 105
 
-   38 exp: FOR id ASSIGN exp TO . exp DO exp
+   38 exp: "for" id ":=" exp "to" . exp "do" exp
 
-    ID      shift, and go to state 1
-    STRING  shift, and go to state 2
-    INT     shift, and go to state 3
-    LPAREN  shift, and go to state 4
-    MINUS   shift, and go to state 5
-    IF      shift, and go to state 6
-    WHILE   shift, and go to state 7
-    FOR     shift, and go to state 8
-    LET     shift, and go to state 9
-    BREAK   shift, and go to state 10
-    NIL     shift, and go to state 11
+    ID       shift, and go to state 1
+    STRING   shift, and go to state 2
+    INT      shift, and go to state 3
+    "("      shift, and go to state 4
+    "-"      shift, and go to state 5
+    "if"     shift, and go to state 6
+    "while"  shift, and go to state 7
+    "for"    shift, and go to state 8
+    "let"    shift, and go to state 9
+    "break"  shift, and go to state 10
+    "nil"    shift, and go to state 11
 
     id       go to state 13
     lvalue   go to state 14
@@ -2219,24 +2219,24 @@ State 105
 
 State 106
 
-   14 tyfield: id . COLON id
+   14 tyfield: id . ":" id
 
-    COLON  shift, and go to state 125
+    ":"  shift, and go to state 125
 
 
 State 107
 
-   19 fundec: FUNCTION id LPAREN tyfields . RPAREN EQ exp
-   20       | FUNCTION id LPAREN tyfields . RPAREN COLON id EQ exp
+   19 fundec: "function" id "(" tyfields . ")" "=" exp
+   20       | "function" id "(" tyfields . ")" ":" id "=" exp
 
-    RPAREN  shift, and go to state 126
+    ")"  shift, and go to state 126
 
 
 State 108
 
    12 tyfields: tyfield . tyfieldList
 
-    COMMA  shift, and go to state 127
+    ","  shift, and go to state 127
 
     $default  reduce using rule 16 (tyfieldList)
 
@@ -2245,46 +2245,46 @@ State 108
 
 State 109
 
-   18 vardec: VAR id COLON id . EQ exp
+   18 vardec: "var" id ":" id . "=" exp
 
-    EQ  shift, and go to state 129
+    "="  shift, and go to state 129
 
 
 State 110
 
-   17 vardec: VAR id ASSIGN exp .
-   51 binexp: exp . PLUS exp
-   52       | exp . MINUS exp
-   53       | exp . TIMES exp
-   54       | exp . DIVIDE exp
-   55       | exp . EQ exp
-   56       | exp . NEQ exp
-   57       | exp . GT exp
-   58       | exp . LT exp
-   59       | exp . LE exp
-   60       | exp . GE exp
-   61 boolexp: exp . AND exp
-   62        | exp . OR exp
+   17 vardec: "var" id ":=" exp .
+   51 binexp: exp . "+" exp
+   52       | exp . "-" exp
+   53       | exp . "*" exp
+   54       | exp . "/" exp
+   55       | exp . "=" exp
+   56       | exp . "!=" exp
+   57       | exp . ">" exp
+   58       | exp . "<" exp
+   59       | exp . "<=" exp
+   60       | exp . ">=" exp
+   61 boolexp: exp . "&" exp
+   62        | exp . "|" exp
 
-    PLUS    shift, and go to state 42
-    MINUS   shift, and go to state 43
-    TIMES   shift, and go to state 44
-    DIVIDE  shift, and go to state 45
-    EQ      shift, and go to state 46
-    NEQ     shift, and go to state 47
-    LT      shift, and go to state 48
-    LE      shift, and go to state 49
-    GT      shift, and go to state 50
-    GE      shift, and go to state 51
-    AND     shift, and go to state 52
-    OR      shift, and go to state 53
+    "+"   shift, and go to state 42
+    "-"   shift, and go to state 43
+    "*"   shift, and go to state 44
+    "/"   shift, and go to state 45
+    "="   shift, and go to state 46
+    "!="  shift, and go to state 47
+    "<"   shift, and go to state 48
+    "<="  shift, and go to state 49
+    ">"   shift, and go to state 50
+    ">="  shift, and go to state 51
+    "&"   shift, and go to state 52
+    "|"   shift, and go to state 53
 
     $default  reduce using rule 17 (vardec)
 
 
 State 111
 
-   10 ty: LBRACE . tyfields RBRACE
+   10 ty: "{" . tyfields "}"
 
     ID  shift, and go to state 1
 
@@ -2297,9 +2297,9 @@ State 111
 
 State 112
 
-   11 ty: ARRAY . OF id
+   11 ty: "array" . "of" id
 
-    OF  shift, and go to state 131
+    "of"  shift, and go to state 131
 
 
 State 113
@@ -2311,7 +2311,7 @@ State 113
 
 State 114
 
-    8 tydec: TYPE id EQ ty .
+    8 tydec: "type" id "=" ty .
 
     $default  reduce using rule 8 (tydec)
 
@@ -2325,40 +2325,40 @@ State 115
 
 State 116
 
-   40 exp: LET decs IN expseq END .
+   40 exp: "let" decs "in" expseq "end" .
 
     $default  reduce using rule 40 (exp)
 
 
 State 117
 
-   48 funargs: COMMA exp . funargs
-   51 binexp: exp . PLUS exp
-   52       | exp . MINUS exp
-   53       | exp . TIMES exp
-   54       | exp . DIVIDE exp
-   55       | exp . EQ exp
-   56       | exp . NEQ exp
-   57       | exp . GT exp
-   58       | exp . LT exp
-   59       | exp . LE exp
-   60       | exp . GE exp
-   61 boolexp: exp . AND exp
-   62        | exp . OR exp
+   48 funargs: "," exp . funargs
+   51 binexp: exp . "+" exp
+   52       | exp . "-" exp
+   53       | exp . "*" exp
+   54       | exp . "/" exp
+   55       | exp . "=" exp
+   56       | exp . "!=" exp
+   57       | exp . ">" exp
+   58       | exp . "<" exp
+   59       | exp . "<=" exp
+   60       | exp . ">=" exp
+   61 boolexp: exp . "&" exp
+   62        | exp . "|" exp
 
-    COMMA   shift, and go to state 96
-    PLUS    shift, and go to state 42
-    MINUS   shift, and go to state 43
-    TIMES   shift, and go to state 44
-    DIVIDE  shift, and go to state 45
-    EQ      shift, and go to state 46
-    NEQ     shift, and go to state 47
-    LT      shift, and go to state 48
-    LE      shift, and go to state 49
-    GT      shift, and go to state 50
-    GE      shift, and go to state 51
-    AND     shift, and go to state 52
-    OR      shift, and go to state 53
+    ","   shift, and go to state 96
+    "+"   shift, and go to state 42
+    "-"   shift, and go to state 43
+    "*"   shift, and go to state 44
+    "/"   shift, and go to state 45
+    "="   shift, and go to state 46
+    "!="  shift, and go to state 47
+    "<"   shift, and go to state 48
+    "<="  shift, and go to state 49
+    ">"   shift, and go to state 50
+    ">="  shift, and go to state 51
+    "&"   shift, and go to state 52
+    "|"   shift, and go to state 53
 
     $default  reduce using rule 49 (funargs)
 
@@ -2367,26 +2367,26 @@ State 117
 
 State 118
 
-   46 funcall: id LPAREN exp funargs RPAREN .
+   46 funcall: id "(" exp funargs ")" .
 
     $default  reduce using rule 46 (funcall)
 
 
 State 119
 
-   41 exp: id LBRACK exp RBRACK OF . exp
+   41 exp: id "[" exp "]" "of" . exp
 
-    ID      shift, and go to state 1
-    STRING  shift, and go to state 2
-    INT     shift, and go to state 3
-    LPAREN  shift, and go to state 4
-    MINUS   shift, and go to state 5
-    IF      shift, and go to state 6
-    WHILE   shift, and go to state 7
-    FOR     shift, and go to state 8
-    LET     shift, and go to state 9
-    BREAK   shift, and go to state 10
-    NIL     shift, and go to state 11
+    ID       shift, and go to state 1
+    STRING   shift, and go to state 2
+    INT      shift, and go to state 3
+    "("      shift, and go to state 4
+    "-"      shift, and go to state 5
+    "if"     shift, and go to state 6
+    "while"  shift, and go to state 7
+    "for"    shift, and go to state 8
+    "let"    shift, and go to state 9
+    "break"  shift, and go to state 10
+    "nil"    shift, and go to state 11
 
     id       go to state 13
     lvalue   go to state 14
@@ -2400,41 +2400,41 @@ State 119
 
 State 120
 
-   51 binexp: exp . PLUS exp
-   52       | exp . MINUS exp
-   53       | exp . TIMES exp
-   54       | exp . DIVIDE exp
-   55       | exp . EQ exp
-   56       | exp . NEQ exp
-   57       | exp . GT exp
-   58       | exp . LT exp
-   59       | exp . LE exp
-   60       | exp . GE exp
-   61 boolexp: exp . AND exp
-   62        | exp . OR exp
-   65 recfield: id EQ exp .
+   51 binexp: exp . "+" exp
+   52       | exp . "-" exp
+   53       | exp . "*" exp
+   54       | exp . "/" exp
+   55       | exp . "=" exp
+   56       | exp . "!=" exp
+   57       | exp . ">" exp
+   58       | exp . "<" exp
+   59       | exp . "<=" exp
+   60       | exp . ">=" exp
+   61 boolexp: exp . "&" exp
+   62        | exp . "|" exp
+   65 recfield: id "=" exp .
 
-    PLUS    shift, and go to state 42
-    MINUS   shift, and go to state 43
-    TIMES   shift, and go to state 44
-    DIVIDE  shift, and go to state 45
-    EQ      shift, and go to state 46
-    NEQ     shift, and go to state 47
-    LT      shift, and go to state 48
-    LE      shift, and go to state 49
-    GT      shift, and go to state 50
-    GE      shift, and go to state 51
-    AND     shift, and go to state 52
-    OR      shift, and go to state 53
+    "+"   shift, and go to state 42
+    "-"   shift, and go to state 43
+    "*"   shift, and go to state 44
+    "/"   shift, and go to state 45
+    "="   shift, and go to state 46
+    "!="  shift, and go to state 47
+    "<"   shift, and go to state 48
+    "<="  shift, and go to state 49
+    ">"   shift, and go to state 50
+    ">="  shift, and go to state 51
+    "&"   shift, and go to state 52
+    "|"   shift, and go to state 53
 
     $default  reduce using rule 65 (recfield)
 
 
 State 121
 
-   66 recfields: COMMA recfield . recfields
+   66 recfields: "," recfield . recfields
 
-    COMMA  shift, and go to state 100
+    ","  shift, and go to state 100
 
     $default  reduce using rule 67 (recfields)
 
@@ -2443,77 +2443,77 @@ State 121
 
 State 122
 
-   63 reccrea: id LBRACE recfield recfields RBRACE .
+   63 reccrea: id "{" recfield recfields "}" .
 
     $default  reduce using rule 63 (reccrea)
 
 
 State 123
 
-   51 binexp: exp . PLUS exp
-   52       | exp . MINUS exp
-   53       | exp . TIMES exp
-   54       | exp . DIVIDE exp
-   55       | exp . EQ exp
-   56       | exp . NEQ exp
-   57       | exp . GT exp
-   58       | exp . LT exp
-   59       | exp . LE exp
-   60       | exp . GE exp
-   61 boolexp: exp . AND exp
-   62        | exp . OR exp
-   69 ifexp: IF exp THEN exp ELSE exp .
+   51 binexp: exp . "+" exp
+   52       | exp . "-" exp
+   53       | exp . "*" exp
+   54       | exp . "/" exp
+   55       | exp . "=" exp
+   56       | exp . "!=" exp
+   57       | exp . ">" exp
+   58       | exp . "<" exp
+   59       | exp . "<=" exp
+   60       | exp . ">=" exp
+   61 boolexp: exp . "&" exp
+   62        | exp . "|" exp
+   69 ifexp: "if" exp "then" exp "else" exp .
 
-    PLUS    shift, and go to state 42
-    MINUS   shift, and go to state 43
-    TIMES   shift, and go to state 44
-    DIVIDE  shift, and go to state 45
-    EQ      shift, and go to state 46
-    NEQ     shift, and go to state 47
-    LT      shift, and go to state 48
-    LE      shift, and go to state 49
-    GT      shift, and go to state 50
-    GE      shift, and go to state 51
-    AND     shift, and go to state 52
-    OR      shift, and go to state 53
+    "+"   shift, and go to state 42
+    "-"   shift, and go to state 43
+    "*"   shift, and go to state 44
+    "/"   shift, and go to state 45
+    "="   shift, and go to state 46
+    "!="  shift, and go to state 47
+    "<"   shift, and go to state 48
+    "<="  shift, and go to state 49
+    ">"   shift, and go to state 50
+    ">="  shift, and go to state 51
+    "&"   shift, and go to state 52
+    "|"   shift, and go to state 53
 
     $default  reduce using rule 69 (ifexp)
 
 
 State 124
 
-   38 exp: FOR id ASSIGN exp TO exp . DO exp
-   51 binexp: exp . PLUS exp
-   52       | exp . MINUS exp
-   53       | exp . TIMES exp
-   54       | exp . DIVIDE exp
-   55       | exp . EQ exp
-   56       | exp . NEQ exp
-   57       | exp . GT exp
-   58       | exp . LT exp
-   59       | exp . LE exp
-   60       | exp . GE exp
-   61 boolexp: exp . AND exp
-   62        | exp . OR exp
+   38 exp: "for" id ":=" exp "to" exp . "do" exp
+   51 binexp: exp . "+" exp
+   52       | exp . "-" exp
+   53       | exp . "*" exp
+   54       | exp . "/" exp
+   55       | exp . "=" exp
+   56       | exp . "!=" exp
+   57       | exp . ">" exp
+   58       | exp . "<" exp
+   59       | exp . "<=" exp
+   60       | exp . ">=" exp
+   61 boolexp: exp . "&" exp
+   62        | exp . "|" exp
 
-    PLUS    shift, and go to state 42
-    MINUS   shift, and go to state 43
-    TIMES   shift, and go to state 44
-    DIVIDE  shift, and go to state 45
-    EQ      shift, and go to state 46
-    NEQ     shift, and go to state 47
-    LT      shift, and go to state 48
-    LE      shift, and go to state 49
-    GT      shift, and go to state 50
-    GE      shift, and go to state 51
-    AND     shift, and go to state 52
-    OR      shift, and go to state 53
-    DO      shift, and go to state 135
+    "+"   shift, and go to state 42
+    "-"   shift, and go to state 43
+    "*"   shift, and go to state 44
+    "/"   shift, and go to state 45
+    "="   shift, and go to state 46
+    "!="  shift, and go to state 47
+    "<"   shift, and go to state 48
+    "<="  shift, and go to state 49
+    ">"   shift, and go to state 50
+    ">="  shift, and go to state 51
+    "&"   shift, and go to state 52
+    "|"   shift, and go to state 53
+    "do"  shift, and go to state 135
 
 
 State 125
 
-   14 tyfield: id COLON . id
+   14 tyfield: id ":" . id
 
     ID  shift, and go to state 1
 
@@ -2522,16 +2522,16 @@ State 125
 
 State 126
 
-   19 fundec: FUNCTION id LPAREN tyfields RPAREN . EQ exp
-   20       | FUNCTION id LPAREN tyfields RPAREN . COLON id EQ exp
+   19 fundec: "function" id "(" tyfields ")" . "=" exp
+   20       | "function" id "(" tyfields ")" . ":" id "=" exp
 
-    COLON  shift, and go to state 137
-    EQ     shift, and go to state 138
+    ":"  shift, and go to state 137
+    "="  shift, and go to state 138
 
 
 State 127
 
-   15 tyfieldList: COMMA . tyfield tyfieldList
+   15 tyfieldList: "," . tyfield tyfieldList
 
     ID  shift, and go to state 1
 
@@ -2548,19 +2548,19 @@ State 128
 
 State 129
 
-   18 vardec: VAR id COLON id EQ . exp
+   18 vardec: "var" id ":" id "=" . exp
 
-    ID      shift, and go to state 1
-    STRING  shift, and go to state 2
-    INT     shift, and go to state 3
-    LPAREN  shift, and go to state 4
-    MINUS   shift, and go to state 5
-    IF      shift, and go to state 6
-    WHILE   shift, and go to state 7
-    FOR     shift, and go to state 8
-    LET     shift, and go to state 9
-    BREAK   shift, and go to state 10
-    NIL     shift, and go to state 11
+    ID       shift, and go to state 1
+    STRING   shift, and go to state 2
+    INT      shift, and go to state 3
+    "("      shift, and go to state 4
+    "-"      shift, and go to state 5
+    "if"     shift, and go to state 6
+    "while"  shift, and go to state 7
+    "for"    shift, and go to state 8
+    "let"    shift, and go to state 9
+    "break"  shift, and go to state 10
+    "nil"    shift, and go to state 11
 
     id       go to state 13
     lvalue   go to state 14
@@ -2574,14 +2574,14 @@ State 129
 
 State 130
 
-   10 ty: LBRACE tyfields . RBRACE
+   10 ty: "{" tyfields . "}"
 
-    RBRACE  shift, and go to state 141
+    "}"  shift, and go to state 141
 
 
 State 131
 
-   11 ty: ARRAY OF . id
+   11 ty: "array" "of" . id
 
     ID  shift, and go to state 1
 
@@ -2590,65 +2590,65 @@ State 131
 
 State 132
 
-   48 funargs: COMMA exp funargs .
+   48 funargs: "," exp funargs .
 
     $default  reduce using rule 48 (funargs)
 
 
 State 133
 
-   41 exp: id LBRACK exp RBRACK OF exp .
-   51 binexp: exp . PLUS exp
-   52       | exp . MINUS exp
-   53       | exp . TIMES exp
-   54       | exp . DIVIDE exp
-   55       | exp . EQ exp
-   56       | exp . NEQ exp
-   57       | exp . GT exp
-   58       | exp . LT exp
-   59       | exp . LE exp
-   60       | exp . GE exp
-   61 boolexp: exp . AND exp
-   62        | exp . OR exp
+   41 exp: id "[" exp "]" "of" exp .
+   51 binexp: exp . "+" exp
+   52       | exp . "-" exp
+   53       | exp . "*" exp
+   54       | exp . "/" exp
+   55       | exp . "=" exp
+   56       | exp . "!=" exp
+   57       | exp . ">" exp
+   58       | exp . "<" exp
+   59       | exp . "<=" exp
+   60       | exp . ">=" exp
+   61 boolexp: exp . "&" exp
+   62        | exp . "|" exp
 
-    PLUS    shift, and go to state 42
-    MINUS   shift, and go to state 43
-    TIMES   shift, and go to state 44
-    DIVIDE  shift, and go to state 45
-    EQ      shift, and go to state 46
-    NEQ     shift, and go to state 47
-    LT      shift, and go to state 48
-    LE      shift, and go to state 49
-    GT      shift, and go to state 50
-    GE      shift, and go to state 51
-    AND     shift, and go to state 52
-    OR      shift, and go to state 53
+    "+"   shift, and go to state 42
+    "-"   shift, and go to state 43
+    "*"   shift, and go to state 44
+    "/"   shift, and go to state 45
+    "="   shift, and go to state 46
+    "!="  shift, and go to state 47
+    "<"   shift, and go to state 48
+    "<="  shift, and go to state 49
+    ">"   shift, and go to state 50
+    ">="  shift, and go to state 51
+    "&"   shift, and go to state 52
+    "|"   shift, and go to state 53
 
     $default  reduce using rule 41 (exp)
 
 
 State 134
 
-   66 recfields: COMMA recfield recfields .
+   66 recfields: "," recfield recfields .
 
     $default  reduce using rule 66 (recfields)
 
 
 State 135
 
-   38 exp: FOR id ASSIGN exp TO exp DO . exp
+   38 exp: "for" id ":=" exp "to" exp "do" . exp
 
-    ID      shift, and go to state 1
-    STRING  shift, and go to state 2
-    INT     shift, and go to state 3
-    LPAREN  shift, and go to state 4
-    MINUS   shift, and go to state 5
-    IF      shift, and go to state 6
-    WHILE   shift, and go to state 7
-    FOR     shift, and go to state 8
-    LET     shift, and go to state 9
-    BREAK   shift, and go to state 10
-    NIL     shift, and go to state 11
+    ID       shift, and go to state 1
+    STRING   shift, and go to state 2
+    INT      shift, and go to state 3
+    "("      shift, and go to state 4
+    "-"      shift, and go to state 5
+    "if"     shift, and go to state 6
+    "while"  shift, and go to state 7
+    "for"    shift, and go to state 8
+    "let"    shift, and go to state 9
+    "break"  shift, and go to state 10
+    "nil"    shift, and go to state 11
 
     id       go to state 13
     lvalue   go to state 14
@@ -2662,14 +2662,14 @@ State 135
 
 State 136
 
-   14 tyfield: id COLON id .
+   14 tyfield: id ":" id .
 
     $default  reduce using rule 14 (tyfield)
 
 
 State 137
 
-   20 fundec: FUNCTION id LPAREN tyfields RPAREN COLON . id EQ exp
+   20 fundec: "function" id "(" tyfields ")" ":" . id "=" exp
 
     ID  shift, and go to state 1
 
@@ -2678,19 +2678,19 @@ State 137
 
 State 138
 
-   19 fundec: FUNCTION id LPAREN tyfields RPAREN EQ . exp
+   19 fundec: "function" id "(" tyfields ")" "=" . exp
 
-    ID      shift, and go to state 1
-    STRING  shift, and go to state 2
-    INT     shift, and go to state 3
-    LPAREN  shift, and go to state 4
-    MINUS   shift, and go to state 5
-    IF      shift, and go to state 6
-    WHILE   shift, and go to state 7
-    FOR     shift, and go to state 8
-    LET     shift, and go to state 9
-    BREAK   shift, and go to state 10
-    NIL     shift, and go to state 11
+    ID       shift, and go to state 1
+    STRING   shift, and go to state 2
+    INT      shift, and go to state 3
+    "("      shift, and go to state 4
+    "-"      shift, and go to state 5
+    "if"     shift, and go to state 6
+    "while"  shift, and go to state 7
+    "for"    shift, and go to state 8
+    "let"    shift, and go to state 9
+    "break"  shift, and go to state 10
+    "nil"    shift, and go to state 11
 
     id       go to state 13
     lvalue   go to state 14
@@ -2704,9 +2704,9 @@ State 138
 
 State 139
 
-   15 tyfieldList: COMMA tyfield . tyfieldList
+   15 tyfieldList: "," tyfield . tyfieldList
 
-    COMMA  shift, and go to state 127
+    ","  shift, and go to state 127
 
     $default  reduce using rule 16 (tyfieldList)
 
@@ -2715,143 +2715,143 @@ State 139
 
 State 140
 
-   18 vardec: VAR id COLON id EQ exp .
-   51 binexp: exp . PLUS exp
-   52       | exp . MINUS exp
-   53       | exp . TIMES exp
-   54       | exp . DIVIDE exp
-   55       | exp . EQ exp
-   56       | exp . NEQ exp
-   57       | exp . GT exp
-   58       | exp . LT exp
-   59       | exp . LE exp
-   60       | exp . GE exp
-   61 boolexp: exp . AND exp
-   62        | exp . OR exp
+   18 vardec: "var" id ":" id "=" exp .
+   51 binexp: exp . "+" exp
+   52       | exp . "-" exp
+   53       | exp . "*" exp
+   54       | exp . "/" exp
+   55       | exp . "=" exp
+   56       | exp . "!=" exp
+   57       | exp . ">" exp
+   58       | exp . "<" exp
+   59       | exp . "<=" exp
+   60       | exp . ">=" exp
+   61 boolexp: exp . "&" exp
+   62        | exp . "|" exp
 
-    PLUS    shift, and go to state 42
-    MINUS   shift, and go to state 43
-    TIMES   shift, and go to state 44
-    DIVIDE  shift, and go to state 45
-    EQ      shift, and go to state 46
-    NEQ     shift, and go to state 47
-    LT      shift, and go to state 48
-    LE      shift, and go to state 49
-    GT      shift, and go to state 50
-    GE      shift, and go to state 51
-    AND     shift, and go to state 52
-    OR      shift, and go to state 53
+    "+"   shift, and go to state 42
+    "-"   shift, and go to state 43
+    "*"   shift, and go to state 44
+    "/"   shift, and go to state 45
+    "="   shift, and go to state 46
+    "!="  shift, and go to state 47
+    "<"   shift, and go to state 48
+    "<="  shift, and go to state 49
+    ">"   shift, and go to state 50
+    ">="  shift, and go to state 51
+    "&"   shift, and go to state 52
+    "|"   shift, and go to state 53
 
     $default  reduce using rule 18 (vardec)
 
 
 State 141
 
-   10 ty: LBRACE tyfields RBRACE .
+   10 ty: "{" tyfields "}" .
 
     $default  reduce using rule 10 (ty)
 
 
 State 142
 
-   11 ty: ARRAY OF id .
+   11 ty: "array" "of" id .
 
     $default  reduce using rule 11 (ty)
 
 
 State 143
 
-   38 exp: FOR id ASSIGN exp TO exp DO exp .
-   51 binexp: exp . PLUS exp
-   52       | exp . MINUS exp
-   53       | exp . TIMES exp
-   54       | exp . DIVIDE exp
-   55       | exp . EQ exp
-   56       | exp . NEQ exp
-   57       | exp . GT exp
-   58       | exp . LT exp
-   59       | exp . LE exp
-   60       | exp . GE exp
-   61 boolexp: exp . AND exp
-   62        | exp . OR exp
+   38 exp: "for" id ":=" exp "to" exp "do" exp .
+   51 binexp: exp . "+" exp
+   52       | exp . "-" exp
+   53       | exp . "*" exp
+   54       | exp . "/" exp
+   55       | exp . "=" exp
+   56       | exp . "!=" exp
+   57       | exp . ">" exp
+   58       | exp . "<" exp
+   59       | exp . "<=" exp
+   60       | exp . ">=" exp
+   61 boolexp: exp . "&" exp
+   62        | exp . "|" exp
 
-    PLUS    shift, and go to state 42
-    MINUS   shift, and go to state 43
-    TIMES   shift, and go to state 44
-    DIVIDE  shift, and go to state 45
-    EQ      shift, and go to state 46
-    NEQ     shift, and go to state 47
-    LT      shift, and go to state 48
-    LE      shift, and go to state 49
-    GT      shift, and go to state 50
-    GE      shift, and go to state 51
-    AND     shift, and go to state 52
-    OR      shift, and go to state 53
+    "+"   shift, and go to state 42
+    "-"   shift, and go to state 43
+    "*"   shift, and go to state 44
+    "/"   shift, and go to state 45
+    "="   shift, and go to state 46
+    "!="  shift, and go to state 47
+    "<"   shift, and go to state 48
+    "<="  shift, and go to state 49
+    ">"   shift, and go to state 50
+    ">="  shift, and go to state 51
+    "&"   shift, and go to state 52
+    "|"   shift, and go to state 53
 
     $default  reduce using rule 38 (exp)
 
 
 State 144
 
-   20 fundec: FUNCTION id LPAREN tyfields RPAREN COLON id . EQ exp
+   20 fundec: "function" id "(" tyfields ")" ":" id . "=" exp
 
-    EQ  shift, and go to state 147
+    "="  shift, and go to state 147
 
 
 State 145
 
-   19 fundec: FUNCTION id LPAREN tyfields RPAREN EQ exp .
-   51 binexp: exp . PLUS exp
-   52       | exp . MINUS exp
-   53       | exp . TIMES exp
-   54       | exp . DIVIDE exp
-   55       | exp . EQ exp
-   56       | exp . NEQ exp
-   57       | exp . GT exp
-   58       | exp . LT exp
-   59       | exp . LE exp
-   60       | exp . GE exp
-   61 boolexp: exp . AND exp
-   62        | exp . OR exp
+   19 fundec: "function" id "(" tyfields ")" "=" exp .
+   51 binexp: exp . "+" exp
+   52       | exp . "-" exp
+   53       | exp . "*" exp
+   54       | exp . "/" exp
+   55       | exp . "=" exp
+   56       | exp . "!=" exp
+   57       | exp . ">" exp
+   58       | exp . "<" exp
+   59       | exp . "<=" exp
+   60       | exp . ">=" exp
+   61 boolexp: exp . "&" exp
+   62        | exp . "|" exp
 
-    PLUS    shift, and go to state 42
-    MINUS   shift, and go to state 43
-    TIMES   shift, and go to state 44
-    DIVIDE  shift, and go to state 45
-    EQ      shift, and go to state 46
-    NEQ     shift, and go to state 47
-    LT      shift, and go to state 48
-    LE      shift, and go to state 49
-    GT      shift, and go to state 50
-    GE      shift, and go to state 51
-    AND     shift, and go to state 52
-    OR      shift, and go to state 53
+    "+"   shift, and go to state 42
+    "-"   shift, and go to state 43
+    "*"   shift, and go to state 44
+    "/"   shift, and go to state 45
+    "="   shift, and go to state 46
+    "!="  shift, and go to state 47
+    "<"   shift, and go to state 48
+    "<="  shift, and go to state 49
+    ">"   shift, and go to state 50
+    ">="  shift, and go to state 51
+    "&"   shift, and go to state 52
+    "|"   shift, and go to state 53
 
     $default  reduce using rule 19 (fundec)
 
 
 State 146
 
-   15 tyfieldList: COMMA tyfield tyfieldList .
+   15 tyfieldList: "," tyfield tyfieldList .
 
     $default  reduce using rule 15 (tyfieldList)
 
 
 State 147
 
-   20 fundec: FUNCTION id LPAREN tyfields RPAREN COLON id EQ . exp
+   20 fundec: "function" id "(" tyfields ")" ":" id "=" . exp
 
-    ID      shift, and go to state 1
-    STRING  shift, and go to state 2
-    INT     shift, and go to state 3
-    LPAREN  shift, and go to state 4
-    MINUS   shift, and go to state 5
-    IF      shift, and go to state 6
-    WHILE   shift, and go to state 7
-    FOR     shift, and go to state 8
-    LET     shift, and go to state 9
-    BREAK   shift, and go to state 10
-    NIL     shift, and go to state 11
+    ID       shift, and go to state 1
+    STRING   shift, and go to state 2
+    INT      shift, and go to state 3
+    "("      shift, and go to state 4
+    "-"      shift, and go to state 5
+    "if"     shift, and go to state 6
+    "while"  shift, and go to state 7
+    "for"    shift, and go to state 8
+    "let"    shift, and go to state 9
+    "break"  shift, and go to state 10
+    "nil"    shift, and go to state 11
 
     id       go to state 13
     lvalue   go to state 14
@@ -2865,31 +2865,31 @@ State 147
 
 State 148
 
-   20 fundec: FUNCTION id LPAREN tyfields RPAREN COLON id EQ exp .
-   51 binexp: exp . PLUS exp
-   52       | exp . MINUS exp
-   53       | exp . TIMES exp
-   54       | exp . DIVIDE exp
-   55       | exp . EQ exp
-   56       | exp . NEQ exp
-   57       | exp . GT exp
-   58       | exp . LT exp
-   59       | exp . LE exp
-   60       | exp . GE exp
-   61 boolexp: exp . AND exp
-   62        | exp . OR exp
+   20 fundec: "function" id "(" tyfields ")" ":" id "=" exp .
+   51 binexp: exp . "+" exp
+   52       | exp . "-" exp
+   53       | exp . "*" exp
+   54       | exp . "/" exp
+   55       | exp . "=" exp
+   56       | exp . "!=" exp
+   57       | exp . ">" exp
+   58       | exp . "<" exp
+   59       | exp . "<=" exp
+   60       | exp . ">=" exp
+   61 boolexp: exp . "&" exp
+   62        | exp . "|" exp
 
-    PLUS    shift, and go to state 42
-    MINUS   shift, and go to state 43
-    TIMES   shift, and go to state 44
-    DIVIDE  shift, and go to state 45
-    EQ      shift, and go to state 46
-    NEQ     shift, and go to state 47
-    LT      shift, and go to state 48
-    LE      shift, and go to state 49
-    GT      shift, and go to state 50
-    GE      shift, and go to state 51
-    AND     shift, and go to state 52
-    OR      shift, and go to state 53
+    "+"   shift, and go to state 42
+    "-"   shift, and go to state 43
+    "*"   shift, and go to state 44
+    "/"   shift, and go to state 45
+    "="   shift, and go to state 46
+    "!="  shift, and go to state 47
+    "<"   shift, and go to state 48
+    "<="  shift, and go to state 49
+    ">"   shift, and go to state 50
+    ">="  shift, and go to state 51
+    "&"   shift, and go to state 52
+    "|"   shift, and go to state 53
 
     $default  reduce using rule 20 (fundec)

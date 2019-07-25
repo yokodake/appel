@@ -87,20 +87,19 @@ void pr_exp(FILE *out, A_exp v, int d) {
   // printf("prabsyn::pr_exp %d", d);
   switch (v->kind) {
   case A_varExp: {
-    fprintf(out, "#");
     pr_var(out, v->u.var, d+1);
     break;
   }
   case A_nilExp: {
-    fprintf(out, "#nil");
+    fprintf(out, "nil");
     break;
   }
   case A_intExp: {
-    fprintf(out, "#%d", v->u.intt);
+    fprintf(out, "%d", v->u.intt);
     break;
   }
   case A_stringExp: {
-    fprintf(out, "#\"%s\"", v->u.stringg);
+    fprintf(out, "\"%s\"", v->u.stringg);
     break;
   }
   case A_callExp: {
@@ -136,7 +135,7 @@ void pr_exp(FILE *out, A_exp v, int d) {
     int i = strlen("(record ");
     fprintf(out, "(record %s\n", S_name(v->u.record.typ));
     indent(out, d+i);
-    pr_efieldList(out, v->u.record.fields, d+2);
+    pr_efieldList(out, v->u.record.fields, d+i);
     fprintf(out, ")");
     break;
   }
@@ -201,7 +200,7 @@ void pr_exp(FILE *out, A_exp v, int d) {
     break;
   }
   case A_breakExp: {
-   fprintf(out, "(break)");
+   fprintf(out, "break");
    break;
   }
   case A_letExp: {

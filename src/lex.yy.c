@@ -1055,7 +1055,7 @@ case 49:
 /* rule 49 can match eol */
 YY_RULE_SETUP
 #line 81 "tiger.lex"
-{adjust(); yylval.sval=yytext; return STRING;}
+{adjust(); yylval.str.sval=yytext; yylval.str.ssiz=yyleng; return STRING;}
 	YY_BREAK
 case 50:
 YY_RULE_SETUP
