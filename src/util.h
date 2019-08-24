@@ -1,8 +1,8 @@
 #pragma once
 #include <assert.h>
 
-typedef char *string;
 typedef char bool;
+typedef char *string;
 
 #define TRUE 1
 #define FALSE 0
