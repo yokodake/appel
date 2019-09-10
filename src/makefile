@@ -2,12 +2,19 @@ y_hdr = y.tab.h
 y_src = y.tab.c
 lex   = lex.yy.c
 
+incdir = ../inc
+INC = -I../inc
 DFLAGS = -Wall
-CC     = gcc $(DFLAGS)
-CC_    = gcc
+CC     = gcc $(DFLAGS) $(INC)
+CC_    = gcc $(INC)
+
+list = errormsg.h util.h absyn.h symbol.h prabsyn.h table.h
 
 a.out: parsetest.o y.tab.o lex.yy.o errormsg.o util.o absyn.o s-prabsyn.o symbol.o table.o
 	$(CC) -g $^
+
+$(list) : %: ../inc/%
+	echo $@
 
 parsetest.o: parsetest.c errormsg.h util.h
 	$(CC) -g -c parsetest.c

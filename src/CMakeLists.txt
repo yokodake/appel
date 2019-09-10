@@ -3,6 +3,8 @@
 #
 cmake_minimum_required (VERSION 3.8)
 
-# add_executable (tiger "util.c" "util.h" "errormsg.c" "errormsg.h" "y.tab.h" "y.tab.c" "lex.yy.c") 
-add_executable (tiger "parsetest.c" "util.c" "util.h" "errormsg.c" "errormsg.h" "y.tab.h" "y.tab.c" "lex.yy.c" "absyn.h" "absyn.c" "s-prabsyn.c" "prabsyn.h" "symbol.c" "symbol.h" "table.h" "table.c")
-add_executable (foo "main.c")
+include_directories("../inc")
+# set(INCLUDES "../inc/.h")
+# set(INCLUDES "../inc/util.h" "../inc/y.tab.h" "../inc/errormsg.h" "../inc/absyn.h" "../inc/s-prabsyn.h" "../inc/symbol.h" "../inc/table.h")
+add_executable (tiger "parsetest.c" "util.c" "errormsg.c" "y.tab.c" "lex.yy.c" "absyn.c" "s-prabsyn.c" "symbol.c" "table.c")
+# add_executable (foo "main.c")
