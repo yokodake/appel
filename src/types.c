@@ -1,5 +1,5 @@
 /*
- * types.c - 
+ * types.c -
  *
  * All types and functions declared in this header file begin with "Ty_"
  * Linked list types end with "..list"
@@ -68,7 +68,7 @@ Ty_fieldList Ty_FieldList(Ty_field head, Ty_fieldList tail)
 
 /* printing functions - used for debugging */
 static char str_ty[][12] = {
-   "ty_record", "ty_nil", "ty_int", "ty_string", 
+   "ty_record", "ty_nil", "ty_int", "ty_string",
    "ty_array", "ty_name", "ty_void"};
 
 /* This will infinite loop on mutually recursive types */
@@ -77,7 +77,7 @@ void Ty_print(Ty_ty t)
   if (t == NULL) printf("null");
   else { printf("%s", str_ty[t->kind]);
          if (t->kind == Ty_name) {
-	   printf(", %s", S_name(t->u.name.sym)); }
+             printf(", %s", S_name(t->u.name.sym)); }
        }
 }
 
@@ -93,3 +93,15 @@ void TyList_print(Ty_tyList list)
   }
 }
 
+string show_type(Ty_ty ty) {
+    switch (ty->kind) {
+    case Ty_record: return "Record";
+    case Ty_nil: return "Nil";
+    case Ty_int: return "Int";
+    case Ty_string: return "String";
+    case Ty_array: return "Array";
+    case Ty_name: return S_name(ty->u.name.sym);
+    case Ty_void: return "Void";
+    default: return "null";
+    }
+}

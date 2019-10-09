@@ -1,3 +1,4 @@
+#pragma once
 extern bool EM_anyErrors;
 
 static volatile int lineNum = 1;
