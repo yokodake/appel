@@ -5,7 +5,7 @@
 
 with pkgs;
 
-clangStdenv.mkDerivation {
+stdenv.mkDerivation {
     name = "appel-${version}";
     inherit version;
     src = lib.cleanSource source;

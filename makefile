@@ -12,8 +12,8 @@ SRC_FILES = absyn.c env.c errormsg.c semant.c s-prabsyn.c symbol.c table.c types
 OBJ = $(y_src:%.c= $(OUT)/%.o) $(x_src:%.c= $(OUT)/%.o) $(SRC_FILES:%.c= $(OUT)/%.o)
 
 DFLAGS = -Wall
-CC     = clang $(DFLAGS) $(INC) $(LIBS)
-CC_    = clang $(INC)
+CC     = gcc $(DFLAGS) $(INC) $(LIBS)
+CC_    = gcc $(INC)
 
 build: $(OBJ)
 	@mkdir -p $(OUT)
