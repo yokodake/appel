@@ -1,49 +1,140 @@
 #pragma once
+#include <memory>
 #include <optional>
 #include <string>
 
-// typedef char bool;
-// typedef char *string;
-
-void *checked_malloc(int);
-
+namespace tiger {
 using std::string;
-string String(char *);
-string String_strip(char *, int);
+string String(char*);
+string String_strip(char*, int);
 
 /** simple linked list*/
-template <typename T> struct List {
+template <typename T>
+struct list {
+  struct Cons;
+  using _Cons = std::shared_ptr<Cons>;
+
   struct Cons {
     T hd;
-    List<T> *tl;
-    Cons(T hd, List<T> *tl) : hd(hd), tl(tl) {}
+    _Cons tl;
+    Cons(T hd, const _Cons& tl) : hd(hd), tl(tl) {}
   };
 
-  std::optional<Cons> node;
-  List() { node = {}; };
-  List(std::optional<Cons> const &node) : node(node){};
-  List(T hd, List<T> *tl) { node = Cons(hd, tl); }
-  /** pushes a new element at the front of the list */
-  static List<T> cons(T hd, List<T> *tl);
-  /** head of the list */
-  T head() { return node->hd; }
-  /** tail of the list */
-  List<T> *tail() { return node->tl; }
-  /** is this the end of the list */
-  bool is_nil() { return !node.has_value(); }
+  _Cons node;
 
-  /* is this copy ctor? */
-  List(List const &) = default;
-  /* list initialization 
-   * @TODO make a contiguous list*/
-  List(std::initializer_list<T> l) {
-    node = {};
+  inline list() { node = nullptr; }
+
+  inline list(list const& ls) : node(ls.node) {}
+
+  inline list(T hd) : node(std::make_shared<Cons>(hd, list())) {}
+
+  // inline list(T hd, list<T> tl) : node(std::make_shared<Cons>(hd, tl.node)) {}
+
+  inline list(T hd, const list<T>& tl) : node(std::make_shared<Cons>(hd, tl.node)) {}
+
+  inline list(const _Cons& node) : node(node) {}
+
+  // list initialization
+  // @TODO make a contiguous list?
+  list(std::initializer_list<T> l) {
+    node = nullptr;
     for (auto it = std::rbegin(l); it < std::rend(l); it++) {
-      node = Cons(*it, new List<T>(node));
+      node = std::make_shared<Cons>(*it, node);
     }
   }
+
+  // head of the list
+  inline T head() const {
+    if (is_nil())
+      std::runtime_error("list is nil");
+    else
+      return node->hd;
+  }
+
+  // tail of the list
+  inline list<T> tail() const {
+    if (is_nil())
+      std::runtime_error("list is nil");
+    else
+      return list(node->tl);
+  }
+
+  bool is_nil() const { return node == nullptr; }
+
+  // recursive process
+  template <typename F, typename A>
+  A foldr(F f, A z) const {
+    if (is_nil())
+      return z;
+    else
+      return f(head(), tail().foldr(f, z));
+  }
+
+  template <typename F, typename A>
+  A foldl(F f, A z) const {
+    for (auto it : *this)
+      z = f(z, *it);
+    return z;
+  }
+
+  // recursive process
+  template <typename T, typename F>
+  T map(F f) {
+    return list(f(head()), tail().map(f))
+  }
+
+  list<T> reverse() {
+    list<T> rev = list();
+    for (auto it : *this)
+      rev = cons(it, rev);
+    return rev;
+  }
+
+  size_t size() const {
+    size_t s = 0;
+    for (auto _ : *this)
+      s++;
+    return s;
+  }
+
+  // static functions
+  static inline list<T> nil() { return list(); }
+  static inline list<T> cons(T hd, list<T> tl) { return list<T>(hd, tl); }
+  static inline bool is_nil(const list<T> ls) { return ls.is_nil(); }
+  static inline T head(const list<T> ls) { return ls.head(); }
+  static inline list<T> tail(const list<T> ls) { return ls.tail(); }
+
+  class iterator {
+    friend struct list;
+    _Cons it;
+    iterator(const _Cons& node) : it(node) {}
+
+   public:
+    T operator*() const { return it->hd; }
+    iterator& operator++() {
+      it = it->tl;
+      return *this;
+    }
+    bool operator!=(const iterator& o) { return o.it != it; }
+  };
+
+  iterator begin() const { return iterator(node); }
+  iterator end() const { return iterator(nullptr); }
 };
 
-template <typename T> inline List<T> List<T>::cons(T hd, List<T> *tl) {
-  return List(hd, tl);
+template <typename T>
+std::ostream& operator<<(std::ostream& os, const list<T>& xs) {
+  bool b = true;
+  os << "{";
+  for (auto x : xs) {
+    if (b)
+      b = false;
+    else
+      os << ",";
+    os << x;
+  }
+  os << "}";
+  return os;
 }
+
+}  // namespace tiger

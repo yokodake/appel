@@ -9,7 +9,8 @@
 #pragma once
 #include <cassert>
 
-namespace tab {
+namespace tiger {
+namespace table {
 
 template <typename K, typename T> struct Table {
   struct Binder {
@@ -18,7 +19,7 @@ template <typename K, typename T> struct Table {
     Binder *next;
     K *prevtop;
 
-    Binder(K *key, T value, Binder *next, K* prevtop)
+    Binder(K *key, T value, Binder *next, K *prevtop)
         : key(key), value(value), next(next), prevtop(prevtop) {}
   };
 
@@ -57,11 +58,12 @@ template <typename K, typename T> struct Table {
  */
 template <typename K, typename T>
 inline void Table<K, T>::enter(K *key, T value) {
-  int i = ((unsigned int) key) % TABSIZE;
+  int i = ((unsigned int)key) % TABSIZE;
   tab[i] = new Binder(key, value, tab[i], top);
   top = key;
 }
-template <typename K, typename T> inline std::optional<T> Table<K, T>::look(K *key) {
+template <typename K, typename T>
+inline std::optional<T> Table<K, T>::look(K *key) {
   int i = ((unsigned)key) % TABSIZE;
   for (auto b = tab[i]; b; b = b->next)
     if (b->key == key)
@@ -94,3 +96,4 @@ void Table<K, T>::dump(void (*show)(K *key, T value)) {
   tab[i] = b;
 }
 } // namespace tab
+} // namespace Tiger
