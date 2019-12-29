@@ -28,9 +28,11 @@ struct list {
 
   inline list(T hd) : node(std::make_shared<Cons>(hd, list())) {}
 
-  // inline list(T hd, list<T> tl) : node(std::make_shared<Cons>(hd, tl.node)) {}
+  // inline list(T hd, list<T> tl) : node(std::make_shared<Cons>(hd, tl.node))
+  // {}
 
-  inline list(T hd, const list<T>& tl) : node(std::make_shared<Cons>(hd, tl.node)) {}
+  inline list(T hd, const list<T>& tl)
+      : node(std::make_shared<Cons>(hd, tl.node)) {}
 
   inline list(const _Cons& node) : node(node) {}
 
@@ -79,9 +81,7 @@ struct list {
 
   // recursive process
   template <typename T, typename F>
-  T map(F f) {
-    return list(f(head()), tail().map(f))
-  }
+  T map(F f){return list(f(head()), tail().map(f))}
 
   list<T> reverse() {
     list<T> rev = list();
@@ -96,13 +96,6 @@ struct list {
       s++;
     return s;
   }
-
-  // static functions
-  static inline list<T> nil() { return list(); }
-  static inline list<T> cons(T hd, list<T> tl) { return list<T>(hd, tl); }
-  static inline bool is_nil(const list<T> ls) { return ls.is_nil(); }
-  static inline T head(const list<T> ls) { return ls.head(); }
-  static inline list<T> tail(const list<T> ls) { return ls.tail(); }
 
   class iterator {
     friend struct list;
@@ -121,6 +114,27 @@ struct list {
   iterator begin() const { return iterator(node); }
   iterator end() const { return iterator(nullptr); }
 };
+
+template<typename T>
+static inline list<T> nil() {
+  return list<T>();
+}
+template <typename T>
+static inline list<T> cons(T hd, list<T> tl) {
+  return list<T>(hd, tl);
+}
+template <typename T>
+static inline bool is_nil(const list<T>& ls) {
+  return ls.is_nil();
+}
+template <typename T>
+static inline T head(const list<T>& ls) {
+  return ls.head();
+}
+template <typename T>
+static inline list<T> tail(const list<T>& ls) {
+  return ls.tail();
+}
 
 template <typename T>
 std::ostream& operator<<(std::ostream& os, const list<T>& xs) {

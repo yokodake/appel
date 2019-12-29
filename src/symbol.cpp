@@ -3,15 +3,17 @@
 #include "util.hpp"
 
 namespace tiger {
-Symbol *Symbol::symbol(std::string name) {
-  auto r = Symbol::hashtable.find(name);
-  if (r != Symbol::hashtable.end())
-    return r->second;
-  auto s = new Symbol(name);
-  Symbol::hashtable[name] = s;
-  return s;
+Symbol::Symbol(std::string name) {
+  auto r = hashtable.find(name);
+  if (r != hashtable.end()) {
+    s = r->second;
+  } else {
+    auto n = new Sym(name);
+    hashtable[name] = n;
+    s = n;
+  }
 }
 
-std::map<std::string, Symbol *> Symbol::hashtable =
-    std::map<std::string, Symbol *>();
+std::map<std::string, Symbol::Sym *> Symbol::hashtable =
+std::map<std::string, Symbol::Sym *>();
 } // namespace Tiger
