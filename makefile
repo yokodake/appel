@@ -8,6 +8,7 @@ INC = -I$(IDIR)
 OUT = ./out
 LIB = ./lib
 SRC = ./src
+GEN = ./src/frontend/
 SRC_FILES = absyn.c env.c errormsg.c semant.c s-prabsyn.c symbol.c table.c types.c util.c parsetest.c
 OBJ = $(y_src:%.c= $(OUT)/%.o) $(x_src:%.c= $(OUT)/%.o) $(SRC_FILES:%.c= $(OUT)/%.o)
 
@@ -23,12 +24,12 @@ $(OBJ): $(OUT)/%.o: $(SRC)/%.c # $(IDIR)/%.h
 	@mkdir -p $(@D)
 	$(CC_) -c -o $@ $< $(DFLAGS)
 
-$(SRC)/$(x_src): $(SRC)/tiger.lex
+$(GEN)/$(x_src): $(GEN)/tiger.lex
 	flex -o $@ $<
 
-$(SRC)/$(y_src): $(SRC)/tiger.grm
-	bison -dv $(SRC)/tiger.grm -o $@
-	mv -v $(SRC)/$(y_hdr) $(IDIR)/
+$(GEN)/$(y_src): $(GEN)/tiger.grm
+	bison -dv $(GEN)/tiger.grm -o $@
+	mv -v $(GEN)/$(y_hdr) $(IDIR)/frontend/
 
 $(IDIR)/$(y_hdr): $(SRC)/$(y_src)
 

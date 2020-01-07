@@ -5,7 +5,6 @@
 #pragma once
 #include <map>
 
-#include "util.hpp"
 #include "table.hpp"
 
 namespace tiger {
@@ -61,4 +60,5 @@ public:
 
 template<typename T>
 const Symbol::Sym Symbol::Table<T>::marksym = Symbol::Sym("<mark>");
+
 } // namespace tiger

@@ -8,6 +8,7 @@
  */
 #pragma once
 #include <cassert>
+#include <optional>
 
 namespace tiger {
 namespace table {

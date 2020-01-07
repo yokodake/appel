@@ -1,6 +1,8 @@
+#pragma once
+#include <string>
+
 #include "symbol.hpp"
 #include "table.hpp"
-#include "util.hpp"
 
 namespace tiger {
 Symbol::Symbol(std::string name) {
@@ -14,6 +16,10 @@ Symbol::Symbol(std::string name) {
   }
 }
 
-std::map<std::string, Symbol::Sym *> Symbol::hashtable =
-std::map<std::string, Symbol::Sym *>();
-} // namespace Tiger
+std::string Symbol::name() {
+  return s->name;
+}
+
+std::map<std::string, Symbol::Sym *> Symbol::hashtable = 
+  std::map<std::string, Symbol::Sym *>();
+} // namespace tiger

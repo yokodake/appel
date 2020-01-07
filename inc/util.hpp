@@ -2,11 +2,15 @@
 #include <memory>
 #include <optional>
 #include <string>
+#include <iostream>
 
 namespace tiger {
-using std::string;
-string String(char*);
-string String_strip(char*, int);
+
+inline std::string String(char *s) { return std::string(s); }
+
+inline std::string String_strip(char *s, int size) {
+  return std::string(s + 1, s + size - 1);
+}
 
 /** simple linked list*/
 template <typename T>
@@ -17,36 +21,37 @@ struct list {
   struct Cons {
     T hd;
     _Cons tl;
-    Cons(T hd, const _Cons& tl) : hd(hd), tl(tl) {}
+    Cons(T hd, _Cons tl) : hd(hd), tl(tl) {}
   };
 
   _Cons node;
 
-  inline list() { node = nullptr; }
+  list() { node = nullptr; }
 
-  inline list(list const& ls) : node(ls.node) {}
+  list(list<T> const& ls) : node(ls.node) {}
 
-  inline list(T hd) : node(std::make_shared<Cons>(hd, list())) {}
+  list(const T& hd) 
+    : node(std::make_shared<Cons>(hd, nullptr)) {}
 
-  // inline list(T hd, list<T> tl) : node(std::make_shared<Cons>(hd, tl.node))
-  // {}
+  // inline list(T hd, list<T> tl) : node(std::make_shared<Cons>(hd, tl.node)) {}
 
-  inline list(T hd, const list<T>& tl)
-      : node(std::make_shared<Cons>(hd, tl.node)) {}
+  list(T hd, const list<T>& tl)
+    : node(std::make_shared<Cons>(hd, tl.node)) {}
 
-  inline list(const _Cons& node) : node(node) {}
+  list(const _Cons& node) : node(node) {}
 
   // list initialization
   // @TODO make a contiguous list?
   list(std::initializer_list<T> l) {
     node = nullptr;
+    std::cout << *std::rbegin(l) << std::endl;
     for (auto it = std::rbegin(l); it < std::rend(l); it++) {
       node = std::make_shared<Cons>(*it, node);
     }
   }
 
   // head of the list
-  inline T head() const {
+  T head() const {
     if (is_nil())
       std::runtime_error("list is nil");
     else
@@ -54,7 +59,7 @@ struct list {
   }
 
   // tail of the list
-  inline list<T> tail() const {
+  list<T> tail() const {
     if (is_nil())
       std::runtime_error("list is nil");
     else
@@ -115,12 +120,15 @@ struct list {
   iterator end() const { return iterator(nullptr); }
 };
 
+/* static functions */
+
 template<typename T>
 static inline list<T> nil() {
   return list<T>();
 }
+// pass by value
 template <typename T>
-static inline list<T> cons(T hd, list<T> tl) {
+static inline list<T> cons(const T& hd, const list<T>& tl) {
   return list<T>(hd, tl);
 }
 template <typename T>
