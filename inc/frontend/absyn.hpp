@@ -36,16 +36,22 @@ struct Break {
   bool operator!=(const Nil& o) { return false; }
 };
 
+struct ASTNode {
+  Pos pos;
+protected:
+  ASTNode(Pos pos) : pos(pos) {}
+};
+
 /** a Variable*/
-struct Var {
+struct Var : public ASTNode {
 private:
-  struct EField {
+  struct VField {
     var_ptr var;
     Symbol sym;
 
-    EField(var_ptr var, Symbol sym)
+    VField(var_ptr var, Symbol sym)
       : var(var), sym(sym) {}
-    EField(Var* var, Symbol sym)
+    VField(Var* var, Symbol sym)
       : var(shared_ptr<Var>(var)), sym(sym) {}
   };
 
@@ -60,38 +66,38 @@ private:
   };
 
 public:
-  Pos pos;
-  std::variant<Symbol /*simple*/, Field, Subscript> var;
+  std::variant<Symbol /*simple*/, VField, Subscript> var;
 
-  Var(Pos pos, Symbol simple) 
-    : pos(pos), var(simple) {}
-  Var(Pos pos, const Field& f) 
-    : pos(pos), var(f) {}
-  Var(Pos pos, const Subscript& s) 
-    : pos(pos), var(s) {}
+  Var(Pos pos, Symbol simple)
+    : ASTNode(pos), var(simple) {}
+  Var(Pos pos, const VField& f)
+    : ASTNode(pos), var(f) {}
+  Var(Pos pos, const Subscript& s)
+    : ASTNode(pos), var(s) {}
 
   static inline var_ptr SubscriptVar(Pos pos, var_ptr var, exp_ptr exp) {
     return std::make_shared<Var>(pos, Subscript(var, exp));
   }
   static inline var_ptr FieldVar(Pos pos, var_ptr var, Symbol sym) {
-    return std::make_shared<Var>(pos, EField(var, sym));
+    return std::make_shared<Var>(pos, VField(var, sym));
   }
-  static inline var_ptr SimpleVar(Pos pos, Symbol sym) { 
-    return std::make_shared<Var>(pos, sym); 
+  static inline var_ptr SimpleVar(Pos pos, Symbol sym) {
+    return std::make_shared<Var>(pos, sym);
   }
 };
 
-struct Field {
-  Pos pos;
+struct Field : public ASTNode {
   Symbol name, typ;
   bool escape;
 };
+
+struct Decl : public ASTNode {};
 
 /**** EXPRESSION *****/
 
 /** function call */
 
-struct Exp {
+struct Exp : ASTNode {
   // infix/prefix operators
   struct Op {
     enum op_t {
@@ -172,27 +178,26 @@ struct Exp {
       : type(type), size(size), init(init) {}
   };
 
-  Pos pos;
   // var, int, string, call, record, assignment, sequence,
   std::variant<var_ptr, VNumber, Nil, VString, Call, Record, Assign, Op
               ,list<exp_ptr> , If, While, For, Break, Let, Array>
       exp;
 
-  Exp(Pos pos, const var_ptr& exp) : pos(pos), exp(exp) {}
-  Exp(Pos pos, const VNumber& exp) : pos(pos), exp(exp) {}
-  Exp(Pos pos, const Nil& exp) : pos(pos), exp(exp) {}
-  Exp(Pos pos, const VString& exp) : pos(pos), exp(exp) {}
-  Exp(Pos pos, const Call& exp) : pos(pos), exp(exp) {}
-  Exp(Pos pos, const Record& exp) : pos(pos), exp(exp) {}
-  Exp(Pos pos, const Assign& exp) : pos(pos), exp(exp) {}
-  Exp(Pos pos, const Op& exp) : pos(pos), exp(exp) {}
-  Exp(Pos pos, const list<exp_ptr>& exp) : pos(pos), exp(exp) {}
-  Exp(Pos pos, const If& exp) : pos(pos), exp(exp) {}
-  Exp(Pos pos, const While& exp) : pos(pos), exp(exp) {}
-  Exp(Pos pos, const For& exp) : pos(pos), exp(exp) {}
-  Exp(Pos pos, const Break& exp) : pos(pos), exp(exp) {}
-  Exp(Pos pos, const Let& exp) : pos(pos), exp(exp) {}
-  Exp(Pos pos, const Array& exp) : pos(pos), exp(exp) {}
+  Exp(Pos pos, const var_ptr& exp) : ASTNode(pos), exp(exp) {}
+  Exp(Pos pos, const VNumber& exp) : ASTNode(pos), exp(exp) {}
+  Exp(Pos pos, const Nil& exp) : ASTNode(pos), exp(exp) {}
+  Exp(Pos pos, const VString& exp) : ASTNode(pos), exp(exp) {}
+  Exp(Pos pos, const Call& exp) : ASTNode(pos), exp(exp) {}
+  Exp(Pos pos, const Record& exp) : ASTNode(pos), exp(exp) {}
+  Exp(Pos pos, const Assign& exp) : ASTNode(pos), exp(exp) {}
+  Exp(Pos pos, const Op& exp) : ASTNode(pos), exp(exp) {}
+  Exp(Pos pos, const list<exp_ptr>& exp) : ASTNode(pos), exp(exp) {}
+  Exp(Pos pos, const If& exp) : ASTNode(pos), exp(exp) {}
+  Exp(Pos pos, const While& exp) : ASTNode(pos), exp(exp) {}
+  Exp(Pos pos, const For& exp) : ASTNode(pos), exp(exp) {}
+  Exp(Pos pos, const Break& exp) : ASTNode(pos), exp(exp) {}
+  Exp(Pos pos, const Let& exp) : ASTNode(pos), exp(exp) {}
+  Exp(Pos pos, const Array& exp) : ASTNode(pos), exp(exp) {}
 
   static exp_ptr VarExp(Pos pos, const var_ptr& exp) { return std::make_shared<Exp>(pos, exp); }
   static exp_ptr NumberExp(Pos pos, const VNumber& exp) { return std::make_shared<Exp>(pos, exp); }

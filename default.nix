@@ -9,6 +9,6 @@ stdenv.mkDerivation {
     name = "appel-${version}";
     inherit version;
     src = lib.cleanSource source;
-    buildInputs = [ makeWrapper bison flex ];
+    buildInputs = [ makeWrapper bison flex cmake ];
     enableParallelBuilding = true;
 }

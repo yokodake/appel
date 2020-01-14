@@ -30,7 +30,7 @@ struct list {
 
   list(list<T> const& ls) : node(ls.node) {}
 
-  list(const T& hd) 
+  list(const T& hd)
     : node(std::make_shared<Cons>(hd, nullptr)) {}
 
   // inline list(T hd, list<T> tl) : node(std::make_shared<Cons>(hd, tl.node)) {}
@@ -85,8 +85,8 @@ struct list {
   }
 
   // recursive process
-  template <typename T, typename F>
-  T map(F f){return list(f(head()), tail().map(f))}
+  template <typename X, typename F>
+  X map(F f){return list(f(head()), tail().map(f));}
 
   list<T> reverse() {
     list<T> rev = list();

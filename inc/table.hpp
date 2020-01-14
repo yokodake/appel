@@ -59,13 +59,13 @@ template <typename K, typename T> struct Table {
  */
 template <typename K, typename T>
 inline void Table<K, T>::enter(K *key, T value) {
-  int i = ((unsigned int)key) % TABSIZE;
+  int i = reinterpret_cast<uintptr_t>(key) % TABSIZE;
   tab[i] = new Binder(key, value, tab[i], top);
   top = key;
 }
 template <typename K, typename T>
 inline std::optional<T> Table<K, T>::look(K *key) {
-  int i = ((unsigned)key) % TABSIZE;
+  int i = reinterpret_cast<uintptr_t>(key) % TABSIZE;
   for (auto b = tab[i]; b; b = b->next)
     if (b->key == key)
       return b->value;
@@ -74,7 +74,7 @@ inline std::optional<T> Table<K, T>::look(K *key) {
 template <typename K, typename T> K *Table<K, T>::pop() {
   auto k = top;
   assert(k);
-  int i = ((unsigned)k) % TABSIZE;
+  int i = reinterpret_cast<uintptr_t>(k) % TABSIZE;
   auto b = tab[i];
   assert(b);
   tab[i] = b->next;
@@ -85,7 +85,7 @@ template <typename K, typename T>
 void Table<K, T>::dump(void (*show)(K *key, T value)) {
   auto k = top;
   int i = ((unsigned)k) % TABSIZE;
-  auto b = tab[index];
+  auto b = tab[i];
   if (b == NULL)
     return;
   tab[i] = b->next;

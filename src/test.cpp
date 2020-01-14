@@ -8,8 +8,8 @@
 #include "symbol.hpp"
 #include "util.hpp"
 
-struct foo { 
-  foo() { std::cout << "foo::ctor" << std::endl; } 
+struct foo {
+  foo() { std::cout << "foo::ctor" << std::endl; }
   foo(const foo& other) { std::cout << "foo::copy" << std::endl; operator=(other); }
   ~foo() { std::cout << "foo:dtor" << std::endl; }
 };
@@ -43,8 +43,8 @@ int main() {
 
   std::cout << "---" << std::endl; 
   bar _ = bar::Bar(foo());
-  char* s = "\"foo bar\"";
-  size_t size = strlen(s);
+  std::string s = "\"foo bar\"";
+  size_t size = s.size();
   auto a = Symbol("foo");
   auto b = Symbol("foo");
   std::cout << (a == b) << std::endl;

@@ -2,3 +2,7 @@
 out
 *.o
 a.out
+CMakeCache.txt
+Makefile
+*.cmake
+CMakeFiles/
