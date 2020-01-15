@@ -13,22 +13,26 @@ private:
   struct Sym {
     std::string name;
 
-    Sym() { name = ""; }
-    Sym(std::string n) : name(n) {}
+    Sym()
+        : name("") {}
+    Sym(std::string n)
+        : name(n) {}
   };
-  Sym * s;
+  Sym* s;
 
 public:
   constexpr static const unsigned int SIZE = 109;
 
-  static std::map<std::string, Sym *> hashtable;
+  static std::map<std::string, Sym*> hashtable;
 
-  template <typename T> struct Table {
+  template <typename T>
+  struct Table {
     table::Table<Sym, T> table;
 
     static const Sym marksym;
 
-    Table() : table(table::Table<Sym, T>()) {}
+    Table()
+        : table(table::Table<Sym, T>()) {}
 
     /** Enter a binding "sym->value" into table, shadowing but not deleting
      *    any previous binding of "sym". */
@@ -39,14 +43,21 @@ public:
     std::optional<T> look(Symbol sym) { return table.look(sym.s); }
 
     /** Start a new "scope" in table. Scopes are nested. */
-    void beginScope() { table.enter(const_cast<Sym *>(&marksym), {}); }
+    void beginScope() { table.enter(const_cast<Sym*>(&marksym), {}); }
 
     /** Remove any bindings entered since the current scope began,
      * and end the current scope. */
-    void endScope() { Sym * s; do s = table.pop(); while (s != &marksym); }
+    void endScope() {
+      Sym* s;
+      do
+        s = table.pop();
+      while (s != &marksym);
+    }
 
-    template<typename PF>
-    void dump(PF show) { table.dump(show); }
+    template <typename PF>
+    void dump(PF show) {
+      table.dump(show);
+    }
   };
 
   /** Make a unique symbol from a given std::string.
@@ -54,11 +65,13 @@ public:
    *  value, even if the "foo" strings are at different locations. */
   Symbol(std::string s);
 
-  friend bool operator==(const Symbol& x, const Symbol& y) { return x.s == y.s; }
+  friend bool operator==(const Symbol& x, const Symbol& y) {
+    return x.s == y.s;
+  }
   std::string name();
 };
 
-template<typename T>
+template <typename T>
 const Symbol::Sym Symbol::Table<T>::marksym = Symbol::Sym("<mark>");
 
 } // namespace tiger
