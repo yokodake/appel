@@ -10,16 +10,14 @@ Symbol::Symbol(std::string name) {
   if (r != hashtable.end()) {
     s = r->second;
   } else {
-    auto n = new Sym(name);
+    auto n          = new Sym(name);
     hashtable[name] = n;
-    s = n;
+    s               = n;
   }
 }
 
-std::string Symbol::name() {
-  return s->name;
-}
+std::string Symbol::name() { return s->name; }
 
-std::map<std::string, Symbol::Sym *> Symbol::hashtable = 
-  std::map<std::string, Symbol::Sym *>();
+std::map<std::string, Symbol::Sym*> Symbol::hashtable =
+    std::map<std::string, Symbol::Sym*>();
 } // namespace tiger

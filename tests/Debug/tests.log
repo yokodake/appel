@@ -1,5 +1,0 @@
-﻿  tests.cpp
-  class template optional is only available with C++17 or later.
-C:\Users\kusanagi\source\repos\appel\inc\util.hpp(59): warning C4715: 'tiger::list<int>::head': not all control paths return a value
-C:\Users\kusanagi\source\repos\appel\inc\util.hpp(67): warning C4715: 'tiger::list<int>::tail': not all control paths return a value
-  tests.vcxproj -> C:\Users\kusanagi\Source\Repos\Debug\tests.dll

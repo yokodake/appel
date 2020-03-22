@@ -1,14 +1,15 @@
 #pragma once
+#include <functional>
+#include <iostream>
 #include <memory>
 #include <optional>
 #include <string>
-#include <iostream>
 
 namespace tiger {
 
-inline std::string String(char *s) { return std::string(s); }
+inline std::string String(char* s) { return std::string(s); }
 
-inline std::string String_strip(char *s, int size) {
+inline std::string String_strip(char* s, int size) {
   return std::string(s + 1, s + size - 1);
 }
 
@@ -18,29 +19,33 @@ struct list {
   struct Cons;
   using _Cons = std::shared_ptr<Cons>;
 
+  /* inner rep. */
   struct Cons {
     T hd;
     _Cons tl;
-    Cons(T hd, _Cons tl) : hd(hd), tl(tl) {}
+    Cons(T hd, _Cons tl)
+        : hd(hd)
+        , tl(tl) {}
   };
 
   _Cons node;
 
+  /* API */
   list() { node = nullptr; }
 
-  list(list<T> const& ls) : node(ls.node) {}
+  list(list<T> const& ls)
+      : node(ls.node) {}
 
   list(const T& hd)
-    : node(std::make_shared<Cons>(hd, nullptr)) {}
-
-  // inline list(T hd, list<T> tl) : node(std::make_shared<Cons>(hd, tl.node)) {}
+      : node(std::make_shared<Cons>(hd, nullptr)) {}
 
   list(T hd, const list<T>& tl)
-    : node(std::make_shared<Cons>(hd, tl.node)) {}
+      : node(std::make_shared<Cons>(hd, tl.node)) {}
 
-  list(const _Cons& node) : node(node) {}
+  list(const _Cons& node)
+      : node(node) {}
 
-  // list initialization
+  // list initialization, O(n), iterative process
   // @TODO make a contiguous list?
   list(std::initializer_list<T> l) {
     node = nullptr;
@@ -66,48 +71,65 @@ struct list {
       return list(node->tl);
   }
 
+  // O(1)
   bool is_nil() const { return node == nullptr; }
 
   // recursive process
-  template <typename F, typename A>
-  A foldr(F f, A z) const {
+  template <typename Z, typename F>
+  // Z foldr(std::function<Z(T, Z)> f, Z z) const { // @FIXME
+  Z foldr(F f, Z z) const {
     if (is_nil())
       return z;
     else
       return f(head(), tail().foldr(f, z));
   }
 
-  template <typename F, typename A>
-  A foldl(F f, A z) const {
+  // iterative process
+  template <typename Z, typename F>
+  // Z foldl(std::function<Z(Z, T)> f, Z z) const { // @FIXME
+  Z foldl(F f, Z z) const {
     for (auto it : *this)
-      z = f(z, *it);
+      z = f(z, it);
     return z;
   }
 
   // recursive process
-  template <typename X, typename F>
-  X map(F f){return list(f(head()), tail().map(f));}
-
-  list<T> reverse() {
+  template <typename U, typename F>
+  U map(F f) {
+    return list(f(head()), tail().map(f));
+  }
+  // iterative process
+  list<T> reverse() const {
     list<T> rev = list();
     for (auto it : *this)
       rev = cons(it, rev);
     return rev;
   }
-
+  // O(n), iterative process
   size_t size() const {
     size_t s = 0;
     for (auto _ : *this)
       s++;
     return s;
   }
+  // O(n), iterative process
+  std::vector<T> to_vec() const {
+    return foldl(
+        [](std::vector<T> vs, T x) {
+          vs.push_back(x);
+          return vs;
+        },
+        std::vector<T>());
+  }
 
+  /* iterators */
   class iterator {
     friend struct list;
     _Cons it;
-    iterator(const _Cons& node) : it(node) {}
+    iterator(const _Cons& node)
+        : it(node) {}
 
-   public:
+  public:
     T operator*() const { return it->hd; }
     iterator& operator++() {
       it = it->tl;
@@ -122,11 +144,10 @@ struct list {
 
 /* static functions */
 
-template<typename T>
+template <typename T>
 static inline list<T> nil() {
   return list<T>();
 }
-// pass by value
 template <typename T>
 static inline list<T> cons(const T& hd, const list<T>& tl) {
   return list<T>(hd, tl);
@@ -144,6 +165,7 @@ static inline list<T> tail(const list<T>& ls) {
   return ls.tail();
 }
 
+/* operator overloading */
 template <typename T>
 std::ostream& operator<<(std::ostream& os, const list<T>& xs) {
   bool b = true;
@@ -159,4 +181,4 @@ std::ostream& operator<<(std::ostream& os, const list<T>& xs) {
   return os;
 }
 
-}  // namespace tiger
+} // namespace tiger
