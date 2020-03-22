@@ -6,3 +6,5 @@ CMakeCache.txt
 Makefile
 *.cmake
 CMakeFiles/
+src/tiger
+src/test
